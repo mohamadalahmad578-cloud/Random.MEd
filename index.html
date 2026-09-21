@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPU Cloud Schedule - Admin Edition</title>
+    <title>SPU Cloud Schedule - V8.0</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
         .header { background: #0f172a; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #38bdf8; }
@@ -37,7 +37,6 @@
         .color-friend-3 { color: #059669; }
         .color-friend-4 { color: #dc2626; }
         
-        /* تنسيقات محرر البيانات */
         .editor-section { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .editor-input { padding: 6px; border: 1px solid #94a3b8; border-radius: 4px; font-family: Tahoma; }
     </style>
@@ -45,7 +44,7 @@
 <body>
 
     <div class="header">
-        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول</h2>
+        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول (V8.0)</h2>
         <p style="margin: 5px 0 0 0; color: #bae6fd;">مزامنة سحابية - أرقام المقاعد - تحكم كامل للمشرف</p>
     </div>
 
@@ -58,9 +57,9 @@
         <!-- شاشة الإدخال الاحتياطية -->
         <div id="setup-screen">
             <h3 style="color: #dc2626;">⚠️ السيرفر المركزي فارغ أو غير متصل!</h3>
-            <p style="color:#475569;">يرجى للصق البيانات المسحوبة حديثاً هنا كبداية:</p>
+            <p style="color:#475569;">يرجى للصق البيانات المسحوبة حديثاً هنا كبداية (أو إنشاء ملف data.json):</p>
             <textarea id="db-input" placeholder='{"Course Name": [{"id": "...", "type": "theory"...}]}'></textarea><br><br>
-            <button class="btn-primary" onclick="saveAndStart()">💾 حفظ الداتا والدخول للنظام</button>
+            <button class="btn-primary" onclick="saveAndStart()">💾 الدخول للنظام مؤقتاً</button>
         </div>
 
         <!-- لوحة تحكم المشرف (محرر البيانات) -->
@@ -116,12 +115,16 @@
     </div>
 
     <script>
+        // تنظيف شامل لذاكرة المتصفح المحلية لضمان الاعتماد على السيرفر المركزي
+        localStorage.removeItem('spu_courses_db');
+        
         let parsedCourses = {};
         const daysOfWeek = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
         window.generatedGroups = [];
         let usersCount = 1;
 
         window.onload = function() {
+            // جلب البيانات من السيرفر وإجبار المتصفح على عدم تخزينها
             fetch('data.json?v=' + new Date().getTime())
                 .then(res => {
                     if(!res.ok) throw new Error('File not found');
@@ -306,7 +309,6 @@
             document.body.removeChild(tempTextArea);
         };
 
-
         // ==========================================
         //         بناء الواجهة للمستخدم العادي
         // ==========================================
@@ -359,7 +361,7 @@
                         <span>
                             <strong style="color:${c.type==='theory'?'#ea580c':'#059669'};">${c.className}</strong> 
                             ${seatsDisplay}
-                            | <span style="color:#64748b;">${c.times.length > 0 ? c.times.map(t=>t.raw).join(' <br> ') : '<span style="color:red; font-weight:bold;">⚠️ الأوقات غير مسجلة! (تواصل مع المشرف لإصلاحها)</span>'}</span> 
+                            | <span style="color:#64748b;">${c.times.length > 0 ? c.times.map(t=>t.raw).join(' <br> ') : '<span style="color:red; font-weight:bold;">⚠️ الأوقات غير مسجلة!</span>'}</span> 
                             | <span style="color:${isClosed?'red':'green'}; font-size:10px;">${c.status}</span>
                         </span>
                     </div>`;
