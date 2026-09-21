@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPU Cloud Schedule - Final Edition V9.0</title>
+    <title>SPU Cloud Schedule - Final Edition V9.1</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
         .header { background: #0f172a; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #38bdf8; }
@@ -44,8 +44,8 @@
 <body>
 
     <div class="header">
-        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول (V9.0)</h2>
-        <p style="margin: 5px 0 0 0; color: #bae6fd;">مزامنة سحابية - أرقام المقاعد - مطابقة جماعية مستقرة</p>
+        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول (V9.1)</h2>
+        <p style="margin: 5px 0 0 0; color: #bae6fd;">مزامنة سحابية - عرض المقاعد - مطابقة جماعية مستقرة</p>
     </div>
 
     <div class="container">
@@ -216,7 +216,7 @@
                     </div>
                     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
                         <div><label>اسم الفئة:</label><br><input type="text" class="editor-input inp-classname" value="${sec.className}"></div>
-                        <div><label>المقاعد والسعة:</label><br><input type="text" class="editor-input inp-seats" value="${sec.seats || ''}" placeholder="(مثال: 45/50)"></div>
+                        <div><label>المقاعد والسعة:</label><br><input type="text" class="editor-input inp-seats" value="${sec.seats || sec.capacity || ''}" placeholder="(مثال: 45/50)"></div>
                         <div><label>الحالة:</label><br>
                             <select class="editor-input inp-status">
                                 <option value="فئة متاحة" ${sec.status.includes('متاحة')?'selected':''}>فئة متاحة</option>
@@ -358,7 +358,9 @@
                         usersHTML_Section += `<label class="user-label ${getColorClass(u)}"><input type="checkbox" class="${secClass}" data-course="${courseName}" value="${c.id}" ${isClosed?'disabled':''} ${isChecked}> ${getUserName(u)}</label>`;
                     }
                     
-                    let seatsDisplay = c.seats ? `<span style="background:#e2e8f0; padding:2px 5px; border-radius:4px; font-size:10px; font-weight:bold; color:#0f172a; margin-right:5px;">${c.seats}</span>` : '';
+                    // التعديل الذكي لالتقاط المقاعد بغض النظر عن اسم الحقل في ملف الـ json
+                    let rawSeats = c.seats || c.capacity || c.seatCount || "";
+                    let seatsDisplay = rawSeats ? `<span style="background:#e2e8f0; padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold; color:#0f172a; margin-right:6px;" title="المقاعد والسعة">👥 ${rawSeats}</span>` : '';
 
                     return `<div style="font-size:12px; display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px dashed #e2e8f0; margin-bottom:4px; ${isClosed ? 'opacity:0.5;' : ''}">
                         <div class="users-row" style="border:none; padding:0; margin:0;">${usersHTML_Section}</div>
@@ -680,7 +682,7 @@
             grp.groupSchedules.forEach(person => { fullWordHTML += wordMatrixGen(person.schedule, `جدول ${getUserName(person.userIndex)}`); });
             fullWordHTML += `</body></html>`;
 
-            const d = document.createElement('div'); d.style.position = 'absolute'; d.style.left = '-9999px'; d.innerHTML = fullWordHTML; document.body.appendChild(d);
+            const d = document.createElement('div'); d.style.position = 'absolute'; d.style.left = `-9999px`; d.innerHTML = fullWordHTML; document.body.appendChild(d);
             const s = window.getSelection(); const r = document.createRange(); r.selectNodeContents(d); s.removeAllRanges(); s.addRange(r);
             try { document.execCommand('copy'); alert('✅ تم النسخ כجدول جماعي احترافي!\nافتح Word واضغط (لصق).'); } catch (e) { alert('❌ فشل النسخ.'); }
             document.body.removeChild(d); s.removeAllRanges();
