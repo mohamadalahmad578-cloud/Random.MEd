@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPU Cloud Schedule</title>
+    <title>SPU Cloud Schedule - Admin Edition</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
         .header { background: #0f172a; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #38bdf8; }
         .container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
-        #setup-screen, #app-screen, #loading-screen { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        #app-screen, #setup-screen { display: none; }
+        #setup-screen, #app-screen, #loading-screen, #editor-screen { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        #app-screen, #setup-screen, #editor-screen { display: none; }
         textarea { width: 100%; height: 130px; padding: 15px; border-radius: 8px; border: 2px dashed #cbd5e1; direction: ltr; font-family: monospace; font-size:13px; resize: vertical; box-sizing: border-box; }
         button.btn-primary { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; width: 100%; }
         button.btn-primary:hover { background: #059669; }
@@ -36,28 +36,51 @@
         .color-friend-2 { color: #ea580c; }
         .color-friend-3 { color: #059669; }
         .color-friend-4 { color: #dc2626; }
+        
+        /* تنسيقات محرر البيانات */
+        .editor-section { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .editor-input { padding: 6px; border: 1px solid #94a3b8; border-radius: 4px; font-family: Tahoma; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول</h2>
-        <p style="margin: 5px 0 0 0; color: #bae6fd;">نظام سحابي مركزي - دخول فوري لجميع الطلاب</p>
+        <p style="margin: 5px 0 0 0; color: #bae6fd;">مزامنة سحابية - أرقام المقاعد - تحكم كامل للمشرف</p>
     </div>
 
     <div class="container">
         <!-- شاشة التحميل المركزية -->
         <div id="loading-screen" style="text-align: center; padding: 80px 20px;">
             <h2 style="color: #0284c7;">🔄 جاري مزامنة قاعدة البيانات من السيرفر...</h2>
-            <p style="color: #64748b;">يرجى الانتظار ثوانٍ قليلة</p>
         </div>
 
-        <!-- شاشة الإدخال (تظهر فقط في حال غياب الداتا المركزية كاحتياط) -->
+        <!-- شاشة الإدخال الاحتياطية -->
         <div id="setup-screen">
-            <h3 style="color: #dc2626;">⚠️ السيرفر المركزي غير متصل!</h3>
-            <p style="color:#475569;">لا يوجد ملف بيانات على غيت هاب حالياً، يرجى للصق البيانات يدوياً:</p>
+            <h3 style="color: #dc2626;">⚠️ السيرفر المركزي فارغ أو غير متصل!</h3>
+            <p style="color:#475569;">يرجى للصق البيانات المسحوبة حديثاً هنا كبداية:</p>
             <textarea id="db-input" placeholder='{"Course Name": [{"id": "...", "type": "theory"...}]}'></textarea><br><br>
             <button class="btn-primary" onclick="saveAndStart()">💾 حفظ الداتا والدخول للنظام</button>
+        </div>
+
+        <!-- لوحة تحكم المشرف (محرر البيانات) -->
+        <div id="editor-screen">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 style="color: #ea580c; margin: 0;">⚙️ لوحة المشرف: تصحيح أوقات الفئات</h2>
+                <button class="btn-secondary" style="background: #64748b;" onclick="closeEditor()">↩️ رجوع للنظام</button>
+            </div>
+            
+            <label style="font-weight: bold; color: #1e293b;">اختر المادة لتعديلها:</label>
+            <select id="editor-course-select" class="editor-input" style="width: 100%; margin-top: 5px; margin-bottom: 20px;" onchange="renderCourseEditor()">
+                <option value="">-- اختر المادة --</option>
+            </select>
+
+            <div id="editor-sections-container"></div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e2e8f0;">
+                <button class="btn-primary" style="background: #0284c7; margin-bottom: 10px;" onclick="saveEditorChanges()">💾 1. حفظ التعديلات في الذاكرة المؤقتة</button>
+                <button class="btn-primary" style="background: #10b981;" onclick="copyFinalData()">📋 2. نسخ قاعدة البيانات النهائية لرفعها لـ GitHub</button>
+            </div>
         </div>
 
         <!-- شاشة التطبيق الرئيسية -->
@@ -71,7 +94,7 @@
                         <h4 style="color: #0284c7; margin:0;">الأشخاص:</h4>
                         <div>
                             <button class="btn-secondary" onclick="addFriend()">➕ صديق</button>
-                            <button class="btn-secondary" style="background:#ef4444; padding:8px 10px;" onclick="showAdminUpdate()" title="كيفية التحديث">⚙️ تحديث الداتا (للمشرف)</button>
+                            <button class="btn-secondary" style="background:#ea580c; padding:8px 10px;" onclick="openEditor()" title="إصلاح الأخطاء في أوقات الفئات">⚙️ تعديل الداتا</button>
                         </div>
                     </div>
                     
@@ -79,7 +102,7 @@
                     
                     <div id="courses-list" style="overflow-y: auto; flex-grow: 1; padding-bottom: 10px;"></div>
                     
-                    <button class="btn-primary" style="margin-top: 15px;" onclick="runGenerator()">⚙️ توليد المصفوفات الجماعية</button>
+                    <button class="btn-primary" style="margin-top: 15px;" onclick="runGenerator()">🚀 توليد المصفوفات الجماعية</button>
                 </div>
                 
                 <div class="main-content">
@@ -98,9 +121,7 @@
         window.generatedGroups = [];
         let usersCount = 1;
 
-        // ميزة المزامنة السحابية الفورية V7.0
         window.onload = function() {
-            // إضافة رقم عشوائي للرابط لمنع تخزين الكاش وضمان أخذ أحدث نسخة دائماً
             fetch('data.json?v=' + new Date().getTime())
                 .then(res => {
                     if(!res.ok) throw new Error('File not found');
@@ -109,7 +130,7 @@
                 .then(data => {
                     parsedCourses = data;
                     if(Object.keys(parsedCourses).length === 0) throw new Error('Empty Data');
-                    bootApp(); // الدخول فوراً بدون أي أزرار!
+                    bootApp();
                 })
                 .catch(err => {
                     document.getElementById('loading-screen').style.display = 'none';
@@ -125,10 +146,6 @@
             } catch (e) { alert('❌ خطأ في تنسيق البيانات!'); }
         };
 
-        window.showAdminUpdate = function() {
-            alert("🔒 نظام التحديث المركزي محمي بحسابك!\n\nبما أنك الأدمن، لتحديث بيانات الفصل للجميع دفعة واحدة:\n1. اسحب الداتا الجديدة من موقع الجامعة.\n2. افتح مستودعك في غيت هاب.\n3. افتح ملف (data.json) واضغط أيقونة التعديل ✏️.\n4. امسح القديم، الصق الجديد، واضغط Commit.\n\nبمجرد الحفظ هناك، سيتحدث الموقع عند كل أصدقائك فوراً بدون أن يطلب منهم إدخال شيء!");
-        };
-
         function bootApp() {
             document.getElementById('setup-screen').style.display = 'none';
             document.getElementById('loading-screen').style.display = 'none';
@@ -136,6 +153,164 @@
             renderUI();
         }
 
+        // ==========================================
+        //         نظام محرر البيانات (للمشرف)
+        // ==========================================
+        
+        window.openEditor = function() {
+            let pass = prompt('الرجاء إدخال كلمة سر المشرف للتعديل:');
+            if(pass !== '7683') { alert('❌ كلمة السر غير صحيحة!'); return; }
+            
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('editor-screen').style.display = 'block';
+            
+            let select = document.getElementById('editor-course-select');
+            select.innerHTML = '<option value="">-- اختر المادة --</option>';
+            Object.keys(parsedCourses).forEach(cName => {
+                select.innerHTML += `<option value="${cName}">${cName}</option>`;
+            });
+            document.getElementById('editor-sections-container').innerHTML = '';
+        };
+
+        window.closeEditor = function() {
+            document.getElementById('editor-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'block';
+            renderUI();
+        };
+
+        function minsToTimeInput(mins) {
+            if(!mins) return "";
+            let h = Math.floor(mins / 60).toString().padStart(2, '0');
+            let m = (mins % 60).toString().padStart(2, '0');
+            return `${h}:${m}`;
+        }
+
+        function timeInputToMins(timeStr) {
+            if(!timeStr) return 0;
+            let parts = timeStr.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        function formatRawTime(day, startMins, endMins) {
+            function formatAMPM(mins) {
+                let h = Math.floor(mins / 60); let m = mins % 60;
+                let ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12; h = h ? h : 12; 
+                let mStr = m.toString().padStart(2, '0');
+                let hStr = h.toString().padStart(2, '0');
+                return `${hStr}:${mStr}${ampm}`;
+            }
+            return `${day} ${formatAMPM(startMins)}-${formatAMPM(endMins)}`;
+        }
+
+        window.renderCourseEditor = function() {
+            let cName = document.getElementById('editor-course-select').value;
+            if(!cName) { document.getElementById('editor-sections-container').innerHTML = ''; return; }
+            
+            let html = '';
+            parsedCourses[cName].forEach((sec, sIdx) => {
+                html += `<div class="editor-section" id="edit-sec-${sIdx}">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <strong>معرف الفئة: </strong> <span style="color:#64748b; font-size:11px;">${sec.id}</span>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+                        <div><label>اسم الفئة:</label><br><input type="text" class="editor-input inp-classname" value="${sec.className}"></div>
+                        <div><label>المقاعد والسعة:</label><br><input type="text" class="editor-input inp-seats" value="${sec.seats || ''}" placeholder="(مثال: 45/50)"></div>
+                        <div><label>الحالة:</label><br>
+                            <select class="editor-input inp-status">
+                                <option value="فئة متاحة" ${sec.status.includes('متاحة')?'selected':''}>فئة متاحة</option>
+                                <option value="فئة ممتلئة" ${sec.status.includes('ممتلئ')||sec.status.includes('مغلق')?'selected':''}>فئة ممتلئة/مغلقة</option>
+                            </select>
+                        </div>
+                    </div>
+                    <strong style="color:#0284c7;">أوقات المحاضرة:</strong>
+                    <div class="times-container" style="margin-top:10px;">`;
+                
+                sec.times.forEach((t, tIdx) => {
+                    let startVal = minsToTimeInput(t.start);
+                    let endVal = minsToTimeInput(t.end);
+                    html += `<div class="time-row" style="background:white; padding:8px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:5px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <select class="editor-input inp-day">
+                            ${daysOfWeek.map(d => `<option value="${d}" ${d===t.day?'selected':''}>${d}</option>`).join('')}
+                        </select>
+                        من: <input type="time" class="editor-input inp-start" value="${startVal}">
+                        إلى: <input type="time" class="editor-input inp-end" value="${endVal}">
+                        <button class="btn-secondary" style="background:#ef4444; padding:4px 8px;" onclick="this.parentElement.remove()">🗑️ حذف الوقت</button>
+                    </div>`;
+                });
+
+                html += `</div>
+                    <button class="btn-secondary" style="margin-top:10px;" onclick="addNewTimeRow(this)">➕ إضافة وقت جديد لهذه الفئة</button>
+                </div>`;
+            });
+            document.getElementById('editor-sections-container').innerHTML = html;
+        };
+
+        window.addNewTimeRow = function(btn) {
+            let container = btn.previousElementSibling;
+            let newRow = document.createElement('div');
+            newRow.className = 'time-row';
+            newRow.style.cssText = 'background:white; padding:8px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:5px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;';
+            newRow.innerHTML = `
+                <select class="editor-input inp-day">
+                    ${daysOfWeek.map(d => `<option value="${d}">${d}</option>`).join('')}
+                </select>
+                من: <input type="time" class="editor-input inp-start" value="08:00">
+                إلى: <input type="time" class="editor-input inp-end" value="09:40">
+                <button class="btn-secondary" style="background:#ef4444; padding:4px 8px;" onclick="this.parentElement.remove()">🗑️ حذف الوقت</button>
+            `;
+            container.appendChild(newRow);
+        };
+
+        window.saveEditorChanges = function() {
+            let cName = document.getElementById('editor-course-select').value;
+            if(!cName) return;
+
+            let sectionsBlocks = document.querySelectorAll('.editor-section');
+            sectionsBlocks.forEach((block, sIdx) => {
+                let sec = parsedCourses[cName][sIdx];
+                sec.className = block.querySelector('.inp-classname').value.trim();
+                sec.seats = block.querySelector('.inp-seats').value.trim();
+                sec.status = block.querySelector('.inp-status').value;
+                
+                let timeRows = block.querySelectorAll('.time-row');
+                sec.times = [];
+                timeRows.forEach(row => {
+                    let day = row.querySelector('.inp-day').value;
+                    let startMins = timeInputToMins(row.querySelector('.inp-start').value);
+                    let endMins = timeInputToMins(row.querySelector('.inp-end').value);
+                    
+                    if(startMins > 0 && endMins > 0) {
+                        sec.times.push({
+                            day: day,
+                            start: startMins,
+                            end: endMins,
+                            raw: formatRawTime(day, startMins, endMins)
+                        });
+                    }
+                });
+            });
+            alert('✅ تم حفظ التعديلات لهذه المادة مؤقتاً في الذاكرة.');
+        };
+
+        window.copyFinalData = function() {
+            let finalJSON = JSON.stringify(parsedCourses);
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = finalJSON;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                document.execCommand('copy');
+                alert("✅ تم نسخ الكود المصحح بالكامل!\n\nاذهب الآن إلى حسابك في غيت هاب، وافتح ملف data.json والصق هذا الكود الجديد داخله ثم اضغط Commit لتحديث الموقع للجميع.");
+            } catch (err) { alert('❌ فشل النسخ!'); }
+            document.body.removeChild(tempTextArea);
+        };
+
+
+        // ==========================================
+        //         بناء الواجهة للمستخدم العادي
+        // ==========================================
+        
         function getColorClass(idx) {
             if(idx === 0) return 'color-me';
             let classes = ['color-friend-1', 'color-friend-2', 'color-friend-3', 'color-friend-4'];
@@ -145,11 +320,6 @@
         function getUserName(idx) {
             return idx === 0 ? "أنا" : `صديق ${idx}`;
         }
-
-        window.addFriend = function() {
-            usersCount++;
-            renderUI();
-        };
 
         function renderUI() {
             if(!document.getElementById('days-container').innerHTML) {
@@ -181,10 +351,17 @@
                         let isChecked = savedStates[secClass + '-' + c.id + '-' + courseName] ? 'checked' : '';
                         usersHTML_Section += `<label class="user-label ${getColorClass(u)}"><input type="checkbox" class="${secClass}" data-course="${courseName}" value="${c.id}" ${isClosed?'disabled':''} ${isChecked}> ${getUserName(u)}</label>`;
                     }
+                    
+                    let seatsDisplay = c.seats ? `<span style="background:#e2e8f0; padding:2px 5px; border-radius:4px; font-size:10px; font-weight:bold; color:#0f172a; margin-right:5px;">${c.seats}</span>` : '';
 
                     return `<div style="font-size:12px; display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px dashed #e2e8f0; margin-bottom:4px; ${isClosed ? 'opacity:0.5;' : ''}">
                         <div class="users-row" style="border:none; padding:0; margin:0;">${usersHTML_Section}</div>
-                        <span><strong style="color:${c.type==='theory'?'#ea580c':'#059669'};">${c.className}</strong> | <span style="color:#64748b;">${c.times.map(t=>t.raw).join(' <br> ')}</span> | <span style="color:${isClosed?'red':'green'}; font-size:10px;">${c.status}</span></span>
+                        <span>
+                            <strong style="color:${c.type==='theory'?'#ea580c':'#059669'};">${c.className}</strong> 
+                            ${seatsDisplay}
+                            | <span style="color:#64748b;">${c.times.length > 0 ? c.times.map(t=>t.raw).join(' <br> ') : '<span style="color:red; font-weight:bold;">⚠️ الأوقات غير مسجلة! (تواصل مع المشرف لإصلاحها)</span>'}</span> 
+                            | <span style="color:${isClosed?'red':'green'}; font-size:10px;">${c.status}</span>
+                        </span>
                     </div>`;
                 }).join('');
 
@@ -234,13 +411,13 @@
 
                 document.querySelectorAll(`.${sectionClass}[data-course="${courseName}"]:checked`).forEach(cb => {
                     let section = parsedCourses[courseName].find(s => s.id === cb.value);
-                    if (!section.times.some(t => excludedDays.includes(t.day))) {
+                    if (section.times.length > 0 && !section.times.some(t => excludedDays.includes(t.day))) {
                         if(section.type === 'theory') theorySecs.push(section); else practicalSecs.push(section);
                     }
                 });
 
-                if (hasTheory && theorySecs.length === 0) return { error: `المادة "${courseName}" تحتاج فئة (نظري).` };
-                if (hasPractical && practicalSecs.length === 0) return { error: `المادة "${courseName}" تحتاج فئة (عملي).` };
+                if (hasTheory && theorySecs.length === 0) return { error: `المادة "${courseName}" تحتاج فئة (نظري) بأوقات صحيحة.` };
+                if (hasPractical && practicalSecs.length === 0) return { error: `المادة "${courseName}" تحتاج فئة (عملي) بأوقات صحيحة.` };
 
                 let validChoices = [];
                 if (theorySecs.length > 0 && practicalSecs.length > 0) {
@@ -301,7 +478,7 @@
                 if(uNames.length > 0) {
                     let uSchedules = buildCombinationsForPool(uNames, `cb-user-${u}-section`, exDays);
                     if(uSchedules.error) return container.innerHTML = `<p style="color:red; text-align:center;">❌ ${getUserName(u)}: ${uSchedules.error}</p>`;
-                    if(uSchedules.length === 0) return container.innerHTML = `<p style="color:red; text-align:center;">❌ ${getUserName(u)}: تعارض زمني!</p>`;
+                    if(uSchedules.length === 0) return container.innerHTML = `<p style="color:red; text-align:center;">❌ ${getUserName(u)}: تعارض زمني مستحيل حله!</p>`;
                     allUsersSchedules.push({ userIndex: u, schedules: uSchedules });
                     activeUsersCount++;
                 }
