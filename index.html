@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPU Cloud Schedule - V8.0</title>
+    <title>SPU Cloud Schedule - Final Edition V9.0</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
         .header { background: #0f172a; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #38bdf8; }
@@ -44,8 +44,8 @@
 <body>
 
     <div class="header">
-        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول (V8.0)</h2>
-        <p style="margin: 5px 0 0 0; color: #bae6fd;">مزامنة سحابية - أرقام المقاعد - تحكم كامل للمشرف</p>
+        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول (V9.0)</h2>
+        <p style="margin: 5px 0 0 0; color: #bae6fd;">مزامنة سحابية - أرقام المقاعد - مطابقة جماعية مستقرة</p>
     </div>
 
     <div class="container">
@@ -57,7 +57,7 @@
         <!-- شاشة الإدخال الاحتياطية -->
         <div id="setup-screen">
             <h3 style="color: #dc2626;">⚠️ السيرفر المركزي فارغ أو غير متصل!</h3>
-            <p style="color:#475569;">يرجى للصق البيانات المسحوبة حديثاً هنا كبداية (أو إنشاء ملف data.json):</p>
+            <p style="color:#475569;">يرجى لصق البيانات المسحوبة هنا كبداية (أو التأكد من وجود ملف data.json):</p>
             <textarea id="db-input" placeholder='{"Course Name": [{"id": "...", "type": "theory"...}]}'></textarea><br><br>
             <button class="btn-primary" onclick="saveAndStart()">💾 الدخول للنظام مؤقتاً</button>
         </div>
@@ -115,7 +115,6 @@
     </div>
 
     <script>
-        // تنظيف شامل لذاكرة المتصفح المحلية لضمان الاعتماد على السيرفر المركزي
         localStorage.removeItem('spu_courses_db');
         
         let parsedCourses = {};
@@ -124,7 +123,6 @@
         let usersCount = 1;
 
         window.onload = function() {
-            // جلب البيانات من السيرفر وإجبار المتصفح على عدم تخزينها
             fetch('data.json?v=' + new Date().getTime())
                 .then(res => {
                     if(!res.ok) throw new Error('File not found');
@@ -323,9 +321,15 @@
             return idx === 0 ? "أنا" : `صديق ${idx}`;
         }
 
+        window.addFriend = function() {
+            usersCount++;
+            renderUI();
+        };
+
         function renderUI() {
-            if(!document.getElementById('days-container').innerHTML) {
-                document.getElementById('days-container').innerHTML = daysOfWeek.map(d => `<label style="background: #f1f5f9; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; border: 1px solid #cbd5e1;"><input type="checkbox" class="exclude-day" value="${d}"> ${d}</label>`).join('');
+            let daysContainer = document.getElementById('days-container');
+            if(daysContainer && !daysContainer.innerHTML) {
+                daysContainer.innerHTML = daysOfWeek.map(d => `<label style="background: #f1f5f9; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; border: 1px solid #cbd5e1;"><input type="checkbox" class="exclude-day" value="${d}"> ${d}</label>`).join('');
             }
             
             let savedStates = {};
@@ -381,20 +385,15 @@
             }).join('');
 
             let searchInput = document.getElementById('search');
-            let oldSearch = searchInput ? searchInput.value : '';
-            if(oldSearch) {
-                let term = oldSearch.toLowerCase();
-                document.querySelectorAll('.course-card').forEach(el => {
-                    el.style.display = el.getAttribute('data-name').toLowerCase().includes(term) ? 'block' : 'none';
+            if(searchInput && !searchInput.dataset.listenerAdded) {
+                searchInput.dataset.listenerAdded = "true";
+                searchInput.addEventListener('input', e => {
+                    let term = e.target.value.toLowerCase();
+                    document.querySelectorAll('.course-card').forEach(el => {
+                        el.style.display = el.getAttribute('data-name').toLowerCase().includes(term) ? 'block' : 'none';
+                    });
                 });
             }
-            
-            searchInput.addEventListener('input', e => {
-                let term = e.target.value.toLowerCase();
-                document.querySelectorAll('.course-card').forEach(el => {
-                    el.style.display = el.getAttribute('data-name').toLowerCase().includes(term) ? 'block' : 'none';
-                });
-            });
         }
 
         window.toggleGroup = function(mainCb, sectionClass) {
