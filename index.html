@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPU Cloud Schedule Generator</title>
+    <title>SPU Schedule - V6.2</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
         .header { background: #0f172a; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #38bdf8; }
@@ -35,6 +35,505 @@
         .color-friend-1 { color: #8b5cf6; }
         .color-friend-2 { color: #ea580c; }
         .color-friend-3 { color: #059669; }
+        .color-friend-4 { color: #dc2626; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول (Cloud Edition)</h2>
+        <p style="margin: 5px 0 0 0; color: #bae6fd;">حفظ تلقائي - مطابقة جماعية - مصفوفات زمنية</p>
+    </div>
+
+    <div class="container">
+        <!-- شاشة الإدخال -->
+        <div id="setup-screen">
+            <h3>📂 قاعدة بيانات الأوقات للفصل الحالي:</h3>
+            <p style="color:#475569;">الصق كود الداتا المستخرج من موقع الجامعة أدناه:</p>
+            <textarea id="db-input" placeholder='{"Course Name": [{"id": "...", "type": "theory"...}]}'></textarea>
+            <br><br>
+            <!-- الزر الجديد مع اسم مختلف للتأكد من تحديث الموقع -->
+            <button class="btn-primary" id="save-btn" onclick="saveAndStart()">💾 حفظ وبدء (V6.2)</button>
+            <div id="saved-notice" style="margin-top: 15px; text-align: center; display: none;">
+                <button class="btn-secondary" style="background:#059669;" onclick="loadSavedAndStart()">⚡ الدخول السريع (الداتا المحفوظة مسبقاً)</button>
+            </div>
+        </div>
+
+        <!-- شاشة التطبيق الرئيسية -->
+        <div id="app-screen">
+            <div class="grid-layout">
+                <div class="sidebar">
+                    <h4 style="color: #ef4444; margin-top:0;">أيام العطلة المستبعدة:</h4>
+                    <div id="days-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <h4 style="color: #0284c7; margin:0;">الأشخاص:</h4>
+                        <div>
+                            <button class="btn-secondary" onclick="addFriend()">➕ صديق</button>
+                            <button class="btn-secondary" style="background:#ef4444; padding:8px 10px;" onclick="resetDatabase()" title="تحديث الداتا للفصل الجديد">🔄 تحديث</button>
+                        </div>
+                    </div>
+                    
+                    <input type="text" id="search" placeholder="🔍 ابحث عن مادة..." style="padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box; width:100%;">
+                    
+                    <div id="courses-list" style="overflow-y: auto; flex-grow: 1; padding-bottom: 10px;"></div>
+                    
+                    <button class="btn-primary" style="margin-top: 15px;" onclick="runGenerator()">⚙️ توليد المصفوفات الجماعية</button>
+                </div>
+                
+                <div class="main-content">
+                    <h4 style="color: #10b981; margin-top:0;">نتائج المصفوفات الزمنية:</h4>
+                    <div id="results-container" style="background: #f8fafc; border-radius: 8px; padding: 20px; border: 1px dashed #cbd5e1; flex-grow: 1; overflow-y: auto;">
+                        <p style="text-align: center; color: #94a3b8; margin-top: 150px; font-size:16px;">حدد المواد واضغط توليد!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let parsedCourses = {};
+        const daysOfWeek = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+        window.generatedGroups = [];
+        let usersCount = 1;
+
+        window.onload = function() {
+            try {
+                let savedDb = localStorage.getItem('spu_courses_db');
+                if(savedDb) {
+                    document.getElementById('saved-notice').style.display = 'block';
+                    document.getElementById('db-input').value = savedDb;
+                }
+            } catch(e) { console.log('Local storage error', e); }
+        };
+
+        window.saveAndStart = function() {
+            try {
+                const input = document.getElementById('db-input').value.trim();
+                if(!input) { alert('❌ الرجاء لصق البيانات أولاً!'); return; }
+                
+                parsedCourses = JSON.parse(input);
+                
+                if(Object.keys(parsedCourses).length === 0) {
+                    alert('⚠️ النص المنسوخ لا يحتوي على مقررات صحيحة. يرجى سحب البيانات مرة أخرى.');
+                    return;
+                }
+
+                try { localStorage.setItem('spu_courses_db', input); } catch(err) {}
+                bootApp();
+            } catch (e) { 
+                alert('❌ خطأ في تنسيق البيانات!\nتأكد أنك نسخت النص كاملاً من أداة السحب دون نقص.\nالتفاصيل: ' + e.message); 
+            }
+        };
+
+        window.loadSavedAndStart = function() {
+            let savedDb = localStorage.getItem('spu_courses_db');
+            if(savedDb) {
+                try {
+                    parsedCourses = JSON.parse(savedDb);
+                    bootApp();
+                } catch(e) {
+                    alert('❌ الداتا المحفوظة تالفة. يرجى تحديثها.');
+                }
+            }
+        };
+
+        window.resetDatabase = function() {
+            let pass = prompt('الرجاء إدخال كلمة سر التحديث (تأكيد المسح):');
+            if(pass === '7683') {
+                localStorage.removeItem('spu_courses_db');
+                document.getElementById('app-screen').style.display = 'none';
+                document.getElementById('setup-screen').style.display = 'block';
+                document.getElementById('db-input').value = '';
+                document.getElementById('saved-notice').style.display = 'none';
+                alert('✅ تم فتح قفل التحديث. يمكنك الآن لصق بيانات الفصل الجديد.');
+            } else if(pass !== null) {
+                alert('❌ كلمة السر غير صحيحة!');
+            }
+        };
+
+        function bootApp() {
+            document.getElementById('setup-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'block';
+            renderUI();
+        }
+
+        function getColorClass(idx) {
+            if(idx === 0) return 'color-me';
+            let classes = ['color-friend-1', 'color-friend-2', 'color-friend-3', 'color-friend-4'];
+            return classes[(idx - 1) % classes.length];
+        }
+        
+        function getUserName(idx) {
+            return idx === 0 ? "أنا" : `صديق ${idx}`;
+        }
+
+        window.addFriend = function() {
+            usersCount++;
+            renderUI();
+        };
+
+        function renderUI() {
+            if(!document.getElementById('days-container').innerHTML) {
+                document.getElementById('days-container').innerHTML = daysOfWeek.map(d => `<label style="background: #f1f5f9; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; border: 1px solid #cbd5e1;"><input type="checkbox" class="exclude-day" value="${d}"> ${d}</label>`).join('');
+            }
+            
+            let savedStates = {};
+            document.querySelectorAll('#app-screen input[type="checkbox"]').forEach(cb => {
+                if(cb.className.includes('cb-user-') || cb.className === 'exclude-day') {
+                    savedStates[cb.className + '-' + cb.value + '-' + cb.dataset.course] = cb.checked;
+                }
+            });
+
+            const list = document.getElementById('courses-list');
+            list.innerHTML = Object.keys(parsedCourses).map((courseName, idx) => {
+                let safeId = "cgroup-" + idx;
+                
+                let usersHTML_Header = '';
+                for(let u=0; u<usersCount; u++) {
+                    let uClass = `cb-user-${u}-course`;
+                    let isChecked = savedStates[uClass + '-' + courseName + '-undefined'] ? 'checked' : '';
+                    usersHTML_Header += `<label class="user-label ${getColorClass(u)}"><input type="checkbox" class="${uClass}" value="${courseName}" onchange="toggleGroup(this, 'cb-user-${u}-section')" ${isChecked}> ${getUserName(u)}</label>`;
+                }
+
+                let sectionsHTML = parsedCourses[courseName].map(c => {
+                    let isClosed = c.status.includes('مغلقة') || c.status.includes('ممتلئة') || c.status.includes('غير متاحة');
+                    
+                    let usersHTML_Section = '';
+                    for(let u=0; u<usersCount; u++) {
+                        let secClass = `cb-user-${u}-section`;
+                        let isChecked = savedStates[secClass + '-' + c.id + '-' + courseName] ? 'checked' : '';
+                        usersHTML_Section += `<label class="user-label ${getColorClass(u)}"><input type="checkbox" class="${secClass}" data-course="${courseName}" value="${c.id}" ${isClosed?'disabled':''} ${isChecked}> ${getUserName(u)}</label>`;
+                    }
+
+                    return `<div style="font-size:12px; display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px dashed #e2e8f0; margin-bottom:4px; ${isClosed ? 'opacity:0.5;' : ''}">
+                        <div class="users-row" style="border:none; padding:0; margin:0;">${usersHTML_Section}</div>
+                        <span><strong style="color:${c.type==='theory'?'#ea580c':'#059669'};">${c.className}</strong> | <span style="color:#64748b;">${c.times.map(t=>t.raw).join(' <br> ')}</span> | <span style="color:${isClosed?'red':'green'}; font-size:10px;">${c.status}</span></span>
+                    </div>`;
+                }).join('');
+
+                return `
+                <div class="course-card" data-name="${courseName}">
+                    <div class="course-header">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:13px; font-weight:bold;">${courseName}</span>
+                            <button onclick="let el = document.getElementById('${safeId}'); el.style.display = el.style.display === 'none' ? 'flex' : 'none';" style="background: #e2e8f0; border:none; cursor:pointer; font-size:11px; padding:4px 8px; border-radius:4px; font-weight:bold;">الفئات 🔽</button>
+                        </div>
+                        <div class="users-row">${usersHTML_Header}</div>
+                    </div>
+                    <div id="${safeId}" class="course-body">${sectionsHTML}</div>
+                </div>`;
+            }).join('');
+
+            let searchInput = document.getElementById('search');
+            let oldSearch = searchInput ? searchInput.value : '';
+            if(oldSearch) {
+                let term = oldSearch.toLowerCase();
+                document.querySelectorAll('.course-card').forEach(el => {
+                    el.style.display = el.getAttribute('data-name').toLowerCase().includes(term) ? 'block' : 'none';
+                });
+            }
+            
+            searchInput.addEventListener('input', e => {
+                let term = e.target.value.toLowerCase();
+                document.querySelectorAll('.course-card').forEach(el => {
+                    el.style.display = el.getAttribute('data-name').toLowerCase().includes(term) ? 'block' : 'none';
+                });
+            });
+        }
+
+        window.toggleGroup = function(mainCb, sectionClass) {
+            document.querySelectorAll(`.${sectionClass}[data-course="${mainCb.value}"]`).forEach(cb => {
+                if (!cb.disabled) cb.checked = mainCb.checked;
+            });
+        };
+
+        function buildCombinationsForPool(coursesNames, sectionClass, excludedDays) {
+            if (coursesNames.length === 0) return [];
+            let coursesPool = [];
+            for (let courseName of coursesNames) {
+                let theorySecs = [], practicalSecs = [];
+                let hasTheory = parsedCourses[courseName].some(s => s.type === 'theory');
+                let hasPractical = parsedCourses[courseName].some(s => s.type === 'practical');
+
+                document.querySelectorAll(`.${sectionClass}[data-course="${courseName}"]:checked`).forEach(cb => {
+                    let section = parsedCourses[courseName].find(s => s.id === cb.value);
+                    if (!section.times.some(t => excludedDays.includes(t.day))) {
+                        if(section.type === 'theory') theorySecs.push(section); else practicalSecs.push(section);
+                    }
+                });
+
+                if (hasTheory && theorySecs.length === 0) return { error: `المادة "${courseName}" تحتاج فئة (نظري).` };
+                if (hasPractical && practicalSecs.length === 0) return { error: `المادة "${courseName}" تحتاج فئة (عملي).` };
+
+                let validChoices = [];
+                if (theorySecs.length > 0 && practicalSecs.length > 0) {
+                    for(let t of theorySecs) for(let p of practicalSecs) validChoices.push([t, p]);
+                } else if (theorySecs.length > 0) validChoices = theorySecs.map(t => [t]);
+                else if (practicalSecs.length > 0) validChoices = practicalSecs.map(p => [p]);
+
+                if (validChoices.length === 0) return { error: `لا يوجد احتمالات صالحة لمادة "${courseName}".` };
+                coursesPool.push(validChoices);
+            }
+
+            let validSchedules = [];
+            function checkConflict(schedule, newChoice) {
+                if(newChoice.length > 1) {
+                    for (let t1 of newChoice[0].times) { if(t1.start===0) continue;
+                        for (let t2 of newChoice[1].times) { if(t2.start===0) continue;
+                            if (t1.day === t2.day && t1.start < t2.end && t2.start < t1.end) return true;
+                        }
+                    }
+                }
+                for (let existing of schedule) {
+                    for (let t1 of existing.times) { if(t1.start===0) continue;
+                        for (let newSec of newChoice) {
+                            for (let t2 of newSec.times) { if(t2.start===0) continue;
+                                if (t1.day === t2.day && t1.start < t2.end && t2.start < t1.end) return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+
+            function combine(depth, currentSchedule) {
+                if(validSchedules.length > 300) return;
+                if (depth === coursesPool.length) { validSchedules.push([...currentSchedule]); return; }
+                for (let choice of coursesPool[depth]) {
+                    if (!checkConflict(currentSchedule, choice)) {
+                        currentSchedule.push(...choice);
+                        combine(depth + 1, currentSchedule);
+                        for(let i=0; i<choice.length; i++) currentSchedule.pop();
+                    }
+                }
+            }
+            combine(0, []);
+            return validSchedules;
+        }
+
+        window.runGenerator = function() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = '<h3 style="text-align:center; color:#334155;">جاري الحساب... ⏳</h3>';
+
+            const exDays = Array.from(document.querySelectorAll('.exclude-day:checked')).map(cb => cb.value);
+            let allUsersSchedules = []; 
+            let activeUsersCount = 0;
+
+            for(let u=0; u<usersCount; u++) {
+                let uNames = Array.from(document.querySelectorAll(`.cb-user-${u}-course:checked`)).map(cb => cb.value);
+                if(uNames.length > 0) {
+                    let uSchedules = buildCombinationsForPool(uNames, `cb-user-${u}-section`, exDays);
+                    if(uSchedules.error) return container.innerHTML = `<p style="color:red; text-align:center;">❌ ${getUserName(u)}: ${uSchedules.error}</p>`;
+                    if(uSchedules.length === 0) return container.innerHTML = `<p style="color:red; text-align:center;">❌ ${getUserName(u)}: تعارض زمني!</p>`;
+                    allUsersSchedules.push({ userIndex: u, schedules: uSchedules });
+                    activeUsersCount++;
+                }
+            }
+
+            if(activeUsersCount === 0) return container.innerHTML = '<p style="color:red; text-align:center; font-weight:bold;">❌ اختر مواد لشخص واحد على الأقل!</p>';
+
+            window.generatedGroups = [];
+            let resultsHtml = '';
+
+            if(activeUsersCount === 1) {
+                let userObj = allUsersSchedules[0];
+                let limit = Math.min(userObj.schedules.length, 50);
+                resultsHtml += `<h3 style="color:#0284c7; text-align:center;">جداول ${getUserName(userObj.userIndex)} (${userObj.schedules.length} خيار)</h3>`;
+                for (let idx=0; idx<limit; idx++) {
+                    let sch = userObj.schedules[idx];
+                    window.generatedGroups.push({ groupSchedules: [{userIndex: userObj.userIndex, schedule: sch}], score: 0 });
+                    resultsHtml += `
+                    <div class="result-card" style="border: 1px solid #cbd5e1;">
+                        <div class="result-header" style="background:#f1f5f9;">
+                            <strong style="color:#0f172a; font-size:16px;">مقترح #${idx+1}</strong>
+                            <button onclick="exportWord(${idx})" style="background:#2563eb; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-weight:bold;">📥 تصدير لـ Word</button>
+                        </div>
+                        <div style="padding:20px;">
+                            ${buildMatrixHTML(sch, [], `جدول ${getUserName(userObj.userIndex)}`)}
+                            ${buildSummaryHTML(sch, [])}
+                        </div>
+                    </div>`;
+                }
+                container.innerHTML = resultsHtml;
+                return;
+            }
+
+            let groupedCombinations = []; 
+            function combineGroups(depth, currentGroup) {
+                if(groupedCombinations.length > 500) return; 
+                if(depth === allUsersSchedules.length) { groupedCombinations.push([...currentGroup]); return; }
+                let currentPersonSchedules = allUsersSchedules[depth].schedules;
+                for(let sch of currentPersonSchedules) {
+                    currentGroup.push({ userIndex: allUsersSchedules[depth].userIndex, schedule: sch });
+                    combineGroups(depth + 1, currentGroup);
+                    currentGroup.pop();
+                }
+            }
+            combineGroups(0, []);
+
+            let scoredGroups = [];
+            groupedCombinations.forEach(group => {
+                let score = 0;
+                for(let i=0; i<group.length; i++) {
+                    for(let j=i+1; j<group.length; j++) {
+                        let sA = group[i].schedule; let sB = group[j].schedule;
+                        for(let cA of sA) for(let cB of sB) if(cA.id === cB.id) score++; 
+                    }
+                }
+                scoredGroups.push({ groupSchedules: group, score: score });
+            });
+
+            scoredGroups.sort((a, b) => b.score - a.score);
+            let limit = Math.min(scoredGroups.length, 50);
+            
+            resultsHtml += `<h3 style="color:#059669; text-align:center;">🎉 أفضل ${limit} مطابقة جماعية</h3>`;
+            for (let idx=0; idx<limit; idx++) {
+                let grp = scoredGroups[idx]; window.generatedGroups.push(grp);
+                let allIds = {};
+                grp.groupSchedules.forEach(person => { person.schedule.forEach(sec => { allIds[sec.id] = (allIds[sec.id] || 0) + 1; }); });
+                let sharedIds = Object.keys(allIds).filter(id => allIds[id] > 1);
+
+                resultsHtml += `
+                <div class="result-card" style="border: 2px solid ${grp.score>0?'#10b981':'#cbd5e1'};">
+                    <div class="result-header" style="background:${grp.score>0?'#ecfdf5':'#f1f5f9'};">
+                        <div>
+                            <strong style="color:#0f172a; font-size:16px;">مقترح مدمج #${idx+1}</strong>
+                            <span style="background:#10b981; color:white; padding:4px 10px; border-radius:12px; font-size:12px; margin-right:15px;">النقاط المشتركة: ${grp.score} 🤝</span>
+                        </div>
+                        <button onclick="exportWord(${idx})" style="background:#2563eb; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-weight:bold;">📥 تصدير الجداول لـ Word</button>
+                    </div>
+                    <div style="padding:20px; display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">`;
+                
+                grp.groupSchedules.forEach((person) => {
+                    let w = activeUsersCount === 2 ? '48%' : (activeUsersCount === 3 ? '31%' : '100%');
+                    resultsHtml += `<div style="flex:1; min-width:300px; max-width:${w}; border-right:1px dashed #cbd5e1; padding-right:15px;">${buildMatrixHTML(person.schedule, sharedIds, `جدول ${getUserName(person.userIndex)}`)}${buildSummaryHTML(person.schedule, sharedIds)}</div>`;
+                });
+                resultsHtml += `</div></div>`;
+            }
+            container.innerHTML = resultsHtml;
+        };
+
+        function buildMatrixHTML(schedule, sharedIds, title) {
+            let daysMap = {}; daysOfWeek.forEach(d => daysMap[d] = []);
+            schedule.forEach(sec => {
+                let isShared = sharedIds.includes(sec.id);
+                sec.times.forEach(t => { if(t.start > 0) daysMap[t.day].push({ course: sec.course, className: sec.className, rawTime: t.raw, start: t.start, isShared: isShared, type: sec.type }); });
+            });
+
+            let html = `<div style="margin-bottom: 15px;"><h4 style="color:#0f172a; margin: 0 0 10px 0; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px;">📅 ${title}</h4>`;
+            html += `<table class="matrix-table">`;
+            let hasDays = false;
+            daysOfWeek.forEach(day => {
+                if(daysMap[day].length > 0) {
+                    hasDays = true;
+                    daysMap[day].sort((a,b) => a.start - b.start);
+                    html += `<tr><td class="day-cell">${day}</td><td><div style="display: flex; gap: 8px; flex-wrap: wrap;">`;
+                    daysMap[day].forEach(item => {
+                        let bgColor = item.isShared ? '#dcfce7' : '#f8fafc';
+                        let borderColor = item.isShared ? '#22c55e' : '#cbd5e1';
+                        let badgeColor = item.type === 'theory' ? '#ea580c' : '#059669';
+                        html += `
+                        <div class="time-block" style="background: ${bgColor}; border: 1px solid ${borderColor}; min-width: 140px;">
+                            <div style="font-weight:bold; color:#0f172a; margin-bottom:4px; font-size:11px; display:flex; justify-content:space-between;">
+                                <span>${item.course} ${item.isShared ? '🤝' : ''}</span>
+                                <span style="background:${badgeColor}; color:white; padding:2px 4px; border-radius:4px; font-size:9px;">${item.type==='theory'?'نظري':'عملي'}</span>
+                            </div>
+                            <div style="color:#475569; font-size:10px;">${item.className}</div>
+                            <div style="color:#1e293b; font-size:10px; margin-top:4px; font-weight:bold; font-family:monospace;">⌚ ${item.rawTime.replace(day, '').trim()}</div>
+                        </div>`;
+                    });
+                    html += `</div></td></tr>`;
+                }
+            });
+            if(!hasDays) html += `<tr><td colspan="2" style="text-align:center; padding:10px;">لا يوجد دوام!</td></tr>`;
+            html += `</table></div>`;
+            return html;
+        }
+
+        function buildSummaryHTML(schedule, sharedIds) {
+            let coursesMap = {};
+            schedule.forEach(sec => {
+                if(!coursesMap[sec.course]) coursesMap[sec.course] = { theory: '-', practical: '-', theoryShared: false, practicalShared: false };
+                let isShared = sharedIds.includes(sec.id);
+                if(sec.type === 'theory') { coursesMap[sec.course].theory = sec.className; coursesMap[sec.course].theoryShared = isShared; } 
+                else { coursesMap[sec.course].practical = sec.className; coursesMap[sec.course].practicalShared = isShared; }
+            });
+
+            let html = `<table class="summary-table"><tr><th>المقرر</th><th>فئة النظري</th><th>فئة العملي</th></tr>`;
+            Object.keys(coursesMap).forEach(cName => {
+                let data = coursesMap[cName];
+                let tBg = data.theoryShared ? '#dcfce7' : (data.theory !== '-' ? 'white' : '#f8fafc');
+                let pBg = data.practicalShared ? '#dcfce7' : (data.practical !== '-' ? 'white' : '#f8fafc');
+                html += `<tr><td style="font-weight:bold; background:#f8fafc;">${cName}</td><td style="background:${tBg};">${data.theory} ${data.theoryShared?'🤝':''}</td><td style="background:${pBg};">${data.practical} ${data.practicalShared?'🤝':''}</td></tr>`;
+            });
+            html += `</table>`;
+            return html;
+        }
+
+        window.exportWord = function(index) {
+            let grp = window.generatedGroups[index];
+            let allIds = {};
+            grp.groupSchedules.forEach(person => { person.schedule.forEach(sec => { allIds[sec.id] = (allIds[sec.id] || 0) + 1; }); });
+            let sharedIds = Object.keys(allIds).filter(id => allIds[id] > 1);
+
+            function wordMatrixGen(schedule, title) {
+                let daysMap = {}; daysOfWeek.forEach(d => daysMap[d] = []);
+                schedule.forEach(sec => {
+                    let isShared = sharedIds.includes(sec.id);
+                    sec.times.forEach(t => { if(t.start > 0) daysMap[t.day].push({ course: sec.course, className: sec.className, rawTime: t.raw, start: t.start, isShared: isShared, type: sec.type }); });
+                });
+
+                let wHtml = `<h2 style="color:#0f172a; border-bottom: 2px solid #ccc; padding-bottom:5px; margin-top:40px;">📅 ${title}</h2>`;
+                wHtml += `<table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse: collapse; font-family: 'Segoe UI', Arial; font-size:11pt; text-align:right;" dir="rtl">`;
+                daysOfWeek.forEach(day => {
+                    if(daysMap[day].length > 0) {
+                        daysMap[day].sort((a,b) => a.start - b.start);
+                        wHtml += `<tr><td style="width:15%; background:#e2e8f0; font-weight:bold; text-align:center; vertical-align:middle;">${day}</td><td style="width:85%; padding:10px;">`;
+                        daysMap[day].forEach(item => {
+                            let bg = item.isShared ? '#dcfce7' : '#f8fafc';
+                            wHtml += `<div style="background:${bg}; border:1px solid #94a3b8; padding:8px; margin-bottom:8px;">`;
+                            wHtml += `<strong>${item.course} ${item.isShared ? '🤝' : ''}</strong> - [${item.type==='theory'?'نظري':'عملي'}]<br>`;
+                            wHtml += `<span style="color:#475569;">${item.className}</span><br>`;
+                            wHtml += `<strong style="color:#b91c1c;">⌚ ${item.rawTime.replace(day, '').trim()}</strong></div>`;
+                        });
+                        wHtml += `</td></tr>`;
+                    }
+                });
+                wHtml += `</table><br>`;
+                
+                let coursesMap = {};
+                schedule.forEach(sec => {
+                    if(!coursesMap[sec.course]) coursesMap[sec.course] = { theory: '-', practical: '-', theoryShared: false, practicalShared: false };
+                    if(sec.type === 'theory') { coursesMap[sec.course].theory = sec.className; coursesMap[sec.course].theoryShared = sharedIds.includes(sec.id); } 
+                    else { coursesMap[sec.course].practical = sec.className; coursesMap[sec.course].practicalShared = sharedIds.includes(sec.id); }
+                });
+
+                wHtml += `<h3 style="color:#334155;">📋 الملخص التفصيلي للفئات</h3>`;
+                wHtml += `<table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse; font-family: 'Segoe UI', Arial; font-size:10pt; text-align:center;">`;
+                wHtml += `<tr style="background:#cbd5e1;"><th>المقرر</th><th>فئة النظري</th><th>فئة العملي</th></tr>`;
+                Object.keys(coursesMap).forEach(cName => {
+                    let data = coursesMap[cName];
+                    let tBg = data.theoryShared ? '#dcfce7' : (data.theory !== '-' ? 'white' : '#f8fafc');
+                    let pBg = data.practicalShared ? '#dcfce7' : (data.practical !== '-' ? 'white' : '#f8fafc');
+                    wHtml += `<tr><td style="background:#f8fafc; font-weight:bold;">${cName}</td><td style="background:${tBg};">${data.theory} ${data.theoryShared?'🤝':''}</td><td style="background:${pBg};">${data.practical} ${data.practicalShared?'🤝':''}</td></tr>`;
+                });
+                wHtml += `</table><br><br>`;
+                return wHtml;
+            }
+
+            let fullWordHTML = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body style="font-family:'Segoe UI', Arial, sans-serif; direction:rtl;"><h1 style="text-align:center; color:#1e3a8a; font-size:24pt; border-bottom:4px solid #1e3a8a; padding-bottom:10px;">الجداول الأكاديمية المشتركة (SPU)</h1>`;
+            grp.groupSchedules.forEach(person => { fullWordHTML += wordMatrixGen(person.schedule, `جدول ${getUserName(person.userIndex)}`); });
+            fullWordHTML += `</body></html>`;
+
+            const d = document.createElement('div'); d.style.position = 'absolute'; d.style.left = '-9999px'; d.innerHTML = fullWordHTML; document.body.appendChild(d);
+            const s = window.getSelection(); const r = document.createRange(); r.selectNodeContents(d); s.removeAllRanges(); s.addRange(r);
+            try { document.execCommand('copy'); alert('✅ تم النسخ כجدول جماعي احترافي!\nافتح Word واضغط (لصق).'); } catch (e) { alert('❌ فشل النسخ.'); }
+            document.body.removeChild(d); s.removeAllRanges();
+        };
+    </script>
+</body>
+</html>        .color-friend-3 { color: #059669; }
         .color-friend-4 { color: #dc2626; }
     </style>
 </head>
