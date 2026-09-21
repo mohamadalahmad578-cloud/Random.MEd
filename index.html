@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPU Schedule - V6.2</title>
+    <title>SPU Cloud Schedule</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
         .header { background: #0f172a; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #38bdf8; }
         .container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
-        #setup-screen, #app-screen { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        #app-screen { display: none; }
+        #setup-screen, #app-screen, #loading-screen { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        #app-screen, #setup-screen { display: none; }
         textarea { width: 100%; height: 130px; padding: 15px; border-radius: 8px; border: 2px dashed #cbd5e1; direction: ltr; font-family: monospace; font-size:13px; resize: vertical; box-sizing: border-box; }
         button.btn-primary { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; width: 100%; }
         button.btn-primary:hover { background: #059669; }
@@ -41,22 +41,23 @@
 <body>
 
     <div class="header">
-        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول (Cloud Edition)</h2>
-        <p style="margin: 5px 0 0 0; color: #bae6fd;">حفظ تلقائي - مطابقة جماعية - مصفوفات زمنية</p>
+        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول</h2>
+        <p style="margin: 5px 0 0 0; color: #bae6fd;">نظام سحابي مركزي - دخول فوري لجميع الطلاب</p>
     </div>
 
     <div class="container">
-        <!-- شاشة الإدخال -->
+        <!-- شاشة التحميل المركزية -->
+        <div id="loading-screen" style="text-align: center; padding: 80px 20px;">
+            <h2 style="color: #0284c7;">🔄 جاري مزامنة قاعدة البيانات من السيرفر...</h2>
+            <p style="color: #64748b;">يرجى الانتظار ثوانٍ قليلة</p>
+        </div>
+
+        <!-- شاشة الإدخال (تظهر فقط في حال غياب الداتا المركزية كاحتياط) -->
         <div id="setup-screen">
-            <h3>📂 قاعدة بيانات الأوقات للفصل الحالي:</h3>
-            <p style="color:#475569;">الصق كود الداتا المستخرج من موقع الجامعة أدناه:</p>
-            <textarea id="db-input" placeholder='{"Course Name": [{"id": "...", "type": "theory"...}]}'></textarea>
-            <br><br>
-            <!-- الزر الجديد مع اسم مختلف للتأكد من تحديث الموقع -->
-            <button class="btn-primary" id="save-btn" onclick="saveAndStart()">💾 حفظ وبدء (V6.2)</button>
-            <div id="saved-notice" style="margin-top: 15px; text-align: center; display: none;">
-                <button class="btn-secondary" style="background:#059669;" onclick="loadSavedAndStart()">⚡ الدخول السريع (الداتا المحفوظة مسبقاً)</button>
-            </div>
+            <h3 style="color: #dc2626;">⚠️ السيرفر المركزي غير متصل!</h3>
+            <p style="color:#475569;">لا يوجد ملف بيانات على غيت هاب حالياً، يرجى للصق البيانات يدوياً:</p>
+            <textarea id="db-input" placeholder='{"Course Name": [{"id": "...", "type": "theory"...}]}'></textarea><br><br>
+            <button class="btn-primary" onclick="saveAndStart()">💾 حفظ الداتا والدخول للنظام</button>
         </div>
 
         <!-- شاشة التطبيق الرئيسية -->
@@ -70,7 +71,7 @@
                         <h4 style="color: #0284c7; margin:0;">الأشخاص:</h4>
                         <div>
                             <button class="btn-secondary" onclick="addFriend()">➕ صديق</button>
-                            <button class="btn-secondary" style="background:#ef4444; padding:8px 10px;" onclick="resetDatabase()" title="تحديث الداتا للفصل الجديد">🔄 تحديث</button>
+                            <button class="btn-secondary" style="background:#ef4444; padding:8px 10px;" onclick="showAdminUpdate()" title="كيفية التحديث">⚙️ تحديث الداتا (للمشرف)</button>
                         </div>
                     </div>
                     
@@ -84,7 +85,7 @@
                 <div class="main-content">
                     <h4 style="color: #10b981; margin-top:0;">نتائج المصفوفات الزمنية:</h4>
                     <div id="results-container" style="background: #f8fafc; border-radius: 8px; padding: 20px; border: 1px dashed #cbd5e1; flex-grow: 1; overflow-y: auto;">
-                        <p style="text-align: center; color: #94a3b8; margin-top: 150px; font-size:16px;">حدد المواد واضغط توليد!</p>
+                        <p style="text-align: center; color: #94a3b8; margin-top: 150px; font-size:16px;">حدد المواد لك ولأصدقائك واضغط توليد!</p>
                     </div>
                 </div>
             </div>
@@ -97,63 +98,40 @@
         window.generatedGroups = [];
         let usersCount = 1;
 
+        // ميزة المزامنة السحابية الفورية V7.0
         window.onload = function() {
-            try {
-                let savedDb = localStorage.getItem('spu_courses_db');
-                if(savedDb) {
-                    document.getElementById('saved-notice').style.display = 'block';
-                    document.getElementById('db-input').value = savedDb;
-                }
-            } catch(e) { console.log('Local storage error', e); }
+            // إضافة رقم عشوائي للرابط لمنع تخزين الكاش وضمان أخذ أحدث نسخة دائماً
+            fetch('data.json?v=' + new Date().getTime())
+                .then(res => {
+                    if(!res.ok) throw new Error('File not found');
+                    return res.json();
+                })
+                .then(data => {
+                    parsedCourses = data;
+                    if(Object.keys(parsedCourses).length === 0) throw new Error('Empty Data');
+                    bootApp(); // الدخول فوراً بدون أي أزرار!
+                })
+                .catch(err => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('setup-screen').style.display = 'block';
+                });
         };
 
         window.saveAndStart = function() {
             try {
                 const input = document.getElementById('db-input').value.trim();
-                if(!input) { alert('❌ الرجاء لصق البيانات أولاً!'); return; }
-                
                 parsedCourses = JSON.parse(input);
-                
-                if(Object.keys(parsedCourses).length === 0) {
-                    alert('⚠️ النص المنسوخ لا يحتوي على مقررات صحيحة. يرجى سحب البيانات مرة أخرى.');
-                    return;
-                }
-
-                try { localStorage.setItem('spu_courses_db', input); } catch(err) {}
                 bootApp();
-            } catch (e) { 
-                alert('❌ خطأ في تنسيق البيانات!\nتأكد أنك نسخت النص كاملاً من أداة السحب دون نقص.\nالتفاصيل: ' + e.message); 
-            }
+            } catch (e) { alert('❌ خطأ في تنسيق البيانات!'); }
         };
 
-        window.loadSavedAndStart = function() {
-            let savedDb = localStorage.getItem('spu_courses_db');
-            if(savedDb) {
-                try {
-                    parsedCourses = JSON.parse(savedDb);
-                    bootApp();
-                } catch(e) {
-                    alert('❌ الداتا المحفوظة تالفة. يرجى تحديثها.');
-                }
-            }
-        };
-
-        window.resetDatabase = function() {
-            let pass = prompt('الرجاء إدخال كلمة سر التحديث (تأكيد المسح):');
-            if(pass === '7683') {
-                localStorage.removeItem('spu_courses_db');
-                document.getElementById('app-screen').style.display = 'none';
-                document.getElementById('setup-screen').style.display = 'block';
-                document.getElementById('db-input').value = '';
-                document.getElementById('saved-notice').style.display = 'none';
-                alert('✅ تم فتح قفل التحديث. يمكنك الآن لصق بيانات الفصل الجديد.');
-            } else if(pass !== null) {
-                alert('❌ كلمة السر غير صحيحة!');
-            }
+        window.showAdminUpdate = function() {
+            alert("🔒 نظام التحديث المركزي محمي بحسابك!\n\nبما أنك الأدمن، لتحديث بيانات الفصل للجميع دفعة واحدة:\n1. اسحب الداتا الجديدة من موقع الجامعة.\n2. افتح مستودعك في غيت هاب.\n3. افتح ملف (data.json) واضغط أيقونة التعديل ✏️.\n4. امسح القديم، الصق الجديد، واضغط Commit.\n\nبمجرد الحفظ هناك، سيتحدث الموقع عند كل أصدقائك فوراً بدون أن يطلب منهم إدخال شيء!");
         };
 
         function bootApp() {
             document.getElementById('setup-screen').style.display = 'none';
+            document.getElementById('loading-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'block';
             renderUI();
         }
@@ -188,7 +166,6 @@
             const list = document.getElementById('courses-list');
             list.innerHTML = Object.keys(parsedCourses).map((courseName, idx) => {
                 let safeId = "cgroup-" + idx;
-                
                 let usersHTML_Header = '';
                 for(let u=0; u<usersCount; u++) {
                     let uClass = `cb-user-${u}-course`;
@@ -198,7 +175,6 @@
 
                 let sectionsHTML = parsedCourses[courseName].map(c => {
                     let isClosed = c.status.includes('مغلقة') || c.status.includes('ممتلئة') || c.status.includes('غير متاحة');
-                    
                     let usersHTML_Section = '';
                     for(let u=0; u<usersCount; u++) {
                         let secClass = `cb-user-${u}-section`;
@@ -531,75 +507,6 @@
             try { document.execCommand('copy'); alert('✅ تم النسخ כجدول جماعي احترافي!\nافتح Word واضغط (لصق).'); } catch (e) { alert('❌ فشل النسخ.'); }
             document.body.removeChild(d); s.removeAllRanges();
         };
-    </script>
-</body>
-</html>        .color-friend-3 { color: #059669; }
-        .color-friend-4 { color: #dc2626; }
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <h2 style="margin: 0;">🎓 نظام SPU الذكي للجداول (Protected Edition)</h2>
-        <p style="margin: 5px 0 0 0; color: #bae6fd;">محمي بحقوق الملكية الفكرية - مطابقة جماعية - مصفوفات زمنية</p>
-    </div>
-
-    <div class="container">
-        <!-- شاشة إدخال وتحديث البيانات -->
-        <div id="setup-screen">
-            <h3>📂 قاعدة بيانات الأوقات للفصل الحالي:</h3>
-            <p style="color:#475569;">الصق كود الداتا المستخرج من موقع الجامعة أدناه:</p>
-            <textarea id="db-input" placeholder='{"Course Name": [{"id": "...", "type": "theory"...}]}'></textarea>
-            <br><br>
-            <button class="btn-primary" onclick="saveAndStart()">💾 حفظ الداتا والدخول للنظام</button>
-            <div id="saved-notice" style="margin-top: 15px; text-align: center; display: none;">
-                <button class="btn-secondary" style="background:#059669;" onclick="loadSavedAndStart()">⚡ الدخول السريع (الداتا المحفوظة مسبقاً)</button>
-            </div>
-        </div>
-
-        <!-- شاشة التطبيق الرئيسية -->
-        <div id="app-screen">
-            <div class="grid-layout">
-                <div class="sidebar">
-                    <h4 style="color: #ef4444; margin-top:0;">أيام العطلة المستبعدة:</h4>
-                    <div id="days-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                        <h4 style="color: #0284c7; margin:0;">الأشخاص:</h4>
-                        <div>
-                            <button class="btn-secondary" onclick="addFriend()">➕ صديق</button>
-                            <button class="btn-secondary" style="background:#ef4444; padding:8px 10px;" onclick="resetDatabase()" title="تحديث الداتا للفصل الجديد">🔄 تحديث</button>
-                        </div>
-                    </div>
-                    
-                    <input type="text" id="search" placeholder="🔍 ابحث عن مادة..." style="padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box; width:100%;">
-                    
-                    <div id="courses-list" style="overflow-y: auto; flex-grow: 1; padding-bottom: 10px;"></div>
-                    
-                    <button class="btn-primary" style="margin-top: 15px;" onclick="runGenerator()">⚙️ توليد المصفوفات الجماعية</button>
-                </div>
-                
-                <div class="main-content">
-                    <h4 style="color: #10b981; margin-top:0;">نتائج المصفوفات الزمنية:</h4>
-                    <div id="results-container" style="background: #f8fafc; border-radius: 8px; padding: 20px; border: 1px dashed #cbd5e1; flex-grow: 1; overflow-y: auto;">
-                        <p style="text-align: center; color: #94a3b8; margin-top: 150px; font-size:16px;">حدد المواد واضغط توليد!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- كود JavaScript المشفر والمحمي بالكامل -->
-    <script>
-    eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[e(c)];e=function(c){return(c.string?c:d[c])||c};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('2 R={};2 3=\'السُّبت\',\'الأحد\',\'الإثنين\',\'الثلاثاء\',\'الأربعاء\',\'الخميس\',\'الجمعة\'];2 Q=[];2 I=1;M.g=2(){2 b=x.u(\'p_k_q\');b&&(x.u(\'r-o\').d.display=\'block\',x.u(\'3-n\').v=b)};2 j(){g{2 b=x.u(\'3-n\').v.trim();if(!b){alert(\'الرجاء لصق البيانات أولاً!\');y}R=JSON.parse(b);x.setItem(\'p_k_q\',b);K()}catch(c){alert(\'❌ خطأ في تنسيق البيانات!\")}}2 m(){2 b=x.getItem(\'p_k_q\');b&&(R=JSON.parse(b),K())}2 H(){2 b=prompt(\'الرجاء إدخال كلمة سر التحديث:\');if(b===\'7683\'){x.removeItem(\'p_k_q\');x.u(\'w-l\').d.display=\'none\';x.u(\'r-o\').d.display=\'block\';x.u(\'3-n\').v=\'\';x.u(\'r-notice\').d.display=\'none\';alert(\'✅ تم فتح قفل التحديث بنجاح.\')}el{b!==null&&alert(\'❌ كلمة السر غير صحيحة!\")}}2 K(){x.u(\'r-o\').d.display=\'none\';x.u(\'w-l\').d.display=\'block\';L()}2 O(b){return b===0?\'أنا\':`صديق ${b}`}2 P(){I++;L()}2 L(){if(!x.u(\'l-container\').h){x.u(\'l-container\').h=3.g(2(b){return`<label style="background: #f1f5f9; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; border: 1px solid #cbd5e1;"><input type="checkbox" class="exclude-day" value="${b}"> ${b}</label>`}).join(\'\')}2 b={};x.querySelectorAll(\'#w-l input[type="checkbox"]\').g(2(e){(e.className.includes(\'cb-user-\')||e.className===\'exclude-day\')&&(b[e.className+\'-\'+e.value+\'-\'+e.dataset.course]=e.checked)});2 e=x.u(\'courses-list\');e.h=Object.keys(R).g(2(a,f){2 c=`cgroup-${f}`,h=\'\';for(2 i=0;i<I;i++){2 k=`cb-user-${i}-course`,s=b[k+\'-\'+a+\'-undefined\']?\'checked\':\'\';h+=`<label class="user-label ${i===0?\'color-me\':`color-friend-${i}`}"><input type="checkbox" class="${k}" value="${a}" onchange="toggleGroup(this, \'cb-user-${i}-section\')" ${s}> ${O(i)}</label>`}2 t=R[a].g(2(z){2 v=z.status.includes(\'مغلقة\')||z.status.includes(\'ممتلئة\')||z.status.includes(\'غير متاحة\'),A=\'\';for(2 i=0;i<I;i++){2 k=`cb-user-${i}-section`,s=b[k+\'-\'+z.id+\'-'+a+\']?\'checked\':\'\';A+=`<label class="user-label ${i===0?\'color-me\':`color-friend-${i}`}"><input type="checkbox" class="${k}" data-course="${a}" value="${z.id}" ${v?\'disabled\':\'\'} ${s}> ${O(i)}</label>`}return`<div style="font-size:12px; display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px dashed #e2e8f0; margin-bottom:4px; ${v?\'opacity:0.5;\':\'\'}"><div class="users-row" style="border:none; padding:0; margin:0;">${A}</div><span><strong style="color:${z.type===\'theory\'?\'#ea580c\':\'#059669\'};">${z.className}</strong> | <span style="color:#64748b;">${z.times.g(2(B){return B.raw}).join(\' <br> \')}</span> | <span style="color:${v?\'red\':\'green\'}; font-size:10px;">${z.status}</span></span></div>`}).join(\'\');return`<div class="course-card" data-name="${a}"><div class="course-header"><div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:13px; font-weight:bold;">${a}</span><button onclick="let el = document.getElementById(\'${c}\'); el.style.display = el.style.display === \'none\' ? \'flex\' : \'none\';" style="background: #e2e8f0; border:none; cursor:pointer; font-size:11px; padding:4px 8px; border-radius:4px; font-weight:bold;">الفئات 🔽</button></div><div class="users-row">${h}</div></div><div id="${c}" class="course-body">${t}</div></div>`}).join(\'\');2 c=x.u(\'search\');c.addEventListener(\'input\',2(a){2 f=a.target.value.toLowerCase();x.querySelectorAll(\'.course-card\').g(2(c){c.style.display=c.getAttribute(\'data-name\').toLowerCase().includes(f)?\'block\':\'none\'})})}2 toggleGroup(b,e){x.querySelectorAll(`.${e}[data-course="${b.value}"]`).g(2(c){c.disabled||(c.checked=b.checked)})}2 S(b,e,c){if(b.length===0)ret [];2 f=[];b.g(2(a){2 h=[],t=[];2 v=R[a].some(2(z){ret z.type===\'theory\'}),A=R[a].some(2(z){ret z.type===\'practical\'});x.querySelectorAll(`.${e}[data-course="${a}"]:checked`).g(2(z){2 B=R[a].find(2(C){ret C.id===z.value});B.times.some(2(C){ret c.includes(C.day)})||(B.type===\'theory\'?h.push(B):t.push(B))});if(v&&h.length===0)ret{error:`المادة "${a}" تحتاج فئة (نظري).`};if(A&&t.length===0)ret{error:`المادة "${a}" تحتاج فئة (عملي).`};2 D=[];h.length>0&&t.length>0?h.g(2(z){t.g(2(A){D.push([z,A])})}):h.length>0?D=h.g(2(z){ret[z]}):t.length>0&&(D=t.g(2(z){ret[z]}));if(D.length===0)ret{error:`لا يوجد احتمالات صالحة لمادة "${a}".`};f.push(D)});2 k=[];2 T(b,e){if(k.length>300)ret;if(b===f.length){k.push([...e]);ret}f[b].g(2(a){U(e,a)&&(e.push(...a),T(b+1,e),2(a=0;a<a.length;a++)e.pop())})}2 U(b,e){if(e.length>1){for(2 c=0;c<e[0].times.length;c++){if(e[0].times[c].start===0)cont;for(2 f=0;f<e[1].times.length;f++){if(e[1].times[f].start===0)cont;if(e[0].times[c].day===e[1].times[f].day&&e[0].times[c].start<e[1].times[f].end&&e[1].times[f].start<e[0].times[c].end)ret 1}}}for(2 c=0;c<b.length;c++){for(2 f=0;f<b[c].times.length;f++){if(b[c].times[f].start===0)cont;for(2 a=0;a<e.length;a++){for(2 h=0;h<e[a].times.length;h++){if(e[a].times[h].start===0)cont;if(b[c].times[f].day===e[a].times[h].day&&b[c].times[f].start<e[a].times[h].end&&e[a].times[h].start<b[c].times[f].end)ret 1}}}}ret 0}T(0,[]);ret k}2 runGenerator(){2 b=x.u(\'results-container\');b.h=\'<h3 style="text-align:center; color:#334155;">جاري الحساب... ⏳</h3>\';2 e=Array.from(x.querySelectorAll(\'.exclude-day:checked\')).g(2(a){ret a.value}),c=[],f=0;for(2 a=0;a<I;a++){2 h=Array.from(x.querySelectorAll(`.cb-user-${a}-course:checked`)).g(2(c){ret c.value});if(h.length>0){2 t=S(h,`cb-user-${a}-section`,e);if(t.error)ret b.h=`<p style="color:red; text-align:center;">❌ ${O(a)}: ${t.error}</p>`;if(t.length===0)ret b.h=`<p style="color:red; text-align:center;">❌ ${O(a)}: تعارض زمني!</p>`;c.push({userIndex:a,schedules:t});f++}}if(f===0)ret b.h=\'<p style="color:red; text-align:center; font-weight:bold;">❌ اختر مواد لشخص واحد على الأقل!</p>\';Q=[];2 h=\'\';if(f===1){2 a=c[0],t=Math.min(a.schedules.length,50);h+=`<h3 style="color:#0284c7; text-align:center;">جداول ${O(a.userIndex)} (${a.schedules.length} خيار)</h3>`;for(2 z=0;z<t;z++){2 v=a.schedules[z];Q.push({groupSchedules:[{userIndex:a.userIndex,schedule:v}],score:0});h+=`<div class="result-card" style="border: 1px solid #cbd5e1;"><div class="result-header" style="background:#f1f5f9;"><strong style="color:#0f172a; font-size:16px;">مقترح #${z+1}</strong><button onclick="exportWord(${z})" style="background:#2563eb; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-weight:bold;">📥 تصدير لـ Word</button></div><div style="padding:20px;">${V(v,[],`جدول ${O(a.userIndex)}`)}${W(v,[])}</div></div>`}b.h=h;ret}2 A=[];2 V(b,e){if(A.length>500)ret;if(b===c.length){A.push([...e]);ret}2 D=c[b].schedules;for(2 z=0;z<D.length;z++){e.push({userIndex:c[b].userIndex,schedule:D[z]});V(b+1,e);e.pop()}}V(0,[]);2 z=[];A.g(2(b){2 e=0;for(2 c=0;c<b.length;c++){for(2 f=0;f<b.length;f++){if(c!==f){2 a=b[c].schedule,h=b[f].schedule;for(2 t=0;t<a.length;t++){for(2 z=0;z<h.length;z++){a[t].id===h[z].id&&e++}}}}}z.push({groupSchedules:b,score:e})});z.sort(2(b,e){ret e.score-b.score});2 t=Math.min(z.length,50);h+=`<h3 style="color:#059669; text-align:center;">🎉 أفضل ${t} مطابقة جماعية</h3>`;for(2 v=0;v<t;v++){2 a=z[v];Q.push(a);2 D={};a.groupSchedules.g(2(b){b.schedule.g(2(a){D[a.id]=(D[a.id]||0)+1})});2 F=Object.keys(D).filter(2(b){ret D[b]>1});h+=`<div class="result-card" style="border: 2px solid ${a.score>0?\'#10b981\':\'#cbd5e1\'};"><div class="result-header" style="background:${a.score>0?\'#ecfdf5\':\'#f1f5f9\'};"><div><strong style="color:#0f172a; font-size:16px;">مقترح مدمج #${v+1}</strong><span style="background:#10b981; color:white; padding:4px 10px; border-radius:12px; font-size:12px; margin-right:15px;">النقاط المشتركة: ${a.score} 🤝</span></div><button onclick="exportWord(${v})" style="background:#2563eb; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-weight:bold;">📥 تصدير الجداول لـ Word</button></div><div style="padding:20px; display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">`;a.groupSchedules.g(2(b){2 c=f===2?\'48%\':f===3?\'31%\':\'100%\';h+=`<div style="flex:1; min-width:300px; max-width:${c}; border-right:1px dashed #cbd5e1; padding-right:15px;">${V(b.schedule,F,`جدول ${O(b.userIndex)}`)}${W(b.schedule,F)}</div>`});h+=\'</div></div>\'}b.h=h}2 V(b,e,c){2 f={};3.g(2(a){f[a]=[]});b.g(2(a){2 h=e.includes(a.id);a.times.g(2(t){t.start>0&&f[t.day].push({course:a.course,className:a.className,rawTime:t.raw,start:t.start,isShared:h,type:a.type})})});2 a=`<div style="margin-bottom: 15px;"><h4 style="color:#0f172a; margin: 0 0 10px 0; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px;">📅 ${c}</h4>`;a+=\'<table class="matrix-table">\';2 h=0;3.g(2(c){if(f[c].length>0){h=1;f[c].sort(2(b,a){ret b.start-a.start});a+=`<tr><td class="day-cell">${c}</td><td><div style="display: flex; gap: 8px; flex-wrap: wrap;">`;f[c].g(2(b){2 e=b.isShared?\'#dcfce7\':\'#f8fafc\',z=b.isShared?\'#22c55e\':\'#cbd5e1\',v=b.type===\'theory\'?\'#ea580c\':\'#059669\';a+=`<div class="time-block" style="background: ${e}; border: 1px solid ${z}; min-width: 140px;"><div style="font-weight:bold; color:#0f172a; margin-bottom:4px; font-size:11px; display:flex; justify-content:space-between;"><span>${b.course} ${b.isShared?\'🤝\':\'\'}</span><span style="background:${v}; color:white; padding:2px 4px; border-radius:4px; font-size:9px;">${b.type===\'theory\'?\'نظري\':\'عملي\'}</span></div><div style="color:#475569; font-size:10px;">${b.className}</div><div style="color:#1e293b; font-size:10px; margin-top:4px; font-weight:bold; font-family:monospace;">⌚ ${b.rawTime.replace(c,\'\').trim()}</div></div>`});a+=\'</div></td></tr>\'}});h||(a+=\'<tr><td colspan="2" style="text-align:center; padding:10px;">لا يوجد دوام!</td></tr>\');a+=\'</table></div>\';ret a}2 W(b,e){2 c={};b.g(2(a){c[a.course]||(c[a.course]={theory:\'-\',practical:\'-\',theoryShared:0,practicalShared:0});2 f=e.includes(a.id);a.type===\'theory\'?(c[a.course].theory=a.className,c[a.course].theoryShared=f):(c[a.course].practical=a.className,c[a.course].practicalShared=f)});2 f=\'<table class="summary-table"><tr><th>المقرر</th><th>فئة النظري</th><th>فئة العملي</th></tr>\';Object.keys(c).g(2(a){2 h=c[a],t=h.theoryShared?\'#dcfce7\':h.theory!==\'-\'?\'white\':\'#f8fafc\',v=h.practicalShared?\'#dcfce7\':h.practical!==\'-\'?\'white\':\'#f8fafc\';f+=`<tr><td style="font-weight:bold; background:#f8fafc;">${a}</td><td style="background:${t};">${h.theory} ${h.theoryShared?\'🤝\':\'\'}</td><td style="background:${v};">${h.practical} ${h.practicalShared?\'🤝\':\'\'}</td></tr>`});f+=\'</table>\';ret f}2 exportWord(b){2 e=Q[b],c={};e.groupSchedules.g(2(b){b.schedule.g(2(a){c[a.id]=(c[a.id]||0)+1})});2 f=Object.keys(c).filter(2(b){ret c[b]>1});2 a=2(b,a){2 c={};3.g(2(a){c[a]=[]});b.g(2(b){2 h=f.includes(b.id);b.times.g(2(t){t.start>0&&c[t.day].push({course:b.course,className:b.className,rawTime:t.raw,start:t.start,isShared:h,type:b.type})})});2 d=`<h2 style="color:#0f172a; border-bottom: 2px solid #ccc; padding-bottom:5px; margin-top:40px;">📅 ${a}</h2>`;d+=\'<table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse: collapse; font-family: \'Segoe UI\', Arial; font-size:11pt; text-align:right;" dir="rtl">\';3.g(2(b){if(c[b].length>0){c[b].sort(2(b,a){ret b.start-a.start});d+=`<tr><td style="width:15%; background:#e2e8f0; font-weight:bold; text-align:center; vertical-align:middle;">${b}</td><td style="width:85%; padding:10px;">`;c[b].g(2(a){2 h=a.isShared?\'#dcfce7\':\'#f8fafc\';d+=`<div style="background:${h}; border:1px solid #94a3b8; padding:8px; margin-bottom:8px;">`;d+=`<strong>${a.course} ${a.isShared?\'🤝\':\'\'}</strong> - [${a.type===\'theory\'?\'نظري\':\'عملي\'}]<br>`;d+=`<span style="color:#475569;">${a.className}</span><br>`;d+=`<strong style="color:#b91c1c;">⌚ ${a.rawTime.replace(b,\'\').trim()}</strong></div>`});d+=\'</td></tr>\'}});d+=\'</table><br>\';2 h={};b.g(2(b){h[b.course]||(h[b.course]={theory:\'-\',practical:\'-\',theoryShared:0,practicalShared:0});2 c=f.includes(b.id);b.type===\'theory\'?(h[b.course].theory=b.className,h[b.course].theoryShared=c):(h[b.course].practical=b.className,h[b.course].practicalShared=c)});d+=\'<h3 style="color:#334155;">📋 الملخص التفصيلي للفئات</h3>\';d+=\'<table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse; font-family: \'Segoe UI\', Arial; font-size:10pt; text-align:center;">\';d+=\'<tr style="background:#cbd5e1;"><th>المقرر</th><th>فئة النظري</th><th>فئة العملي</th></tr>\';Object.keys(h).g(2(a){2 c=h[a],t=c.theoryShared?\'#dcfce7\':c.theory!==\'-\'?\'white\':\'#f8fafc\',v=c.practicalShared?\'#dcfce7\':c.practical!==\'-\'?\'white\':\'#f8fafc\';d+=`<tr><td style="background:#f8fafc; font-weight:bold;">${a}</td><td style="background:${t};">${c.theory} ${c.theoryShared?\'🤝\':\'\'}</td><td style="background:${v};">${c.practical} ${c.practicalShared?\'🤝\':\'\'}</td></tr>`});d+=\'</table><br><br>\';ret d};2 h=\'<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body style="font-family:\'Segoe UI\', Arial, sans-serif; direction:rtl;"><h1 style="text-align:center; color:#1e3a8a; font-size:24pt; border-bottom:4px solid #1e3a8a; padding-bottom:10px;">الجداول الأكاديمية المشتركة (SPU)</h1>\';e.groupSchedules.g(2(b){h+=a(b.schedule,`جدول ${O(b.userIndex)}`)});h+=\'</body></html>\';2 d=document.createElement(\'div\');d.style.position=\'absolute\';d.style.left=\'-9999px\';d.innerHTML=h;document.body.appendChild(d);2 t=window.getSelection(),s=document.createRange();s.selectNodeContents(d);t.removeAllRanges();t.addRange(s);try{document.execCommand(\'copy\');alert(\'✅ تم النسخ כجدول جماعي احترافي!\nافتح Word واضغط (لصق).\')}catch(v){alert(\'❌ فشل النسخ.\')}document.body.removeChild(d);t.removeAllRanges()};',63,63||'|function|var|daysOfWeek|document|getElementById|onload|innerHTML|usersCount|j|cgroup|days-container|m|style|e|f|bootApp|length|i|saveAndStart|k|l-container|loadSavedAndStart|setup-screen|spu_courses_db|setup|db|sols|الأحد|t|getElementById|value|w-l|localStorage|return|z|A|B|C|D|F|runGenerator|H|O|P|L|M|getUserName|addFriend|Q|R|S|T|U|V|W|x|if|scoredGroups'.split('|'),0,{}))
-    </script>
-</body>
-</html>        </div>
-    </div>
-
-    <!-- كود JavaScript المشفر والمحمي بالكامل -->
-    <script>
-    eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[e(c)];e=function(c){return(c.string?c:d[c])||c};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('2 R={};2 3=\'السُّبت\',\'الأحد\',\'الإثنين\',\'الثلاثاء\',\'الأربعاء\',\'الخميس\',\'الجمعة\'];2 Q=[];2 I=1;M.g=2(){2 b=x.u(\'p_k_q\');b&&(x.u(\'r-o\').d.display=\'block\',x.u(\'3-n\').v=b)};2 j(){g{2 b=x.u(\'3-n\').v.trim();if(!b){alert(\'الرجاء لصق البيانات أولاً!\');y}R=JSON.parse(b);x.setItem(\'p_k_q\',b);K()}catch(c){alert(\'❌ خطأ في تنسيق البيانات!\")}}2 m(){2 b=x.getItem(\'p_k_q\');b&&(R=JSON.parse(b),K())}2 H(){2 b=prompt(\'الرجاء إدخال كلمة سر التحديث:\');if(b===\'7683\'){x.removeItem(\'p_k_q\');x.u(\'w-l\').d.display=\'none\';x.u(\'r-o\').d.display=\'block\';x.u(\'3-n\').v=\'\';x.u(\'r-notice\').d.display=\'none\';alert(\'✅ تم فتح قفل التحديث بنجاح.\')}el{b!==null&&alert(\'❌ كلمة السر غير صحيحة!\")}}2 K(){x.u(\'r-o\').d.display=\'none\';x.u(\'w-l\').d.display=\'block\';L()}2 O(b){return b===0?\'أنا\':`صديق ${b}`}2 P(){I++;L()}2 L(){if(!x.u(\'l-container\').h){x.u(\'l-container\').h=3.g(2(b){return`<label style="background: #f1f5f9; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; border: 1px solid #cbd5e1;"><input type="checkbox" class="exclude-day" value="${b}"> ${b}</label>`}).join(\'\')}2 b={};x.querySelectorAll(\'#w-l input[type="checkbox"]\').g(2(e){(e.className.includes(\'cb-user-\')||e.className===\'exclude-day\')&&(b[e.className+\'-\'+e.value+\'-\'+e.dataset.course]=e.checked)});2 e=x.u(\'courses-list\');e.h=Object.keys(R).g(2(a,f){2 c=`cgroup-${f}`,h=\'\';for(2 i=0;i<I;i++){2 k=`cb-user-${i}-course`,s=b[k+\'-\'+a+\'-undefined\']?\'checked\':\'\';h+=`<label class="user-label ${i===0?\'color-me\':`color-friend-${i}`}"><input type="checkbox" class="${k}" value="${a}" onchange="toggleGroup(this, \'cb-user-${i}-section\')" ${s}> ${O(i)}</label>`}2 t=R[a].g(2(z){2 v=z.status.includes(\'مغلقة\')||z.status.includes(\'ممتلئة\')||z.status.includes(\'غير متاحة\'),A=\'\';for(2 i=0;i<I;i++){2 k=`cb-user-${i}-section`,s=b[k+\'-\'+z.id+\'-'+a+\']?\'checked\':\'\';A+=`<label class="user-label ${i===0?\'color-me\':`color-friend-${i}`}"><input type="checkbox" class="${k}" data-course="${a}" value="${z.id}" ${v?\'disabled\':\'\'} ${s}> ${O(i)}</label>`}return`<div style="font-size:12px; display:flex; flex-direction:column; gap:4px; padding-bottom:8px; border-bottom:1px dashed #e2e8f0; margin-bottom:4px; ${v?\'opacity:0.5;\':\'\'}"><div class="users-row" style="border:none; padding:0; margin:0;">${A}</div><span><strong style="color:${z.type===\'theory\'?\'#ea580c\':\'#059669\'};">${z.className}</strong> | <span style="color:#64748b;">${z.times.g(2(B){return B.raw}).join(\' <br> \')}</span> | <span style="color:${v?\'red\':\'green\'}; font-size:10px;">${z.status}</span></span></div>`}).join(\'\');return`<div class="course-card" data-name="${a}"><div class="course-header"><div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:13px; font-weight:bold;">${a}</span><button onclick="let el = document.getElementById(\'${c}\'); el.style.display = el.style.display === \'none\' ? \'flex\' : \'none\';" style="background: #e2e8f0; border:none; cursor:pointer; font-size:11px; padding:4px 8px; border-radius:4px; font-weight:bold;">الفئات 🔽</button></div><div class="users-row">${h}</div></div><div id="${c}" class="course-body">${t}</div></div>`}).join(\'\');2 c=x.u(\'search\');c.addEventListener(\'input\',2(a){2 f=a.target.value.toLowerCase();x.querySelectorAll(\'.course-card\').g(2(c){c.style.display=c.getAttribute(\'data-name\').toLowerCase().includes(f)?\'block\':\'none\'})})}2 toggleGroup(b,e){x.querySelectorAll(`.${e}[data-course="${b.value}"]`).g(2(c){c.disabled||(c.checked=b.checked)})}2 S(b,e,c){if(b.length===0)ret [];2 f=[];b.g(2(a){2 h=[],t=[];2 v=R[a].some(2(z){ret z.type===\'theory\'}),A=R[a].some(2(z){ret z.type===\'practical\'});x.querySelectorAll(`.${e}[data-course="${a}"]:checked`).g(2(z){2 B=R[a].find(2(C){ret C.id===z.value});B.times.some(2(C){ret c.includes(C.day)})||(B.type===\'theory\'?h.push(B):t.push(B))});if(v&&h.length===0)ret{error:`المادة "${a}" تحتاج فئة (نظري).`};if(A&&t.length===0)ret{error:`المادة "${a}" تحتاج فئة (عملي).`};2 D=[];h.length>0&&t.length>0?h.g(2(z){t.g(2(A){D.push([z,A])})}):h.length>0?D=h.g(2(z){ret[z]}):t.length>0&&(D=t.g(2(z){ret[z]}));if(D.length===0)ret{error:`لا يوجد احتمالات صالحة لمادة "${a}".`};f.push(D)});2 k=[];2 T(b,e){if(k.length>300)ret;if(b===f.length){k.push([...e]);ret}f[b].g(2(a){U(e,a)&&(e.push(...a),T(b+1,e),2(a=0;a<a.length;a++)e.pop())})}2 U(b,e){if(e.length>1){for(2 c=0;c<e[0].times.length;c++){if(e[0].times[c].start===0)cont;for(2 f=0;f<e[1].times.length;f++){if(e[1].times[f].start===0)cont;if(e[0].times[c].day===e[1].times[f].day&&e[0].times[c].start<e[1].times[f].end&&e[1].times[f].start<e[0].times[c].end)ret 1}}}for(2 c=0;c<b.length;c++){for(2 f=0;f<b[c].times.length;f++){if(b[c].times[f].start===0)cont;for(2 a=0;a<e.length;a++){for(2 h=0;h<e[a].times.length;h++){if(e[a].times[h].start===0)cont;if(b[c].times[f].day===e[a].times[h].day&&b[c].times[f].start<e[a].times[h].end&&e[a].times[h].start<b[c].times[f].end)ret 1}}}}ret 0}T(0,[]);ret k}2 runGenerator(){2 b=x.u(\'results-container\');b.h=\'<h3 style="text-align:center; color:#334155;">جاري الحساب... ⏳</h3>\';2 e=Array.from(x.querySelectorAll(\'.exclude-day:checked\')).g(2(a){ret a.value}),c=[],f=0;for(2 a=0;a<I;a++){2 h=Array.from(x.querySelectorAll(`.cb-user-${a}-course:checked`)).g(2(c){ret c.value});if(h.length>0){2 t=S(h,`cb-user-${a}-section`,e);if(t.error)ret b.h=`<p style="color:red; text-align:center;">❌ ${O(a)}: ${t.error}</p>`;if(t.length===0)ret b.h=`<p style="color:red; text-align:center;">❌ ${O(a)}: تعارض زمني!</p>`;c.push({userIndex:a,schedules:t});f++}}if(f===0)ret b.h=\'<p style="color:red; text-align:center; font-weight:bold;">❌ اختر مواد لشخص واحد على الأقل!</p>\';Q=[];2 h=\'\';if(f===1){2 a=c[0],t=Math.min(a.schedules.length,50);h+=`<h3 style="color:#0284c7; text-align:center;">جداول ${O(a.userIndex)} (${a.schedules.length} خيار)</h3>`;for(2 z=0;z<t;z++){2 v=a.schedules[z];Q.push({groupSchedules:[{userIndex:a.userIndex,schedule:v}],score:0});h+=`<div class="result-card" style="border: 1px solid #cbd5e1;"><div class="result-header" style="background:#f1f5f9;"><strong style="color:#0f172a; font-size:16px;">مقترح #${z+1}</strong><button onclick="exportWord(${z})" style="background:#2563eb; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-weight:bold;">📥 تصدير لـ Word</button></div><div style="padding:20px;">${V(v,[],`جدول ${O(a.userIndex)}`)}${W(v,[])}</div></div>`}b.h=h;ret}2 A=[];2 V(b,e){if(A.length>500)ret;if(b===c.length){A.push([...e]);ret}2 D=c[b].schedules;for(2 z=0;z<D.length;z++){e.push({userIndex:c[b].userIndex,schedule:D[z]});V(b+1,e);e.pop()}}V(0,[]);2 z=[];A.g(2(b){2 e=0;for(2 c=0;c<b.length;c++){for(2 f=0;f<b.length;f++){if(c!==f){2 a=b[c].schedule,h=b[f].schedule;for(2 t=0;t<a.length;t++){for(2 z=0;z<h.length;z++){a[t].id===h[z].id&&e++}}}}}z.push({groupSchedules:b,score:e})});z.sort(2(b,e){ret e.score-b.score});2 t=Math.min(z.length,50);h+=`<h3 style="color:#059669; text-align:center;">🎉 أفضل ${t} مطابقة جماعية</h3>`;for(2 v=0;v<t;v++){2 a=z[v];Q.push(a);2 D={};a.groupSchedules.g(2(b){b.schedule.g(2(a){D[a.id]=(D[a.id]||0)+1})});2 F=Object.keys(D).filter(2(b){ret D[b]>1});h+=`<div class="result-card" style="border: 2px solid ${a.score>0?\'#10b981\':\'#cbd5e1\'};"><div class="result-header" style="background:${a.score>0?\'#ecfdf5\':\'#f1f5f9\'};"><div><strong style="color:#0f172a; font-size:16px;">مقترح مدمج #${v+1}</strong><span style="background:#10b981; color:white; padding:4px 10px; border-radius:12px; font-size:12px; margin-right:15px;">النقاط المشتركة: ${a.score} 🤝</span></div><button onclick="exportWord(${v})" style="background:#2563eb; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-weight:bold;">📥 تصدير الجداول لـ Word</button></div><div style="padding:20px; display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">`;a.groupSchedules.g(2(b){2 c=f===2?\'48%\':f===3?\'31%\':\'100%\';h+=`<div style="flex:1; min-width:300px; max-width:${c}; border-right:1px dashed #cbd5e1; padding-right:15px;">${V(b.schedule,F,`جدول ${O(b.userIndex)}`)}${W(b.schedule,F)}</div>`});h+=\'</div></div>\'}b.h=h}2 V(b,e,c){2 f={};3.g(2(a){f[a]=[]});b.g(2(a){2 h=e.includes(a.id);a.times.g(2(t){t.start>0&&f[t.day].push({course:a.course,className:a.className,rawTime:t.raw,start:t.start,isShared:h,type:a.type})})});2 a=`<div style="margin-bottom: 15px;"><h4 style="color:#0f172a; margin: 0 0 10px 0; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px;">📅 ${c}</h4>`;a+=\'<table class="matrix-table">\';2 h=0;3.g(2(c){if(f[c].length>0){h=1;f[c].sort(2(b,a){ret b.start-a.start});a+=`<tr><td class="day-cell">${c}</td><td><div style="display: flex; gap: 8px; flex-wrap: wrap;">`;f[c].g(2(b){2 e=b.isShared?\'#dcfce7\':\'#f8fafc\',z=b.isShared?\'#22c55e\':\'#cbd5e1\',v=b.type===\'theory\'?\'#ea580c\':\'#059669\';a+=`<div class="time-block" style="background: ${e}; border: 1px solid ${z}; min-width: 140px;"><div style="font-weight:bold; color:#0f172a; margin-bottom:4px; font-size:11px; display:flex; justify-content:space-between;"><span>${b.course} ${b.isShared?\'🤝\':\'\'}</span><span style="background:${v}; color:white; padding:2px 4px; border-radius:4px; font-size:9px;">${b.type===\'theory\'?\'نظري\':\'عملي\'}</span></div><div style="color:#475569; font-size:10px;">${b.className}</div><div style="color:#1e293b; font-size:10px; margin-top:4px; font-weight:bold; font-family:monospace;">⌚ ${b.rawTime.replace(c,\'\').trim()}</div></div>`});a+=\'</div></td></tr>\'}});h||(a+=\'<tr><td colspan="2" style="text-align:center; padding:10px;">لا يوجد دوام!</td></tr>\');a+=\'</table></div>\';ret a}2 W(b,e){2 c={};b.g(2(a){c[a.course]||(c[a.course]={theory:\'-\',practical:\'-\',theoryShared:0,practicalShared:0});2 f=e.includes(a.id);a.type===\'theory\'?(c[a.course].theory=a.className,c[a.course].theoryShared=f):(c[a.course].practical=a.className,c[a.course].practicalShared=f)});2 f=\'<table class="summary-table"><tr><th>المقرر</th><th>فئة النظري</th><th>فئة العملي</th></tr>\';Object.keys(c).g(2(a){2 h=c[a],t=h.theoryShared?\'#dcfce7\':h.theory!==\'-\'?\'white\':\'#f8fafc\',v=h.practicalShared?\'#dcfce7\':h.practical!==\'-\'?\'white\':\'#f8fafc\';f+=`<tr><td style="font-weight:bold; background:#f8fafc;">${a}</td><td style="background:${t};">${h.theory} ${h.theoryShared?\'🤝\':\'\'}</td><td style="background:${v};">${h.practical} ${h.practicalShared?\'🤝\':\'\'}</td></tr>`});f+=\'</table>\';ret f}2 exportWord(b){2 e=Q[b],c={};e.groupSchedules.g(2(b){b.schedule.g(2(a){c[a.id]=(c[a.id]||0)+1})});2 f=Object.keys(c).filter(2(b){ret c[b]>1});2 a=2(b,a){2 c={};3.g(2(a){c[a]=[]});b.g(2(b){2 h=f.includes(b.id);b.times.g(2(t){t.start>0&&c[t.day].push({course:b.course,className:b.className,rawTime:t.raw,start:t.start,isShared:h,type:b.type})})});2 d=`<h2 style="color:#0f172a; border-bottom: 2px solid #ccc; padding-bottom:5px; margin-top:40px;">📅 ${a}</h2>`;d+=\'<table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse: collapse; font-family: \'Segoe UI\', Arial; font-size:11pt; text-align:right;" dir="rtl">\';3.g(2(b){if(c[b].length>0){c[b].sort(2(b,a){ret b.start-a.start});d+=`<tr><td style="width:15%; background:#e2e8f0; font-weight:bold; text-align:center; vertical-align:middle;">${b}</td><td style="width:85%; padding:10px;">`;c[b].g(2(a){2 h=a.isShared?\'#dcfce7\':\'#f8fafc\';d+=`<div style="background:${h}; border:1px solid #94a3b8; padding:8px; margin-bottom:8px;">`;d+=`<strong>${a.course} ${a.isShared?\'🤝\':\'\'}</strong> - [${a.type===\'theory\'?\'نظري\':\'عملي\'}]<br>`;d+=`<span style="color:#475569;">${a.className}</span><br>`;d+=`<strong style="color:#b91c1c;">⌚ ${a.rawTime.replace(b,\'\').trim()}</strong></div>`});d+=\'</td></tr>\'}});d+=\'</table><br>\';2 h={};b.g(2(b){h[b.course]||(h[b.course]={theory:\'-\',practical:\'-\',theoryShared:0,practicalShared:0});2 c=f.includes(b.id);b.type===\'theory\'?(h[b.course].theory=b.className,h[b.course].theoryShared=c):(h[b.course].practical=b.className,h[b.course].practicalShared=c)});d+=\'<h3 style="color:#334155;">📋 الملخص التفصيلي للفئات</h3>\';d+=\'<table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse; font-family: \'Segoe UI\', Arial; font-size:10pt; text-align:center;">\';d+=\'<tr style="background:#cbd5e1;"><th>المقرر</th><th>فئة النظري</th><th>فئة العملي</th></tr>\';Object.keys(h).g(2(a){2 c=h[a],t=c.theoryShared?\'#dcfce7\':c.theory!==\'-\'?\'white\':\'#f8fafc\',v=c.practicalShared?\'#dcfce7\':c.practical!==\'-\'?\'white\':\'#f8fafc\';d+=`<tr><td style="background:#f8fafc; font-weight:bold;">${a}</td><td style="background:${t};">${c.theory} ${c.theoryShared?\'🤝\':\'\'}</td><td style="background:${v};">${c.practical} ${c.practicalShared?\'🤝\':\'\'}</td></tr>`});d+=\'</table><br><br>\';ret d};2 h=\'<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body style="font-family:\'Segoe UI\', Arial, sans-serif; direction:rtl;"><h1 style="text-align:center; color:#1e3a8a; font-size:24pt; border-bottom:4px solid #1e3a8a; padding-bottom:10px;">الجداول الأكاديمية المشتركة (SPU)</h1>\';e.groupSchedules.g(2(b){h+=a(b.schedule,`جدول ${O(b.userIndex)}`)});h+=\'</body></html>\';2 d=document.createElement(\'div\');d.style.position=\'absolute\';d.style.left=\'-9999px\';d.innerHTML=h;document.body.appendChild(d);2 t=window.getSelection(),s=document.createRange();s.selectNodeContents(d);t.removeAllRanges();t.addRange(s);try{document.execCommand(\'copy\');alert(\'✅ تم النسخ כجدول جماعي احترافي!\nافتح Word واضغط (لصق).\')}catch(v){alert(\'❌ فشل النسخ.\')}document.body.removeChild(d);t.removeAllRanges()};',63,63||'|function|var|daysOfWeek|document|getElementById|onload|innerHTML|usersCount|j|cgroup|days-container|m|style|e|f|bootApp|length|i|saveAndStart|k|l-container|loadSavedAndStart|setup-screen|spu_courses_db|setup|db|sols|الأحد|t|getElementById|value|w-l|localStorage|return|z|A|B|C|D|F|runGenerator|H|O|P|L|M|getUserName|addFriend|Q|R|S|T|U|V|W|x|if|scoredGroups'.split('|'),0,{}))
     </script>
 </body>
 </html>
