@@ -1,142 +1,1063 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPU Cloud Schedule</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
-        .header { background: #0f172a; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #38bdf8; }
-        .container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
-        #setup-screen, #app-screen, #loading-screen, #editor-screen { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        #app-screen, #setup-screen, #editor-screen { display: none; }
-        textarea { width: 100%; height: 130px; padding: 15px; border-radius: 8px; border: 2px dashed #cbd5e1; direction: ltr; font-family: monospace; font-size:13px; resize: vertical; box-sizing: border-box; }
-        button.btn-primary { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; width: 100%; }
-        button.btn-primary:hover { background: #059669; }
-        button.btn-secondary { background: #3b82f6; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; }
-        .grid-layout { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; }
-        .sidebar { flex: 1; min-width: 350px; border-left: 2px solid #e2e8f0; padding-left: 20px; display: flex; flex-direction: column; max-height: 80vh; }
-        .main-content { flex: 2.5; min-width: 500px; display: flex; flex-direction: column; max-height: 80vh; }
-        .course-card { border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 12px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .course-header { background: #f8fafc; padding: 12px; display: flex; flex-direction: column; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
-        .users-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; }
-        .course-body { padding: 12px; display: none; flex-direction: column; gap: 8px; }
-        .matrix-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: right; margin-bottom: 15px; }
-        .matrix-table td { border: 1px solid #cbd5e1; padding: 10px; }
-        .day-cell { background: #f1f5f9; font-weight: bold; width: 80px; text-align: center; }
-        .time-block { padding: 8px 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-width: 160px; margin-bottom: 8px; }
-        .summary-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; margin-bottom: 25px; }
-        .summary-table th, .summary-table td { border: 1px solid #cbd5e1; padding: 8px; }
-        .summary-table th { background: #e2e8f0; }
-        .result-card { background: white; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); overflow: hidden; }
-        .result-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; }
-        .user-label { font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-        .color-me { color: #0284c7; }
-        .color-friend-1 { color: #8b5cf6; }
-        .color-friend-2 { color: #ea580c; }
-        .color-friend-3 { color: #059669; }
-        .color-friend-4 { color: #dc2626; }
-        
-        .editor-section { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-        .editor-input { padding: 6px; border: 1px solid #94a3b8; border-radius: 4px; font-family: Tahoma; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>SPU · منسّق الجداول الدراسية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141B2E;
+    --ink-soft:#4A5568;
+    --paper:#EEF0F2;
+    --surface:#FFFFFF;
+    --line:#DBDFE4;
+    --brass:#A9761E;
+    --brass-deep:#7C5714;
+    --teal:#146B5D;
+    --teal-soft:#DCEEE9;
+    --rose:#A63A33;
+    --rose-soft:#F5DEDC;
+    --shadow: 0 1px 2px rgba(20,27,46,.06), 0 10px 28px rgba(20,27,46,.09);
+    --font-display:'El Messiri','Tahoma',sans-serif;
+    --font-body:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
+    --font-mono:'IBM Plex Mono','Consolas',monospace;
+    --p0:#1D5B8C; --p1:#8A4FBF; --p2:#B8631B; --p3:#3E7D44; --p4:#B23570;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:var(--font-body); background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; }
+  :focus-visible{ outline:2px solid var(--brass); outline-offset:2px; }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+
+  .ic{ width:16px; height:16px; flex-shrink:0; }
+
+  .header{ position:relative; overflow:hidden; background:var(--ink); color:#fff; padding:30px 20px 26px; text-align:center; border-bottom:3px solid var(--brass); }
+  .header::before{ content:""; position:absolute; inset:0; opacity:.08; pointer-events:none;
+    background-image: linear-gradient(var(--brass) 1px, transparent 1px), linear-gradient(90deg, var(--brass) 1px, transparent 1px);
+    background-size: 34px 34px; }
+  .header-inner{ position:relative; z-index:1; }
+  .wordmark{ font-family:var(--font-display); font-size:30px; font-weight:700; margin:0; letter-spacing:.5px; }
+  .header-sub{ margin:6px 0 0; color:#C7D2E0; font-size:13.5px; }
+
+  .container{ max-width:1320px; margin:26px auto; padding:0 18px 60px; }
+  .screen-panel{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:28px; box-shadow:var(--shadow); }
+  #app-screen, #setup-screen, #editor-screen{ display:none; }
+
+  /* ---------- loading ---------- */
+  #loading-screen{ text-align:center; padding:90px 20px; }
+  .spinner{ width:42px; height:42px; border-radius:50%; border:3px solid var(--line); border-top-color:var(--brass); margin:0 auto 18px; animation:spin .9s linear infinite; }
+  .spinner.sm{ width:26px; height:26px; border-width:3px; margin-bottom:12px; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  #loading-screen h2{ font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--ink-soft); margin:0; }
+
+  /* ---------- setup ---------- */
+  #setup-screen h3{ color:var(--rose); font-family:var(--font-display); font-size:19px; margin:0 0 8px; display:flex; align-items:center; gap:8px; }
+  #setup-screen p{ color:var(--ink-soft); font-size:13.5px; line-height:1.7; }
+  textarea{ width:100%; height:130px; padding:14px; border-radius:10px; border:1.5px dashed var(--line); direction:ltr; font-family:var(--font-mono); font-size:12.5px; resize:vertical; background:var(--paper); }
+  textarea:focus{ border-color:var(--brass); border-style:solid; background:var(--surface); }
+
+  /* ---------- buttons ---------- */
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:7px; border:none; border-radius:10px; font-family:var(--font-body); font-weight:700; cursor:pointer; transition:.15s ease; white-space:nowrap; }
+  .btn-primary{ background:var(--brass); color:#fff; padding:13px 18px; font-size:14.5px; width:100%; margin-top:16px; }
+  .btn-primary:hover{ background:var(--brass-deep); }
+  .btn-secondary{ background:var(--surface); color:var(--ink); border:1px solid var(--line); padding:8px 14px; font-size:12.5px; }
+  .btn-secondary:hover{ border-color:var(--ink-soft); background:var(--paper); }
+  .btn-ghost{ background:transparent; color:var(--ink-soft); border:1px solid var(--line); padding:8px 12px; font-size:12.5px; }
+  .btn-ghost:hover{ color:var(--ink); border-color:var(--ink-soft); }
+  .btn-teal{ background:var(--teal); color:#fff; }
+  .btn-teal:hover{ background:#0F5044; }
+  .btn-export{ background:var(--ink); color:#fff; padding:9px 16px; font-size:12.5px; border-radius:9px; }
+  .btn-export:hover{ background:#0A0F1C; }
+  .btn-danger-ghost{ background:transparent; color:var(--rose); border:1px solid var(--rose-soft); padding:5px 9px; font-size:11px; border-radius:7px; }
+  .btn-danger-ghost:hover{ background:var(--rose-soft); }
+
+  /* ---------- editor screen ---------- */
+  #editor-screen .editor-top{ display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--line); padding-bottom:16px; margin-bottom:22px; flex-wrap:wrap; gap:10px; }
+  #editor-screen h2{ color:var(--brass-deep); margin:0; font-family:var(--font-display); font-size:20px; display:flex; align-items:center; gap:8px; }
+  label.field-label{ font-weight:700; color:var(--ink); font-size:13px; }
+  select#editor-course-select{ width:100%; margin-top:6px; margin-bottom:22px; }
+  .editor-input{ padding:8px 10px; border:1px solid var(--line); border-radius:7px; font-family:var(--font-body); font-size:13px; background:var(--surface); color:var(--ink); }
+  .editor-section{ background:var(--paper); border:1px solid var(--line); padding:16px; border-radius:12px; margin-bottom:16px; }
+  .editor-section-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .editor-section-head strong{ font-size:12.5px; color:var(--ink); }
+  .editor-section-head .id-tag{ color:var(--ink-soft); font-size:11px; font-family:var(--font-mono); }
+  .editor-fields{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  .editor-fields > div{ display:flex; flex-direction:column; gap:4px; }
+  .editor-fields label{ font-size:11.5px; color:var(--ink-soft); font-weight:600; }
+  .times-label{ color:var(--brass-deep); font-weight:700; font-size:12.5px; display:flex; align-items:center; gap:6px; }
+  .time-row{ background:var(--surface); padding:9px 10px; border:1px solid var(--line); border-radius:8px; margin-top:8px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:12.5px; }
+  .editor-actions{ margin-top:22px; padding-top:20px; border-top:2px solid var(--line); display:flex; flex-direction:column; gap:10px; }
+  .editor-actions .btn-primary, .editor-actions .btn-teal, .editor-actions .btn-ghost{ margin-top:0; width:100%; padding:13px; font-size:14px; }
+
+  .gh-panel{ background:var(--paper); border:1.5px dashed var(--brass); border-radius:12px; padding:16px; margin-bottom:20px; }
+  .gh-panel-title{ font-family:var(--font-display); font-weight:700; font-size:14.5px; color:var(--brass-deep); margin:0 0 6px; display:flex; align-items:center; gap:7px; }
+  .gh-panel-note{ font-size:12px; color:var(--ink-soft); line-height:1.7; margin:0 0 14px; }
+  .gh-panel-note code{ background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-family:var(--font-mono); }
+  .gh-fields{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+  .gh-fields > div{ display:flex; flex-direction:column; gap:4px; }
+  .gh-fields label{ font-size:11.5px; color:var(--ink-soft); font-weight:600; }
+  .gh-fields input{ min-width:170px; }
+  .gh-remember{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-soft); cursor:pointer; }
+
+  /* ---------- app shell ---------- */
+  .grid-layout{ display:grid; grid-template-columns: 350px 1fr; gap:22px; align-items:start; }
+  @media (max-width: 920px){ .grid-layout{ grid-template-columns: 1fr; } .sidebar{ position:static !important; max-height:none !important; } }
+
+  .sidebar{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:14px; position:sticky; top:16px; max-height:calc(100vh - 32px); box-shadow:var(--shadow); }
+  .main-content{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px; display:flex; flex-direction:column; max-height:calc(100vh - 32px); box-shadow:var(--shadow); }
+
+  .side-title{ font-family:var(--font-display); font-size:14.5px; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:7px; margin:0; }
+  .side-title .ic{ color:var(--brass); }
+  .side-title.warn .ic{ color:var(--rose); }
+  .side-row-between{ display:flex; justify-content:space-between; align-items:center; }
+  .side-row-between .actions{ display:flex; gap:8px; }
+  hr.divider{ height:1px; background:var(--line); border:none; margin:0; }
+
+  .day-grid{ display:flex; gap:8px; flex-wrap:wrap; }
+  .day-chip{ position:relative; display:inline-flex; align-items:center; justify-content:center; padding:8px 12px; border-radius:8px; border:1px solid var(--line); background:var(--paper); font-size:12.5px; font-weight:600; color:var(--ink-soft); cursor:pointer; transition:.15s; }
+  .day-chip input{ position:absolute; opacity:0; width:0; height:0; }
+  .day-chip:has(input:checked){ background:var(--rose); border-color:var(--rose); color:#fff; }
+
+  .user-chip{ position:relative; display:inline-flex; align-items:center; gap:6px; padding:5px 10px 5px 8px; border-radius:999px; border:1px solid var(--line); background:var(--surface); font-size:12px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:.15s; user-select:none; }
+  .user-chip input{ position:absolute; opacity:0; width:0; height:0; }
+  .user-chip .dot{ width:8px; height:8px; border-radius:50%; background:var(--c,var(--ink-soft)); flex-shrink:0; }
+  .user-chip:has(input:checked){ background:var(--c-bg,var(--paper)); border-color:var(--c,var(--line)); color:var(--c,var(--ink)); }
+  .user-chip:has(input:disabled){ opacity:.4; cursor:not-allowed; }
+  .color-me{ --c:var(--p0); --c-bg:rgba(29,91,140,.12); }
+  .color-friend-1{ --c:var(--p1); --c-bg:rgba(138,79,191,.12); }
+  .color-friend-2{ --c:var(--p2); --c-bg:rgba(184,99,27,.12); }
+  .color-friend-3{ --c:var(--p3); --c-bg:rgba(62,125,68,.12); }
+  .color-friend-4{ --c:var(--p4); --c-bg:rgba(178,53,112,.12); }
+
+  .search-wrap{ position:relative; }
+  .search-wrap .ic{ position:absolute; inset-inline-start:11px; top:50%; transform:translateY(-50%); color:var(--ink-soft); }
+  #search{ width:100%; padding:9px 12px; padding-inline-start:34px; border-radius:10px; border:1px solid var(--line); font-size:13px; font-family:var(--font-body); background:var(--paper); }
+  #search:focus{ background:var(--surface); border-color:var(--brass); }
+
+  .courses-panel{ overflow-y:auto; flex:1; min-height:0; border:1px solid var(--line); border-radius:12px; }
+  .course-row{ border-bottom:1px solid var(--line); }
+  .course-row:last-child{ border-bottom:none; }
+  .course-row-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:11px 13px; cursor:pointer; }
+  .course-row-head:hover{ background:rgba(20,27,46,.03); }
+  .course-title{ font-weight:700; font-size:13px; color:var(--ink); }
+  .course-toggle{ background:none; border:none; cursor:pointer; color:var(--ink-soft); display:flex; padding:2px; transition:transform .2s; }
+  .course-row.open .course-toggle{ transform:rotate(180deg); }
+  .course-row-users{ padding:0 13px 10px; display:flex; gap:6px; flex-wrap:wrap; }
+  .course-body{ padding:2px 13px 14px; display:none; flex-direction:column; gap:9px; background:rgba(20,27,46,.02); }
+
+  .section-row{ display:flex; flex-direction:column; gap:7px; padding:10px 11px; border:1px solid var(--line); border-radius:9px; background:var(--surface); }
+  .section-row.closed{ opacity:.6; border-color:rgba(166,58,51,.4);
+    background: repeating-linear-gradient(135deg, rgba(166,58,51,.06) 0 6px, var(--surface) 6px 12px); }
+  .section-row-users{ display:flex; gap:6px; flex-wrap:wrap; }
+  .section-meta{ font-size:12px; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .section-name{ font-weight:700; color:var(--ink); }
+  .section-name.theory{ color:var(--brass-deep); }
+  .section-name.practical{ color:var(--teal); }
+  .seat-badge{ background:var(--paper); border:1px solid var(--line); padding:2px 7px; border-radius:6px; font-size:10.5px; font-weight:700; font-family:var(--font-mono); }
+  .status-pill{ font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:999px; }
+  .status-pill.ok{ background:var(--teal-soft); color:var(--teal); }
+  .status-pill.closed{ background:var(--rose-soft); color:var(--rose); }
+  .time-list{ font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); direction:ltr; text-align:right; width:100%; }
+  .time-missing{ color:var(--rose); font-weight:700; font-family:var(--font-body); font-size:12px; }
+
+  /* ---------- results ---------- */
+  #results-container{ background:var(--paper); border-radius:12px; padding:20px; border:1px dashed var(--line); flex-grow:1; overflow-y:auto; min-height:0; }
+  .empty-state{ text-align:center; padding:70px 20px; color:var(--ink-soft); }
+  .empty-state .ic-wrap{ display:inline-flex; margin-bottom:12px; color:var(--ink-soft); }
+  .empty-state .ic-wrap .ic{ width:34px; height:34px; }
+  .empty-state.error{ color:var(--rose); }
+  .empty-state.error .ic-wrap{ color:var(--rose); }
+  .empty-state p{ font-size:14.5px; margin:0; }
+
+  .result-heading{ text-align:center; font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--ink); margin:0 0 16px; }
+  .result-card{ border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:22px; background:var(--surface); box-shadow:var(--shadow); }
+  .result-header{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--paper); flex-wrap:wrap; }
+  .result-title{ font-weight:700; font-size:15px; color:var(--ink); font-family:var(--font-display); }
+  .score-badge{ background:var(--teal); color:#fff; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; margin-inline-start:12px; }
+  .result-body{ padding:20px; }
+  .result-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
+  .person-col{ border-top:3px solid var(--accent, var(--line)); padding-top:14px; }
+
+  .matrix-title{ font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink); margin:0 0 10px; padding-bottom:7px; border-bottom:2px solid var(--accent, var(--brass)); display:flex; align-items:center; gap:7px; }
+  .matrix-table{ width:100%; border-collapse:collapse; font-size:12px; margin-bottom:14px; }
+  .matrix-table td{ border:1px solid var(--line); padding:8px; vertical-align:top; }
+  .matrix-day{ background:var(--paper); font-weight:700; width:66px; text-align:center; font-family:var(--font-display); color:var(--ink); }
+  .time-chip{ padding:7px 10px; border-radius:8px; min-width:150px; font-size:11px; margin-bottom:2px; }
+  .time-chip.shared{ background:var(--teal-soft); border:1px solid var(--teal); }
+  .time-chip.solo{ background:var(--paper); border:1px solid var(--line); }
+  .time-chip-head{ display:flex; justify-content:space-between; gap:6px; align-items:center; font-weight:700; color:var(--ink); margin-bottom:3px; font-size:11px; }
+  .type-badge{ font-size:9px; padding:1px 6px; border-radius:5px; color:#fff; font-weight:700; }
+  .type-badge.theory{ background:var(--brass-deep); }
+  .type-badge.practical{ background:var(--teal); }
+  .time-chip-class{ color:var(--ink-soft); font-size:10.5px; }
+  .time-chip-time{ font-family:var(--font-mono); font-size:11px; margin-top:4px; font-weight:700; color:var(--ink); direction:ltr; text-align:right; }
+  .no-days-msg{ text-align:center; padding:14px; color:var(--ink-soft); font-size:12.5px; }
+
+  .summary-label{ font-size:11.5px; font-weight:700; color:var(--ink-soft); margin:0 0 6px; }
+  .summary-table{ width:100%; border-collapse:collapse; font-size:12px; text-align:center; margin-bottom:4px; }
+  .summary-table th, .summary-table td{ border:1px solid var(--line); padding:7px; }
+  .summary-table th{ background:var(--ink); color:#fff; font-family:var(--font-display); font-weight:600; }
+
+  /* ---------- toasts ---------- */
+  #toast-wrap{ position:fixed; bottom:20px; inset-inline-end:20px; z-index:999; display:flex; flex-direction:column; gap:10px; max-width:340px; }
+  .toast{ background:var(--teal); color:#fff; padding:12px 14px; border-radius:10px; font-size:13px; line-height:1.6; display:flex; gap:8px; align-items:flex-start; box-shadow:var(--shadow); opacity:0; transform:translateY(8px); transition:opacity .25s, transform .25s; }
+  .toast.show{ opacity:1; transform:translateY(0); }
+  .toast-error{ background:var(--rose); }
+  .toast .ic{ margin-top:1px; }
+</style>
 </head>
 <body>
 
-    <div class="header">
-        <h2 style="margin: 0;">SPU</h2>
-        <p style="margin: 5px 0 0 0; color: #bae6fd;">.</p>
+  <div class="header">
+    <div class="header-inner">
+      <h2 class="wordmark">SPU</h2>
+      <p class="header-sub">أداة تنسيق الجداول الدراسية ومطابقتها مع الأصدقاء</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div id="loading-screen">
+      <div class="spinner"></div>
+      <h2>جاري مزامنة قاعدة البيانات من السيرفر…</h2>
     </div>
 
-    <div class="container">
-        <!-- شاشة التحميل المركزية -->
-        <div id="loading-screen" style="text-align: center; padding: 80px 20px;">
-            <h2 style="color: #0284c7;">🔄 جاري مزامنة قاعدة البيانات من السيرفر...</h2>
-        </div>
+    <div id="setup-screen" class="screen-panel">
+      <h3 id="ic-setup-title">تعذّر الاتصال بالسيرفر المركزي</h3>
+      <p>يرجى لصق نسخة محفوظة من البيانات هنا للدخول المؤقت، أو التأكد من وجود ملف <code>data.json</code> بجانب هذا الملف.</p>
+      <textarea id="db-input" placeholder='{"اسم المادة": [{"id": "...", "type": "theory"...}]}'></textarea>
+      <button class="btn btn-primary" id="ic-setup-btn" onclick="saveAndStart()">الدخول المؤقت للنظام</button>
+    </div>
 
-        <!-- شاشة الإدخال الاحتياطية -->
-        <div id="setup-screen">
-            <h3 style="color: #dc2626;">⚠️ السيرفر المركزي فارغ أو غير متصل!</h3>
-            <p style="color:#475569;">يرجى لصق البيانات المسحوبة هنا كبداية (أو التأكد من وجود ملف data.json):</p>
-            <textarea id="db-input" placeholder='{"Course Name": [{"id": "...", "type": "theory"...}]}'></textarea><br><br>
-            <button class="btn-primary" onclick="saveAndStart()">💾 الدخول للنظام مؤقتاً</button>
+    <div id="editor-screen" class="screen-panel">
+      <div class="editor-top">
+        <h2 id="ic-editor-title">لوحة التحكم — تصحيح أوقات الفئات</h2>
+        <div class="actions">
+          <button class="btn btn-ghost" id="ic-ghsettings-btn" onclick="toggleGithubSettings()">إعدادات النشر</button>
+          <button class="btn btn-secondary" id="ic-back-btn" onclick="closeEditor()">رجوع للنظام</button>
         </div>
+      </div>
 
-        <!-- لوحة تحكم المشرف (محرر البيانات) -->
-        <div id="editor-screen">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px;">
-                <h2 style="color: #ea580c; margin: 0;">⚙️ لوحة المشرف: تصحيح أوقات الفئات</h2>
-                <button class="btn-secondary" style="background: #64748b;" onclick="closeEditor()">↩️ رجوع للنظام</button>
+      <div id="github-settings-panel" class="gh-panel" style="display:none;">
+        <p class="gh-panel-title" id="ic-gh-title">ربط النشر المباشر مع GitHub</p>
+        <p class="gh-panel-note">أدخل بيانات مستودعك على GitHub ومفتاح وصول شخصي (Personal Access Token) بصلاحية <code>repo</code> من إعدادات حسابك. المفتاح الحقيقي هو ما يحمي بياناتك — وليس أي كلمة سر داخل الكود.</p>
+        <div class="gh-fields">
+          <div><label>اسم المستخدم/المنظمة</label><input type="text" id="gh-owner" class="editor-input" placeholder="mohamadalahmad578-cloud"></div>
+          <div><label>اسم المستودع</label><input type="text" id="gh-repo" class="editor-input" placeholder="Random.MEd"></div>
+          <div><label>الفرع</label><input type="text" id="gh-branch" class="editor-input" placeholder="main"></div>
+          <div><label>مسار الملف</label><input type="text" id="gh-path" class="editor-input" placeholder="data.json"></div>
+          <div style="flex:1; min-width:220px;"><label>مفتاح الوصول (Token)</label><input type="password" id="gh-token" class="editor-input" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;"></div>
+        </div>
+        <label class="gh-remember"><input type="checkbox" id="gh-remember"> تذكرني على هذا الجهاز (لا تفعّلها على جهاز مشترك)</label>
+        <button class="btn btn-secondary" style="margin-top:10px;" onclick="saveGithubSettingsFromForm()">حفظ الإعدادات</button>
+      </div>
+
+      <label class="field-label">اختر المادة لتعديلها:</label>
+      <select id="editor-course-select" class="editor-input" onchange="renderCourseEditor()">
+        <option value="">-- اختر المادة --</option>
+      </select>
+
+      <div id="editor-sections-container"></div>
+
+      <div class="editor-actions">
+        <button class="btn btn-teal" id="ic-save-btn" onclick="saveEditorChanges()">1. حفظ التعديلات في الذاكرة المؤقتة</button>
+        <button class="btn btn-primary" style="margin-top:0;" id="ic-publish-btn" onclick="publishToGithub()">2. نشر مباشرة على GitHub</button>
+        <button class="btn btn-ghost" style="margin-top:0;" id="ic-copy-btn" onclick="copyFinalData()">نسخ يدوي (بديل)</button>
+      </div>
+    </div>
+
+    <div id="app-screen">
+      <div class="grid-layout">
+        <div class="sidebar">
+          <h4 class="side-title warn" id="ic-days-title">الأيام المستبعدة من الجدول</h4>
+          <div id="days-container" class="day-grid"></div>
+
+          <hr class="divider">
+
+          <div class="side-row-between">
+            <h4 class="side-title" id="ic-people-title">المشاركون</h4>
+            <div class="actions">
+              <button class="btn btn-secondary" id="ic-addfriend-btn" onclick="addFriend()">إضافة صديق</button>
+              <button class="btn btn-ghost" onclick="openEditor()" title="إصلاح الأخطاء في أوقات الفئات" id="ic-admin-btn">تعديل البيانات</button>
             </div>
-            
-            <label style="font-weight: bold; color: #1e293b;">اختر المادة لتعديلها:</label>
-            <select id="editor-course-select" class="editor-input" style="width: 100%; margin-top: 5px; margin-bottom: 20px;" onchange="renderCourseEditor()">
-                <option value="">-- اختر المادة --</option>
+          </div>
+
+          <div class="search-wrap" id="ic-search-wrap">
+            <input type="text" id="search" placeholder="ابحث عن مادة…">
+          </div>
+
+          <div id="courses-list" class="courses-panel"></div>
+
+          <button class="btn btn-primary" id="ic-generate-btn" onclick="runGenerator()">توليد الجداول</button>
+        </div>
+
+        <div class="main-content">
+          <h4 class="side-title" style="color:var(--teal); margin-bottom:10px;" id="ic-results-title">نتائج المصفوفات الزمنية</h4>
+          <div id="results-container"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast-wrap"></div>
+
+  <script>
+    localStorage.removeItem('spu_courses_db');
+
+    let parsedCourses = {};
+    const daysOfWeek = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+    const personColors = ['#1D5B8C', '#8A4FBF', '#B8631B', '#3E7D44', '#B23570'];
+    window.generatedGroups = [];
+    let usersCount = 1;
+
+    // ==========================================
+    //                  أيقونات
+    // ==========================================
+    function ic(name){
+      const paths = {
+        search: '<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+        plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+        gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+        trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+        download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+        check: '<polyline points="20 6 9 17 4 12"/>',
+        alert: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+        back: '<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+        chevron: '<polyline points="6 9 12 15 18 9"/>',
+        users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+        calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+        zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+        cal_off: '<path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 8h16"/><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="5" y1="20" x2="19" y2="6"/>',
+        cloud: '<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+        link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'
+      };
+      return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (paths[name] || '') + '</svg>';
+    }
+
+    function paintStaticIcons(){
+      document.getElementById('ic-setup-title').innerHTML = ic('alert') + ' تعذّر الاتصال بالسيرفر المركزي';
+      document.getElementById('ic-setup-btn').innerHTML = ic('check') + ' الدخول المؤقت للنظام';
+      document.getElementById('ic-editor-title').innerHTML = ic('gear') + ' لوحة التحكم — تصحيح أوقات الفئات';
+      document.getElementById('ic-ghsettings-btn').innerHTML = ic('link') + ' إعدادات النشر';
+      document.getElementById('ic-back-btn').innerHTML = ic('back') + ' رجوع للنظام';
+      document.getElementById('ic-gh-title').innerHTML = ic('link') + ' ربط النشر المباشر مع GitHub';
+      document.getElementById('ic-save-btn').innerHTML = ic('check') + ' 1. حفظ التعديلات في الذاكرة المؤقتة';
+      document.getElementById('ic-publish-btn').innerHTML = ic('cloud') + ' 2. نشر مباشرة على GitHub';
+      document.getElementById('ic-copy-btn').innerHTML = ic('download') + ' نسخ يدوي (بديل)';
+      document.getElementById('ic-days-title').innerHTML = ic('cal_off') + ' الأيام المستبعدة من الجدول';
+      document.getElementById('ic-people-title').innerHTML = ic('users') + ' المشاركون';
+      document.getElementById('ic-addfriend-btn').innerHTML = ic('plus') + ' إضافة صديق';
+      document.getElementById('ic-admin-btn').innerHTML = ic('gear') + ' تعديل البيانات';
+      document.getElementById('ic-generate-btn').innerHTML = ic('zap') + ' توليد الجداول';
+      document.getElementById('ic-results-title').innerHTML = ic('calendar') + ' نتائج المصفوفات الزمنية';
+      document.getElementById('search').insertAdjacentHTML('beforebegin', ic('search'));
+    }
+    paintStaticIcons();
+
+    // ==========================================
+    //                  تنبيهات
+    // ==========================================
+    function toast(msg, type, duration){
+      type = type || 'success';
+      duration = duration || Math.min(7000, Math.max(2800, msg.length * 55));
+      const wrap = document.getElementById('toast-wrap');
+      const el = document.createElement('div');
+      el.className = 'toast toast-' + type;
+      el.innerHTML = '<span>' + ic(type === 'error' ? 'alert' : 'check') + '</span><span>' + msg + '</span>';
+      wrap.appendChild(el);
+      requestAnimationFrame(() => el.classList.add('show'));
+      setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }, duration);
+    }
+
+    function legacyCopy(text, onDone, onFail){
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); onDone(); } catch (e) { onFail(); }
+      document.body.removeChild(ta);
+    }
+
+    window.onload = function() {
+      fetch('data.json?v=' + new Date().getTime())
+        .then(res => {
+          if (!res.ok) throw new Error('File not found');
+          return res.json();
+        })
+        .then(data => {
+          parsedCourses = data;
+          if (Object.keys(parsedCourses).length === 0) throw new Error('Empty Data');
+          bootApp();
+        })
+        .catch(err => {
+          document.getElementById('loading-screen').style.display = 'none';
+          document.getElementById('setup-screen').style.display = 'block';
+        });
+    };
+
+    window.saveAndStart = function() {
+      try {
+        const input = document.getElementById('db-input').value.trim();
+        parsedCourses = JSON.parse(input);
+        bootApp();
+      } catch (e) { toast('تعذّر قراءة البيانات — تأكد من صيغة JSON.', 'error'); }
+    };
+
+    function bootApp() {
+      document.getElementById('setup-screen').style.display = 'none';
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('app-screen').style.display = 'block';
+      renderUI();
+    }
+
+    // ==========================================
+    //         نظام محرر البيانات (للمشرف)
+    // ==========================================
+
+    window.openEditor = function() {
+      document.getElementById('app-screen').style.display = 'none';
+      document.getElementById('editor-screen').style.display = 'block';
+
+      let select = document.getElementById('editor-course-select');
+      select.innerHTML = '<option value="">-- اختر المادة --</option>';
+      Object.keys(parsedCourses).forEach(cName => {
+        select.innerHTML += `<option value="${cName}">${cName}</option>`;
+      });
+      document.getElementById('editor-sections-container').innerHTML = '';
+    };
+
+    window.closeEditor = function() {
+      document.getElementById('editor-screen').style.display = 'none';
+      document.getElementById('app-screen').style.display = 'block';
+      renderUI();
+    };
+
+    // ==========================================
+    //         النشر المباشر إلى GitHub
+    // ==========================================
+
+    function getGithubConfig() {
+      try {
+        const base = JSON.parse(localStorage.getItem('spu_gh_config') || 'null');
+        if (!base || !base.owner || !base.repo) return null;
+        const token = sessionStorage.getItem('spu_gh_token') || localStorage.getItem('spu_gh_token');
+        if (!token) return null;
+        return { owner: base.owner, repo: base.repo, branch: base.branch || 'main', path: base.path || 'data.json', token: token };
+      } catch (e) { return null; }
+    }
+
+    function fillGithubSettingsForm() {
+      try {
+        const base = JSON.parse(localStorage.getItem('spu_gh_config') || 'null') || {};
+        document.getElementById('gh-owner').value = base.owner || '';
+        document.getElementById('gh-repo').value = base.repo || '';
+        document.getElementById('gh-branch').value = base.branch || 'main';
+        document.getElementById('gh-path').value = base.path || 'data.json';
+        const rememberedToken = localStorage.getItem('spu_gh_token');
+        if (rememberedToken) { document.getElementById('gh-token').value = rememberedToken; document.getElementById('gh-remember').checked = true; }
+      } catch (e) { /* ignore */ }
+    }
+
+    window.toggleGithubSettings = function() {
+      const panel = document.getElementById('github-settings-panel');
+      const opening = panel.style.display === 'none';
+      panel.style.display = opening ? 'block' : 'none';
+      if (opening) fillGithubSettingsForm();
+    };
+
+    window.saveGithubSettingsFromForm = function() {
+      const owner = document.getElementById('gh-owner').value.trim();
+      const repo = document.getElementById('gh-repo').value.trim();
+      const branch = document.getElementById('gh-branch').value.trim() || 'main';
+      const path = document.getElementById('gh-path').value.trim() || 'data.json';
+      const token = document.getElementById('gh-token').value.trim();
+      const remember = document.getElementById('gh-remember').checked;
+
+      if (!owner || !repo || !token) { toast('يرجى تعبئة اسم المستخدم واسم المستودع ومفتاح الوصول على الأقل.', 'error'); return; }
+
+      localStorage.setItem('spu_gh_config', JSON.stringify({ owner, repo, branch, path }));
+      if (remember) {
+        localStorage.setItem('spu_gh_token', token);
+        sessionStorage.removeItem('spu_gh_token');
+      } else {
+        sessionStorage.setItem('spu_gh_token', token);
+        localStorage.removeItem('spu_gh_token');
+      }
+      toast('تم حفظ إعدادات النشر على هذا الجهاز.', 'success');
+      document.getElementById('github-settings-panel').style.display = 'none';
+    };
+
+    function utf8ToBase64(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    async function githubGetSha(cfg) {
+      const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(cfg.path)}?ref=${encodeURIComponent(cfg.branch)}`;
+      const res = await fetch(url, { headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github+json' } });
+      if (res.status === 404) return null;
+      if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.message || ('HTTP ' + res.status)); }
+      const data = await res.json();
+      return data.sha;
+    }
+
+    window.publishToGithub = async function() {
+      const cfg = getGithubConfig();
+      if (!cfg) {
+        toast('لم يتم إعداد الربط مع GitHub بعد — عبّئ إعدادات النشر أولاً.', 'error');
+        document.getElementById('github-settings-panel').style.display = 'block';
+        fillGithubSettingsForm();
+        return;
+      }
+      const btn = document.getElementById('ic-publish-btn');
+      const originalHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = 'جاري النشر…';
+      try {
+        const sha = await githubGetSha(cfg);
+        const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(cfg.path)}`;
+        const body = { message: 'تحديث بيانات الجداول عبر أداة SPU', content: utf8ToBase64(JSON.stringify(parsedCourses, null, 2)), branch: cfg.branch };
+        if (sha) body.sha = sha;
+        const res = await fetch(url, {
+          method: 'PUT',
+          headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.message || ('HTTP ' + res.status)); }
+        toast('تم نشر البيانات مباشرة على GitHub بنجاح. سيتحدث الموقع خلال دقيقة.', 'success', 7000);
+      } catch (e) {
+        toast('فشل النشر المباشر (' + e.message + '). يمكنك استخدام "نسخ يدوي" بدلاً من ذلك.', 'error', 8000);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+      }
+    };
+
+    function minsToTimeInput(mins) {
+      if (!mins) return "";
+      let h = Math.floor(mins / 60).toString().padStart(2, '0');
+      let m = (mins % 60).toString().padStart(2, '0');
+      return `${h}:${m}`;
+    }
+
+    function timeInputToMins(timeStr) {
+      if (!timeStr) return 0;
+      let parts = timeStr.split(':');
+      return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    }
+
+    function formatRawTime(day, startMins, endMins) {
+      function formatAMPM(mins) {
+        let h = Math.floor(mins / 60); let m = mins % 60;
+        let ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12; h = h ? h : 12;
+        let mStr = m.toString().padStart(2, '0');
+        let hStr = h.toString().padStart(2, '0');
+        return `${hStr}:${mStr}${ampm}`;
+      }
+      return `${day} ${formatAMPM(startMins)}-${formatAMPM(endMins)}`;
+    }
+
+    window.renderCourseEditor = function() {
+      let cName = document.getElementById('editor-course-select').value;
+      if (!cName) { document.getElementById('editor-sections-container').innerHTML = ''; return; }
+
+      let html = '';
+      parsedCourses[cName].forEach((sec, sIdx) => {
+        html += `<div class="editor-section" id="edit-sec-${sIdx}">
+          <div class="editor-section-head">
+            <strong>معرف الفئة:</strong> <span class="id-tag">${sec.id}</span>
+          </div>
+          <div class="editor-fields">
+            <div><label>اسم الفئة</label><input type="text" class="editor-input inp-classname" value="${sec.className}"></div>
+            <div><label>المقاعد والسعة</label><input type="text" class="editor-input inp-seats" value="${sec.seats || sec.capacity || ''}" placeholder="مثال: 45/50"></div>
+            <div><label>الحالة</label>
+              <select class="editor-input inp-status">
+                <option value="فئة متاحة" ${sec.status.includes('متاحة') ? 'selected' : ''}>فئة متاحة</option>
+                <option value="فئة ممتلئة" ${sec.status.includes('ممتلئ') || sec.status.includes('مغلق') ? 'selected' : ''}>فئة ممتلئة/مغلقة</option>
+              </select>
+            </div>
+          </div>
+          <div class="times-label">${ic('calendar')} أوقات المحاضرة</div>
+          <div class="times-container">`;
+
+        sec.times.forEach((t) => {
+          let startVal = minsToTimeInput(t.start);
+          let endVal = minsToTimeInput(t.end);
+          html += `<div class="time-row">
+            <select class="editor-input inp-day">
+              ${daysOfWeek.map(d => `<option value="${d}" ${d === t.day ? 'selected' : ''}>${d}</option>`).join('')}
             </select>
+            من: <input type="time" class="editor-input inp-start" value="${startVal}">
+            إلى: <input type="time" class="editor-input inp-end" value="${endVal}">
+            <button class="btn btn-danger-ghost" onclick="this.parentElement.remove()">${ic('trash')} حذف</button>
+          </div>`;
+        });
 
-            <div id="editor-sections-container"></div>
+        html += `</div>
+          <button class="btn btn-secondary" style="margin-top:10px;" onclick="addNewTimeRow(this)">${ic('plus')} إضافة وقت جديد</button>
+        </div>`;
+      });
+      document.getElementById('editor-sections-container').innerHTML = html;
+    };
 
-            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e2e8f0;">
-                <button class="btn-primary" style="background: #0284c7; margin-bottom: 10px;" onclick="saveEditorChanges()">💾 1. حفظ التعديلات في الذاكرة المؤقتة</button>
-                <button class="btn-primary" style="background: #10b981;" onclick="copyFinalData()">📋 2. نسخ قاعدة البيانات النهائية لرفعها لـ GitHub</button>
+    window.addNewTimeRow = function(btn) {
+      let container = btn.previousElementSibling;
+      let newRow = document.createElement('div');
+      newRow.className = 'time-row';
+      newRow.innerHTML = `
+        <select class="editor-input inp-day">
+          ${daysOfWeek.map(d => `<option value="${d}">${d}</option>`).join('')}
+        </select>
+        من: <input type="time" class="editor-input inp-start" value="08:00">
+        إلى: <input type="time" class="editor-input inp-end" value="09:40">
+        <button class="btn btn-danger-ghost" onclick="this.parentElement.remove()">${ic('trash')} حذف</button>
+      `;
+      container.appendChild(newRow);
+    };
+
+    window.saveEditorChanges = function() {
+      let cName = document.getElementById('editor-course-select').value;
+      if (!cName) return;
+
+      let sectionsBlocks = document.querySelectorAll('.editor-section');
+      sectionsBlocks.forEach((block, sIdx) => {
+        let sec = parsedCourses[cName][sIdx];
+        sec.className = block.querySelector('.inp-classname').value.trim();
+        sec.seats = block.querySelector('.inp-seats').value.trim();
+        sec.status = block.querySelector('.inp-status').value;
+
+        let timeRows = block.querySelectorAll('.time-row');
+        sec.times = [];
+        timeRows.forEach(row => {
+          let day = row.querySelector('.inp-day').value;
+          let startMins = timeInputToMins(row.querySelector('.inp-start').value);
+          let endMins = timeInputToMins(row.querySelector('.inp-end').value);
+
+          if (startMins > 0 && endMins > 0) {
+            sec.times.push({
+              day: day,
+              start: startMins,
+              end: endMins,
+              raw: formatRawTime(day, startMins, endMins)
+            });
+          }
+        });
+      });
+      toast('تم حفظ التعديلات لهذه المادة مؤقتًا في الذاكرة.', 'success');
+    };
+
+    window.copyFinalData = function() {
+      let finalJSON = JSON.stringify(parsedCourses);
+      const done = () => toast('تم نسخ قاعدة البيانات الكاملة. افتح data.json على GitHub، الصق المحتوى، ثم اعتمد التغييرات (Commit).', 'success', 7000);
+      const fail = () => toast('تعذّر نسخ البيانات تلقائيًا.', 'error');
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(finalJSON).then(done).catch(() => legacyCopy(finalJSON, done, fail));
+      } else {
+        legacyCopy(finalJSON, done, fail);
+      }
+    };
+
+    // ==========================================
+    //         بناء الواجهة للمستخدم العادي
+    // ==========================================
+
+    function getColorClass(idx) {
+      if (idx === 0) return 'color-me';
+      let classes = ['color-friend-1', 'color-friend-2', 'color-friend-3', 'color-friend-4'];
+      return classes[(idx - 1) % classes.length];
+    }
+
+    function getUserColorHex(idx) {
+      if (idx === 0) return personColors[0];
+      return personColors[1 + ((idx - 1) % 4)];
+    }
+
+    function getUserName(idx) {
+      return idx === 0 ? "أنا" : `صديق ${idx}`;
+    }
+
+    window.addFriend = function() {
+      usersCount++;
+      renderUI();
+    };
+
+    function renderUI() {
+      let daysContainer = document.getElementById('days-container');
+      if (daysContainer && !daysContainer.innerHTML) {
+        daysContainer.innerHTML = daysOfWeek.map(d => `<label class="day-chip"><input type="checkbox" class="exclude-day" value="${d}"><span>${d}</span></label>`).join('');
+      }
+
+      let savedStates = {};
+      document.querySelectorAll('#app-screen input[type="checkbox"]').forEach(cb => {
+        if (cb.className.includes('cb-user-') || cb.className === 'exclude-day') {
+          savedStates[cb.className + '-' + cb.value + '-' + cb.dataset.course] = cb.checked;
+        }
+      });
+
+      const list = document.getElementById('courses-list');
+      if (Object.keys(parsedCourses).length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="ic-wrap">${ic('calendar')}</div><p>لا توجد مواد في قاعدة البيانات بعد.</p></div>`;
+        return;
+      }
+
+      list.innerHTML = Object.keys(parsedCourses).map((courseName, idx) => {
+        let safeId = "cgroup-" + idx;
+        let usersHTML_Header = '';
+        for (let u = 0; u < usersCount; u++) {
+          let uClass = `cb-user-${u}-course`;
+          let isChecked = savedStates[uClass + '-' + courseName + '-undefined'] ? 'checked' : '';
+          usersHTML_Header += `<label class="user-chip ${getColorClass(u)}"><input type="checkbox" class="${uClass}" value="${courseName}" onchange="toggleGroup(this, 'cb-user-${u}-section')" ${isChecked}><span class="dot"></span>${getUserName(u)}</label>`;
+        }
+
+        let sectionsHTML = parsedCourses[courseName].map(c => {
+          let isClosed = c.status.includes('مغلقة') || c.status.includes('ممتلئة') || c.status.includes('غير متاحة');
+          let usersHTML_Section = '';
+          for (let u = 0; u < usersCount; u++) {
+            let secClass = `cb-user-${u}-section`;
+            let isChecked = savedStates[secClass + '-' + c.id + '-' + courseName] ? 'checked' : '';
+            usersHTML_Section += `<label class="user-chip ${getColorClass(u)}"><input type="checkbox" class="${secClass}" data-course="${courseName}" value="${c.id}" ${isClosed ? 'disabled' : ''} ${isChecked}><span class="dot"></span>${getUserName(u)}</label>`;
+          }
+
+          let rawSeats = c.seats || c.capacity || c.seatCount || "";
+          let seatsDisplay = rawSeats ? `<span class="seat-badge" title="المقاعد والسعة">${ic('users')} ${rawSeats}</span>` : '';
+          let timesDisplay = c.times.length > 0
+            ? `<span class="time-list">${c.times.map(t => t.raw).join(' &nbsp;·&nbsp; ')}</span>`
+            : `<span class="time-missing">${ic('alert')} الأوقات غير مسجلة!</span>`;
+
+          return `<div class="section-row ${isClosed ? 'closed' : ''}">
+            <div class="section-row-users">${usersHTML_Section}</div>
+            <div class="section-meta">
+              <span class="section-name ${c.type}">${c.className}</span>
+              ${seatsDisplay}
+              <span class="status-pill ${isClosed ? 'closed' : 'ok'}">${c.status}</span>
             </div>
-        </div>
+            ${timesDisplay}
+          </div>`;
+        }).join('');
 
-        <!-- شاشة التطبيق الرئيسية -->
-        <div id="app-screen">
-            <div class="grid-layout">
-                <div class="sidebar">
-                    <h4 style="color: #ef4444; margin-top:0;">أيام العطلة المستبعدة:</h4>
-                    <div id="days-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
+        return `
+        <div class="course-row" data-name="${courseName}">
+          <div class="course-row-head" onclick="let el=document.getElementById('${safeId}'); let row=this.parentElement; let open = el.style.display==='flex'; el.style.display = open?'none':'flex'; row.classList.toggle('open', !open);">
+            <span class="course-title">${courseName}</span>
+            <button class="course-toggle" type="button" tabindex="-1">${ic('chevron')}</button>
+          </div>
+          <div class="course-row-users">${usersHTML_Header}</div>
+          <div id="${safeId}" class="course-body">${sectionsHTML}</div>
+        </div>`;
+      }).join('');
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                        <h4 style="color: #0284c7; margin:0;">الأشخاص:</h4>
-                        <div>
-                            <button class="btn-secondary" onclick="addFriend()">➕ صديق</button>
-                            <button class="btn-secondary" style="background:#ea580c; padding:8px 10px;" onclick="openEditor()" title="إصلاح الأخطاء في أوقات الفئات">⚙️ تعديل الداتا</button>
-                        </div>
-                    </div>
-                    
-                    <input type="text" id="search" placeholder="🔍 ابحث عن مادة..." style="padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; box-sizing: border-box; width:100%;">
-                    
-                    <div id="courses-list" style="overflow-y: auto; flex-grow: 1; padding-bottom: 10px;"></div>
-                    
-                    <button class="btn-primary" style="margin-top: 15px;" onclick="runGenerator()">🚀 توليد المصفوفات الجماعية</button>
-                </div>
-                
-                <div class="main-content">
-                    <h4 style="color: #10b981; margin-top:0;">نتائج المصفوفات الزمنية:</h4>
-                    <div id="results-container" style="background: #f8fafc; border-radius: 8px; padding: 20px; border: 1px dashed #cbd5e1; flex-grow: 1; overflow-y: auto;">
-                        <p style="text-align: center; color: #94a3b8; margin-top: 150px; font-size:16px;">حدد المواد لك ولأصدقائك واضغط توليد!</p>
-                    </div>
-                </div>
+      let searchInput = document.getElementById('search');
+      if (searchInput && !searchInput.dataset.listenerAdded) {
+        searchInput.dataset.listenerAdded = "true";
+        searchInput.addEventListener('input', e => {
+          let term = e.target.value.toLowerCase();
+          document.querySelectorAll('.course-row').forEach(el => {
+            el.style.display = el.getAttribute('data-name').toLowerCase().includes(term) ? 'block' : 'none';
+          });
+        });
+      }
+
+      if (!document.getElementById('results-container').dataset.filled) {
+        document.getElementById('results-container').innerHTML = `<div class="empty-state"><div class="ic-wrap">${ic('calendar')}</div><p>حدد المواد لك ولأصدقائك ثم اضغط توليد الجداول</p></div>`;
+      }
+    }
+
+    window.toggleGroup = function(mainCb, sectionClass) {
+      document.querySelectorAll(`.${sectionClass}[data-course="${mainCb.value}"]`).forEach(cb => {
+        if (!cb.disabled) cb.checked = mainCb.checked;
+      });
+    };
+
+    function buildCombinationsForPool(coursesNames, sectionClass, excludedDays) {
+      if (coursesNames.length === 0) return [];
+      let coursesPool = [];
+      for (let courseName of coursesNames) {
+        let theorySecs = [], practicalSecs = [];
+        let hasTheory = parsedCourses[courseName].some(s => s.type === 'theory');
+        let hasPractical = parsedCourses[courseName].some(s => s.type === 'practical');
+
+        document.querySelectorAll(`.${sectionClass}[data-course="${courseName}"]:checked`).forEach(cb => {
+          let section = parsedCourses[courseName].find(s => s.id === cb.value);
+          if (section.times.length > 0 && !section.times.some(t => excludedDays.includes(t.day))) {
+            if (section.type === 'theory') theorySecs.push(section); else practicalSecs.push(section);
+          }
+        });
+
+        if (hasTheory && theorySecs.length === 0) return { error: `المادة "${courseName}" تحتاج فئة (نظري) بأوقات صحيحة.` };
+        if (hasPractical && practicalSecs.length === 0) return { error: `المادة "${courseName}" تحتاج فئة (عملي) بأوقات صحيحة.` };
+
+        let validChoices = [];
+        if (theorySecs.length > 0 && practicalSecs.length > 0) {
+          for (let t of theorySecs) for (let p of practicalSecs) validChoices.push([t, p]);
+        } else if (theorySecs.length > 0) validChoices = theorySecs.map(t => [t]);
+        else if (practicalSecs.length > 0) validChoices = practicalSecs.map(p => [p]);
+
+        if (validChoices.length === 0) return { error: `لا يوجد احتمالات صالحة لمادة "${courseName}".` };
+        coursesPool.push(validChoices);
+      }
+
+      let validSchedules = [];
+      function checkConflict(schedule, newChoice) {
+        if (newChoice.length > 1) {
+          for (let t1 of newChoice[0].times) { if (t1.start === 0) continue;
+            for (let t2 of newChoice[1].times) { if (t2.start === 0) continue;
+              if (t1.day === t2.day && t1.start < t2.end && t2.start < t1.end) return true;
+            }
+          }
+        }
+        for (let existing of schedule) {
+          for (let t1 of existing.times) { if (t1.start === 0) continue;
+            for (let newSec of newChoice) {
+              for (let t2 of newSec.times) { if (t2.start === 0) continue;
+                if (t1.day === t2.day && t1.start < t2.end && t2.start < t1.end) return true;
+              }
+            }
+          }
+        }
+        return false;
+      }
+
+      function combine(depth, currentSchedule) {
+        if (validSchedules.length > 300) return;
+        if (depth === coursesPool.length) { validSchedules.push([...currentSchedule]); return; }
+        for (let choice of coursesPool[depth]) {
+          if (!checkConflict(currentSchedule, choice)) {
+            currentSchedule.push(...choice);
+            combine(depth + 1, currentSchedule);
+            for (let i = 0; i < choice.length; i++) currentSchedule.pop();
+          }
+        }
+      }
+      combine(0, []);
+      return validSchedules;
+    }
+
+    function emptyState(msg, type) {
+      return `<div class="empty-state ${type || ''}"><div class="ic-wrap">${ic('alert')}</div><p>${msg}</p></div>`;
+    }
+
+    window.runGenerator = function() {
+      const container = document.getElementById('results-container');
+      container.dataset.filled = "1";
+      container.innerHTML = `<div class="empty-state"><div class="spinner sm"></div><p>جاري حساب أفضل الجداول…</p></div>`;
+
+      const exDays = Array.from(document.querySelectorAll('.exclude-day:checked')).map(cb => cb.value);
+      let allUsersSchedules = [];
+      let activeUsersCount = 0;
+
+      for (let u = 0; u < usersCount; u++) {
+        let uNames = Array.from(document.querySelectorAll(`.cb-user-${u}-course:checked`)).map(cb => cb.value);
+        if (uNames.length > 0) {
+          let uSchedules = buildCombinationsForPool(uNames, `cb-user-${u}-section`, exDays);
+          if (uSchedules.error) return container.innerHTML = emptyState(`${getUserName(u)}: ${uSchedules.error}`, 'error');
+          if (uSchedules.length === 0) return container.innerHTML = emptyState(`${getUserName(u)}: تعارض زمني مستحيل حله!`, 'error');
+          allUsersSchedules.push({ userIndex: u, schedules: uSchedules });
+          activeUsersCount++;
+        }
+      }
+
+      if (activeUsersCount === 0) return container.innerHTML = emptyState('اختر مواد لشخص واحد على الأقل!', 'error');
+
+      window.generatedGroups = [];
+      let resultsHtml = '';
+
+      if (activeUsersCount === 1) {
+        let userObj = allUsersSchedules[0];
+        let limit = Math.min(userObj.schedules.length, 50);
+        resultsHtml += `<h3 class="result-heading">جداول ${getUserName(userObj.userIndex)} <span style="color:var(--ink-soft); font-weight:600; font-size:13px;">(${userObj.schedules.length} خيار)</span></h3>`;
+        for (let idx = 0; idx < limit; idx++) {
+          let sch = userObj.schedules[idx];
+          window.generatedGroups.push({ groupSchedules: [{ userIndex: userObj.userIndex, schedule: sch }], score: 0 });
+          resultsHtml += `
+          <div class="result-card">
+            <div class="result-header">
+              <span class="result-title">مقترح #${idx + 1}</span>
+              <button class="btn btn-export" onclick="exportWord(${idx})">${ic('download')} تصدير لـ Word</button>
             </div>
-        </div>
-    </div>
+            <div class="result-body">
+              ${buildMatrixHTML(sch, [], `جدول ${getUserName(userObj.userIndex)}`, getUserColorHex(userObj.userIndex))}
+              ${buildSummaryHTML(sch, [])}
+            </div>
+          </div>`;
+        }
+        container.innerHTML = resultsHtml;
+        return;
+      }
 
-    <script>
-        localStorage.removeItem('spu_courses_db');
-        
-        let parsedCourses = {};
-        const daysOfWeek = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
-        window.generatedGroups = [];
-        let usersCount = 1;
+      let groupedCombinations = [];
+      function combineGroups(depth, currentGroup) {
+        if (groupedCombinations.length > 500) return;
+        if (depth === allUsersSchedules.length) { groupedCombinations.push([...currentGroup]); return; }
+        let currentPersonSchedules = allUsersSchedules[depth].schedules;
+        for (let sch of currentPersonSchedules) {
+          currentGroup.push({ userIndex: allUsersSchedules[depth].userIndex, schedule: sch });
+          combineGroups(depth + 1, currentGroup);
+          currentGroup.pop();
+        }
+      }
+      combineGroups(0, []);
 
-        window.onload = function() {
-            fetch('data.json?v=' + new Date().getTime())
-                .then(res => {
-                    if(!res.ok) throw new Error('File not found');
-                    return res.json();
-                })
-                .then(data => {
-                    parsedCourses = data;
-                    if(Object.keys(parsedCourses).length === 0) throw new Error('Empty Data');
-                    bootApp();
-                })
-                .catch(err => {
-                    document.getElementById('loading-screen').style.display = 'none';
-                    document.getElementById('setup-screen').style.display = 'block';
-                });
+      let scoredGroups = [];
+      groupedCombinations.forEach(group => {
+        let score = 0;
+        for (let i = 0; i < group.length; i++) {
+          for (let j = i + 1; j < group.length; j++) {
+            let sA = group[i].schedule; let sB = group[j].schedule;
+            for (let cA of sA) for (let cB of sB) if (cA.id === cB.id) score++;
+          }
+        }
+        scoredGroups.push({ groupSchedules: group, score: score });
+      });
+
+      scoredGroups.sort((a, b) => b.score - a.score);
+      let limit = Math.min(scoredGroups.length, 50);
+
+      resultsHtml += `<h3 class="result-heading" style="color:var(--teal);">أفضل ${limit} مطابقة جماعية</h3>`;
+      for (let idx = 0; idx < limit; idx++) {
+        let grp = scoredGroups[idx]; window.generatedGroups.push(grp);
+        let allIds = {};
+        grp.groupSchedules.forEach(person => { person.schedule.forEach(sec => { allIds[sec.id] = (allIds[sec.id] || 0) + 1; }); });
+        let sharedIds = Object.keys(allIds).filter(id => allIds[id] > 1);
+
+        resultsHtml += `
+        <div class="result-card" style="${grp.score > 0 ? 'border-color:var(--teal);' : ''}">
+          <div class="result-header" style="${grp.score > 0 ? 'background:var(--teal-soft);' : ''}">
+            <div>
+              <span class="result-title">مقترح مدمج #${idx + 1}</span>
+              <span class="score-badge">${ic('users')} النقاط المشتركة: ${grp.score}</span>
+            </div>
+            <button class="btn btn-export" onclick="exportWord(${idx})">${ic('download')} تصدير الجداول لـ Word</button>
+          </div>
+          <div class="result-body">
+            <div class="result-grid">`;
+
+        grp.groupSchedules.forEach((person) => {
+          resultsHtml += `<div class="person-col" style="--accent:${getUserColorHex(person.userIndex)};">${buildMatrixHTML(person.schedule, sharedIds, `جدول ${getUserName(person.userIndex)}`, getUserColorHex(person.userIndex))}${buildSummaryHTML(person.schedule, sharedIds)}</div>`;
+        });
+        resultsHtml += `</div></div></div>`;
+      }
+      container.innerHTML = resultsHtml;
+    };
+
+    function buildMatrixHTML(schedule, sharedIds, title, accent) {
+      let daysMap = {}; daysOfWeek.forEach(d => daysMap[d] = []);
+      schedule.forEach(sec => {
+        let isShared = sharedIds.includes(sec.id);
+        sec.times.forEach(t => { if (t.start > 0) daysMap[t.day].push({ course: sec.course, className: sec.className, rawTime: t.raw, start: t.start, isShared: isShared, type: sec.type }); });
+      });
+
+      let html = `<h4 class="matrix-title" style="--accent:${accent || 'var(--brass)'};">${ic('calendar')} ${title}</h4>`;
+      html += `<table class="matrix-table">`;
+      let hasDays = false;
+      daysOfWeek.forEach(day => {
+        if (daysMap[day].length > 0) {
+          hasDays = true;
+          daysMap[day].sort((a, b) => a.start - b.start);
+          html += `<tr><td class="matrix-day">${day}</td><td><div style="display:flex; gap:8px; flex-wrap:wrap;">`;
+          daysMap[day].forEach(item => {
+            let chipClass = item.isShared ? 'shared' : 'solo';
+            let badgeClass = item.type === 'theory' ? 'theory' : 'practical';
+            html += `
+            <div class="time-chip ${chipClass}">
+              <div class="time-chip-head">
+                <span>${item.course} ${item.isShared ? '🤝' : ''}</span>
+                <span class="type-badge ${badgeClass}">${item.type === 'theory' ? 'نظري' : 'عملي'}</span>
+              </div>
+              <div class="time-chip-class">${item.className}</div>
+              <div class="time-chip-time">${item.rawTime.replace(day, '').trim()}</div>
+            </div>`;
+          });
+          html += `</div></td></tr>`;
+        }
+      });
+      if (!hasDays) html += `<tr><td colspan="2" class="no-days-msg">لا يوجد دوام!</td></tr>`;
+      html += `</table>`;
+      return html;
+    }
+
+    function buildSummaryHTML(schedule, sharedIds) {
+      let coursesMap = {};
+      schedule.forEach(sec => {
+        if (!coursesMap[sec.course]) coursesMap[sec.course] = { theory: '-', practical: '-', theoryShared: false, practicalShared: false };
+        let isShared = sharedIds.includes(sec.id);
+        if (sec.type === 'theory') { coursesMap[sec.course].theory = sec.className; coursesMap[sec.course].theoryShared = isShared; }
+        else { coursesMap[sec.course].practical = sec.className; coursesMap[sec.course].practicalShared = isShared; }
+      });
+
+      let html = `<p class="summary-label">ملخص الفئات</p><table class="summary-table"><tr><th>المقرر</th><th>فئة النظري</th><th>فئة العملي</th></tr>`;
+      Object.keys(coursesMap).forEach(cName => {
+        let data = coursesMap[cName];
+        html += `<tr><td style="font-weight:bold; background:var(--paper);">${cName}</td><td style="${data.theoryShared ? 'background:var(--teal-soft);' : ''}">${data.theory} ${data.theoryShared ? '🤝' : ''}</td><td style="${data.practicalShared ? 'background:var(--teal-soft);' : ''}">${data.practical} ${data.practicalShared ? '🤝' : ''}</td></tr>`;
+      });
+      html += `</table>`;
+      return html;
+    }
+
+    window.exportWord = function(index) {
+      let grp = window.generatedGroups[index];
+      let allIds = {};
+      grp.groupSchedules.forEach(person => { person.schedule.forEach(sec => { allIds[sec.id] = (allIds[sec.id] || 0) + 1; }); });
+      let sharedIds = Object.keys(allIds).filter(id => allIds[id] > 1);
+
+      function wordMatrixGen(schedule, title) {
+        let daysMap = {}; daysOfWeek.forEach(d => daysMap[d] = []);
+        schedule.forEach(sec => {
+          let isShared = sharedIds.includes(sec.id);
+          sec.times.forEach(t => { if (t.start > 0) daysMap[t.day].push({ course: sec.course, className: sec.className, rawTime: t.raw, start: t.start, isShared: isShared, type: sec.type }); });
+        });
+
+        let wHtml = `<h2 style="color:#141B2E; border-bottom: 2px solid #A9761E; padding-bottom:5px; margin-top:40px;">${title}</h2>`;
+        wHtml += `<table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse: collapse; font-family: 'Segoe UI', Arial; font-size:11pt; text-align:right;" dir="rtl">`;
+        daysOfWeek.forEach(day => {
+          if (daysMap[day].length > 0) {
+            daysMap[day].sort((a, b) => a.start - b.start);
+            wHtml += `<tr><td style="width:15%; background:#EEF0F2; font-weight:bold; text-align:center; vertical-align:middle;">${day}</td><td style="width:85%; padding:10px;">`;
+            daysMap[day].forEach(item => {
+              let bg = item.isShared ? '#DCEEE9' : '#F7F8FA';
+              wHtml += `<div style="background:${bg}; border:1px solid #94a3b8; padding:8px; margin-bottom:8px;">`;
+              wHtml += `<strong>${item.course} ${item.isShared ? '🤝' : ''}</strong> - [${item.type === 'theory' ? 'نظري' : 'عملي'}]<br>`;
+              wHtml += `<span style="color:#4A5568;">${item.className}</span><br>`;
+              wHtml += `<strong style="color:#A63A33;">⌚ ${item.rawTime.replace(day, '').trim()}</strong></div>`;
+            });
+            wHtml += `</td></tr>`;
+          }
+        });
+        wHtml += `</table><br>`;
+
+        let coursesMap = {};
+        schedule.forEach(sec => {
+          if (!coursesMap[sec.course]) coursesMap[sec.course] = { theory: '-', practical: '-', theoryShared: false, practicalShared: false };
+          if (sec.type === 'theory') { coursesMap[sec.course].theory = sec.className; coursesMap[sec.course].theoryShared = sharedIds.includes(sec.id); }
+          else { coursesMap[sec.course].practical = sec.className; coursesMap[sec.course].practicalShared = sharedIds.includes(sec.id); }
+        });
+
+        wHtml += `<h3 style="color:#4A5568;">الملخص التفصيلي للفئات</h3>`;
+        wHtml += `<table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse; font-family: 'Segoe UI', Arial; font-size:10pt; text-align:center;">`;
+        wHtml += `<tr style="background:#141B2E; color:#fff;"><th>المقرر</th><th>فئة النظري</th><th>فئة العملي</th></tr>`;
+        Object.keys(coursesMap).forEach(cName => {
+          let data = coursesMap[cName];
+          let tBg = data.theoryShared ? '#DCEEE9' : (data.theory !== '-' ? 'white' : '#F7F8FA');
+          let pBg = data.practicalShared ? '#DCEEE9' : (data.practical !== '-' ? 'white' : '#F7F8FA');
+          wHtml += `<tr><td style="background:#F7F8FA; font-weight:bold;">${cName}</td><td style="background:${tBg};">${data.theory} ${data.theoryShared ? '🤝' : ''}</td><td style="background:${pBg};">${data.practical} ${data.practicalShared ? '🤝' : ''}</td></tr>`;
+        });
+        wHtml += `</table><br><br>`;
+        return wHtml;
+      }
+
+      let fullWordHTML = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body style="font-family:'Segoe UI', Arial, sans-serif; direction:rtl;"><h1 style="text-align:center; color:#141B2E; font-size:24pt; border-bottom:4px solid #141B2E; padding-bottom:10px;">الجداول الأكاديمية المشتركة (SPU)</h1>`;
+      grp.groupSchedules.forEach(person => { fullWordHTML += wordMatrixGen(person.schedule, `جدول ${getUserName(person.userIndex)}`); });
+      fullWordHTML += `</body></html>`;
+
+      const d = document.createElement('div'); d.style.position = 'absolute'; d.style.left = `-9999px`; d.innerHTML = fullWordHTML; document.body.appendChild(d);
+      const s = window.getSelection(); const r = document.createRange(); r.selectNodeContents(d); s.removeAllRanges(); s.addRange(r);
+      try { document.execCommand('copy'); toast('تم نسخ الجدول كجدول Word جاهز. افتح Word واضغط لصق (Ctrl+V).', 'success', 6000); } catch (e) { toast('تعذّر نسخ الجدول.', 'error'); }
+      document.body.removeChild(d); s.removeAllRanges();
+    };
+  </script>
+</body>
+</html>
         };
 
         window.saveAndStart = function() {
