@@ -1399,7 +1399,14 @@
       "capacity": "35",
       "registered": "14",
       "seats": "14/35",
-      "times": []
+      "times": [
+        {
+          "day": "السبت",
+          "start": 580,
+          "end": 680,
+          "raw": "السبت 09:40AM-11:20AM"
+        }
+      ]
     },
     {
       "id": "nnnutbh70",
