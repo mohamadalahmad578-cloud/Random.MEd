@@ -1399,7 +1399,14 @@
       "capacity": "35",
       "registered": "16",
       "seats": "16/35",
-      "times": []
+      "times": [
+        {
+          "day": "الثلاثاء",
+          "start": 580,
+          "end": 680,
+          "raw": "الثلاثاء 09:40AM-11:20AM"
+        }
+      ]
     },
     {
       "id": "21toxdcem",
