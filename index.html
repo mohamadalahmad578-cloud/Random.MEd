@@ -648,7 +648,7 @@
     </div>
 
     <div class="footer-contact" id="ic-footer-contact"></div>
-    <p class="footer-copyright">© 2026 Random MEd — جميع الحقوق محفوظة. يُمنع نسخ الكود أو التصميم أو إعادة نشره أو استخدامه تجاريًا بدون إذن خطي.</p>
+    <p class="footer-copyright">© 2026 Random MEd — جميع الحقوق محفوظة. يُمنع نسخ الكود أو التصميم أو إعادة نشره أو استخدامه  بدون إذن خطي.</p>
 
   </div>
 
@@ -1975,7 +1975,6 @@
       const chip = (key, text) => `<span class="metric-chip ${P.includes(key) ? 'on' : ''}">${text}</span>`;
       return `<span class="metric-chips">
         ${chip('fewDays', `${m.days} أيام`)}
-        ${chip('noEarly', m.early ? `${m.early} محاضرة 8 الصبح` : 'بلا 8 الصبح')}
         ${chip('fewGaps', m.gaps ? `فراغ ${fmtDuration(m.gaps)}` : 'بلا فراغات')}
         ${m.latest ? chip('endEarly', `آخر شي ${clockText(m.latest)}`) : ''}
       </span>`;
