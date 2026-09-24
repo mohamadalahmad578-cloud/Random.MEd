@@ -8,7 +8,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/35",
+      "seats": "34/40",
       "times": [
         {
           "day": "السبت",
@@ -26,7 +26,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "25",
-      "seats": "25/35",
+      "seats": "25/40",
       "times": [
         {
           "day": "السبت",
@@ -41,10 +41,10 @@
       "course": "الأشعة والمعالجة الشعاعية (MERA-4-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "الفئات ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "18",
-      "seats": "18/35",
+      "seats": "18/40",
       "times": [
         {
           "day": "السبت",
@@ -61,10 +61,10 @@
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -85,10 +85,10 @@
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -109,10 +109,10 @@
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -243,10 +243,10 @@
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -261,10 +261,10 @@
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -282,7 +282,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/35",
+      "seats": "34/40",
       "times": [
         {
           "day": "الإثنين",
@@ -300,7 +300,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "33",
-      "seats": "33/35",
+      "seats": "33/40",
       "times": [
         {
           "day": "الإثنين",
@@ -461,10 +461,10 @@
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -479,10 +479,10 @@
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -500,7 +500,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "30",
-      "seats": "30/35",
+      "seats": "30/40",
       "times": [
         {
           "day": "السبت",
@@ -625,10 +625,10 @@
       "course": "الطب النفسي (MEIM-4-07)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -646,7 +646,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "31",
-      "seats": "31/35",
+      "seats": "31/40",
       "times": [
         {
           "day": "السبت",
@@ -661,10 +661,10 @@
       "course": "الطب النفسي (MEIM-4-07)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "الفئات ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "32",
-      "seats": "32/35",
+      "seats": "32/40",
       "times": [
         {
           "day": "السبت",
@@ -681,10 +681,10 @@
       "course": "الطب الوقائي وطب الأسرة (MECM-1-03)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/36",
+      "seats": "36/40",
       "times": [
         {
           "day": "السبت",
@@ -699,10 +699,10 @@
       "course": "الطب الوقائي وطب الأسرة (MECM-1-03)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -722,7 +722,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "20",
-      "seats": "20/35",
+      "seats": "20/40",
       "times": [
         {
           "day": "الإثنين",
@@ -743,10 +743,10 @@
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -770,7 +770,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "30",
-      "seats": "30/35",
+      "seats": "30/40",
       "times": [
         {
           "day": "الأحد",
@@ -901,10 +901,10 @@
       "course": "الوبائيات والإحصاء الحيوي (MECM-1-02)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/36",
+      "seats": "36/40",
       "times": [
         {
           "day": "السبت",
@@ -919,10 +919,10 @@
       "course": "الوبائيات والإحصاء الحيوي (MECM-1-02)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -1011,10 +1011,10 @@
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "الأحد",
@@ -1029,10 +1029,10 @@
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -1047,10 +1047,10 @@
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "الأحد",
@@ -1175,10 +1175,10 @@
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "الأحد",
@@ -1193,10 +1193,10 @@
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "الأحد",
@@ -1211,10 +1211,10 @@
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -1339,10 +1339,10 @@
       "course": "علم المصطلحات الطبية (MEXX-2-04)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -1357,10 +1357,10 @@
       "course": "علم المصطلحات الطبية (MEXX-2-04)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -1375,10 +1375,10 @@
       "course": "علم المصطلحات الطبية (MEXX-2-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "الفئات ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -1395,10 +1395,10 @@
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -1413,10 +1413,10 @@
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -1431,10 +1431,10 @@
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -1449,10 +1449,10 @@
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -1469,10 +1469,10 @@
       "course": "علم النفس السلوكي (MEXX-1-05)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -1487,10 +1487,10 @@
       "course": "علم النفس السلوكي (MEXX-1-05)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -1505,10 +1505,10 @@
       "course": "علم النفس السلوكي (MEXX-1-05)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -1523,10 +1523,10 @@
       "course": "علم النفس السلوكي (MEXX-1-05)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "الفئات ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "29",
-      "seats": "29/35",
+      "seats": "29/40",
       "times": [
         {
           "day": "السبت",
@@ -1543,10 +1543,10 @@
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "الإثنين",
@@ -1579,10 +1579,10 @@
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "الإثنين",
@@ -1764,7 +1764,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "21",
-      "seats": "21/35",
+      "seats": "21/40",
       "times": [
         {
           "day": "السبت",
@@ -1782,7 +1782,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "28",
-      "seats": "28/35",
+      "seats": "28/40",
       "times": [
         {
           "day": "السبت",
@@ -1800,7 +1800,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "23",
-      "seats": "23/35",
+      "seats": "23/40",
       "times": [
         {
           "day": "السبت",
@@ -1891,10 +1891,10 @@
       "course": "أمراض الأذن والأنف والحنجرة (MESR-4-08)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -1918,7 +1918,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "32",
-      "seats": "32/35",
+      "seats": "32/40",
       "times": [
         {
           "day": "الأحد",
@@ -1942,7 +1942,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "28",
-      "seats": "28/35",
+      "seats": "28/40",
       "times": [
         {
           "day": "السبت",
@@ -1968,7 +1968,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "32",
-      "seats": "32/35",
+      "seats": "32/40",
       "times": [
         {
           "day": "الإثنين",
@@ -1992,7 +1992,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/35",
+      "seats": "34/40",
       "times": [
         {
           "day": "الإثنين",
@@ -2016,7 +2016,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "33",
-      "seats": "33/35",
+      "seats": "33/40",
       "times": [
         {
           "day": "الأحد",
@@ -2037,10 +2037,10 @@
       "course": "أمراض الأطفال (1) (MEPD-6-01)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -2064,7 +2064,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "28",
-      "seats": "28/35",
+      "seats": "28/40",
       "times": [
         {
           "day": "الإثنين",
@@ -2090,7 +2090,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "14",
-      "seats": "14/35",
+      "seats": "14/40",
       "times": [
         {
           "day": "الإثنين",
@@ -2114,7 +2114,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "11",
-      "seats": "11/35",
+      "seats": "11/40",
       "times": [
         {
           "day": "السبت",
@@ -2138,7 +2138,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "21",
-      "seats": "21/35",
+      "seats": "21/40",
       "times": [
         {
           "day": "الإثنين",
@@ -2165,7 +2165,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/35",
+      "seats": "34/40",
       "times": [
         {
           "day": "الأحد",
@@ -2180,10 +2180,10 @@
       "course": "أمراض الجلد والأمراض المنتقلة بالجنس (MEIM-6-08)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -2198,10 +2198,10 @@
       "course": "أمراض الجلد والأمراض المنتقلة بالجنس (MEIM-6-08)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -2216,10 +2216,10 @@
       "course": "أمراض الجلد والأمراض المنتقلة بالجنس (MEIM-6-08)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -2240,7 +2240,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "16",
-      "seats": "16/35",
+      "seats": "16/40",
       "times": [
         {
           "day": "السبت",
@@ -2264,7 +2264,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "9",
-      "seats": "9/35",
+      "seats": "9/40",
       "times": [
         {
           "day": "السبت",
@@ -2288,7 +2288,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "15",
-      "seats": "15/35",
+      "seats": "15/40",
       "times": [
         {
           "day": "السبت",
@@ -2312,7 +2312,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "6",
-      "seats": "6/35",
+      "seats": "6/40",
       "times": [
         {
           "day": "السبت",
@@ -2335,10 +2335,10 @@
       "course": "أمراض النساء (MEGO-7-02)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -2359,10 +2359,10 @@
       "course": "أمراض النساء (MEGO-7-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/36",
+      "seats": "36/40",
       "times": [
         {
           "day": "السبت",
@@ -2383,10 +2383,10 @@
       "course": "أمراض النساء (MEGO-7-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -2447,10 +2447,10 @@
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -2465,10 +2465,10 @@
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -2483,10 +2483,10 @@
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -2507,10 +2507,10 @@
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -2671,10 +2671,10 @@
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "السبت",
@@ -2689,10 +2689,10 @@
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "السبت",
@@ -2707,10 +2707,10 @@
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "السبت",
@@ -2725,10 +2725,10 @@
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "السبت",
@@ -3132,10 +3132,10 @@
       "course": "التشريح (3) (MEAN-3-03)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -3156,10 +3156,10 @@
       "course": "التشريح (3) (MEAN-3-03)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -3254,10 +3254,10 @@
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -3278,10 +3278,10 @@
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -3302,10 +3302,10 @@
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -3326,10 +3326,10 @@
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -3498,10 +3498,10 @@
       "course": "الجراحة (4) (MESR-8-04)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/36",
+      "seats": "36/40",
       "times": [
         {
           "day": "السبت",
@@ -3528,10 +3528,10 @@
       "course": "الجراحة (4) (MESR-8-04)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -3558,10 +3558,10 @@
       "course": "الجراحة (4) (MESR-8-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/36",
+      "seats": "36/40",
       "times": [
         {
           "day": "السبت",
@@ -3593,7 +3593,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "30",
-      "seats": "30/35",
+      "seats": "30/40",
       "times": [
         {
           "day": "السبت",
@@ -3617,7 +3617,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "31",
-      "seats": "31/35",
+      "seats": "31/40",
       "times": [
         {
           "day": "السبت",
@@ -3641,7 +3641,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "18",
-      "seats": "18/35",
+      "seats": "18/40",
       "times": [
         {
           "day": "السبت",
@@ -3666,10 +3666,10 @@
       "course": "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -3684,10 +3684,10 @@
       "course": "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -3702,10 +3702,10 @@
       "course": "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -3720,10 +3720,10 @@
       "course": "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -3743,7 +3743,7 @@
       "status": "فئة متاحة",
       "capacity": "36",
       "registered": "35",
-      "seats": "35/36",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -3773,7 +3773,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "33",
-      "seats": "33/35",
+      "seats": "33/40",
       "times": [
         {
           "day": "الأحد",
@@ -3800,10 +3800,10 @@
       "course": "الطب الباطني (2) (MEIM-6-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/36",
+      "seats": "36/40",
       "times": [
         {
           "day": "السبت",
@@ -3833,7 +3833,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "32",
-      "seats": "32/35",
+      "seats": "32/40",
       "times": [
         {
           "day": "السبت",
@@ -3865,7 +3865,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "18",
-      "seats": "18/35",
+      "seats": "18/40",
       "times": [
         {
           "day": "الأحد",
@@ -3889,7 +3889,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "21",
-      "seats": "21/35",
+      "seats": "21/40",
       "times": [
         {
           "day": "السبت",
@@ -3913,7 +3913,7 @@
       "status": "فئة متاحة",
       "capacity": "36",
       "registered": "35",
-      "seats": "35/36",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -3937,7 +3937,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "9",
-      "seats": "9/35",
+      "seats": "9/40",
       "times": [
         {
           "day": "الأحد",
@@ -3963,7 +3963,7 @@
       "status": "فئة متاحة",
       "capacity": "39",
       "registered": "38",
-      "seats": "38/39",
+      "seats": "38/40",
       "times": [
         {
           "day": "الإثنين",
@@ -4008,10 +4008,10 @@
       "course": "الطب الباطني (4) (MEIM-6-04)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "38",
       "registered": "38",
-      "seats": "38/38",
+      "seats": "38/40",
       "times": [
         {
           "day": "السبت",
@@ -4037,7 +4037,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "9",
-      "seats": "9/35",
+      "seats": "9/40",
       "times": [
         {
           "day": "الأحد",
@@ -4058,10 +4058,10 @@
       "course": "الطب الباطني (5) (MEIM-6-05)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -4085,7 +4085,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "26",
-      "seats": "26/35",
+      "seats": "26/40",
       "times": [
         {
           "day": "الأحد",
@@ -4108,10 +4108,10 @@
       "course": "الطب الباطني (6) (MEIM-6-06)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -4129,7 +4129,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "23",
-      "seats": "23/35",
+      "seats": "23/40",
       "times": [
         {
           "day": "السبت",
@@ -4150,7 +4150,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/35",
+      "seats": "34/40",
       "times": [
         {
           "day": "السبت",
@@ -4174,7 +4174,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "26",
-      "seats": "26/35",
+      "seats": "26/40",
       "times": [
         {
           "day": "السبت",
@@ -4198,7 +4198,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "28",
-      "seats": "28/35",
+      "seats": "28/40",
       "times": [
         {
           "day": "السبت",
@@ -4705,10 +4705,10 @@
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -4729,10 +4729,10 @@
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -4753,10 +4753,10 @@
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -4777,10 +4777,10 @@
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -4947,10 +4947,10 @@
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -4971,10 +4971,10 @@
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -4995,10 +4995,10 @@
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -5019,10 +5019,10 @@
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -5189,10 +5189,10 @@
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -5213,10 +5213,10 @@
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -5237,10 +5237,10 @@
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -5255,10 +5255,10 @@
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -5428,7 +5428,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "29",
-      "seats": "29/35",
+      "seats": "29/40",
       "times": [
         {
           "day": "السبت",
@@ -5446,7 +5446,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "17",
-      "seats": "17/35",
+      "seats": "17/40",
       "times": [
         {
           "day": "السبت",
@@ -5464,7 +5464,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "20",
-      "seats": "20/35",
+      "seats": "20/40",
       "times": [
         {
           "day": "السبت",
@@ -5482,7 +5482,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "25",
-      "seats": "25/35",
+      "seats": "25/40",
       "times": [
         {
           "day": "السبت",
@@ -6602,10 +6602,10 @@
       "course": "جراحة (2) (MESR-6-02)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/36",
+      "seats": "36/40",
       "times": [
         {
           "day": "السبت",
@@ -6626,10 +6626,10 @@
       "course": "جراحة (2) (MESR-6-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -6650,10 +6650,10 @@
       "course": "جراحة (2) (MESR-6-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/37",
+      "seats": "37/40",
       "times": [
         {
           "day": "الأحد",
@@ -6674,10 +6674,10 @@
       "course": "جراحة (2) (MESR-6-02)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -6727,7 +6727,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "24",
-      "seats": "24/35",
+      "seats": "24/40",
       "times": [
         {
           "day": "الإثنين",
@@ -6751,7 +6751,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "30",
-      "seats": "30/35",
+      "seats": "30/40",
       "times": [
         {
           "day": "الأحد",
@@ -6775,7 +6775,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "24",
-      "seats": "24/35",
+      "seats": "24/40",
       "times": [
         {
           "day": "السبت",
@@ -6798,10 +6798,10 @@
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -6819,7 +6819,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/35",
+      "seats": "34/40",
       "times": [
         {
           "day": "الأحد",
@@ -6834,10 +6834,10 @@
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الأحد",
@@ -6967,7 +6967,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "23",
-      "seats": "23/35",
+      "seats": "23/40",
       "times": [
         {
           "day": "الإثنين",
@@ -6991,7 +6991,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "20",
-      "seats": "20/35",
+      "seats": "20/40",
       "times": [
         {
           "day": "الإثنين",
@@ -7015,7 +7015,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "31",
-      "seats": "31/35",
+      "seats": "31/40",
       "times": [
         {
           "day": "السبت",
@@ -7036,10 +7036,10 @@
       "course": "طب التوليد (MEGO-6-01)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -7060,10 +7060,10 @@
       "course": "طب التوليد (MEGO-6-01)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -7090,7 +7090,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "20",
-      "seats": "20/35",
+      "seats": "20/40",
       "times": [
         {
           "day": "الإثنين",
@@ -7108,7 +7108,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "12",
-      "seats": "12/35",
+      "seats": "12/40",
       "times": [
         {
           "day": "الإثنين",
@@ -7126,7 +7126,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "29",
-      "seats": "29/35",
+      "seats": "29/40",
       "times": [
         {
           "day": "الأحد",
@@ -7144,7 +7144,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "16",
-      "seats": "16/35",
+      "seats": "16/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7377,10 +7377,10 @@
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -7395,10 +7395,10 @@
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -7413,10 +7413,10 @@
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7434,7 +7434,7 @@
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "31",
-      "seats": "31/35",
+      "seats": "31/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7595,10 +7595,10 @@
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -7619,10 +7619,10 @@
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7643,10 +7643,10 @@
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "السبت",
@@ -7667,10 +7667,10 @@
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7837,10 +7837,10 @@
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -7861,10 +7861,10 @@
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الإثنين",
@@ -7885,10 +7885,10 @@
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "فئة متاحة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/35",
+      "seats": "35/40",
       "times": [
         {
           "day": "الثلاثاء",
