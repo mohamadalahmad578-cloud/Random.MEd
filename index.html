@@ -1417,65 +1417,49 @@
       else if (e.key === 'ArrowLeft') { e.preventDefault(); tourGo(1); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); tourGo(-1); }
     }
-  function placeTour() {
+ function placeTour() {
   if (!tour) return;
   const el = tourEl(tour.steps[tour.idx]);
   const spot = document.querySelector('.tour-spot'), card = document.querySelector('.tour-card');
   if (!el || !spot || !card) return;
 
+  const r = el.getBoundingClientRect();
+  const pad = 6;
+  
+  // 1. تظليل العنصر بحجمه الطبيعي وين ما كان
+  Object.assign(spot.style, {
+    top: (r.top - pad) + 'px',
+    left: (r.left - pad) + 'px',
+    width: (r.width + pad * 2) + 'px',
+    height: (r.height + pad * 2) + 'px',
+    transition: 'none' // إيقاف التحريك المؤقت لمنع الارتجاج أثناء التمرير
+  });
+
+  card.style.transition = 'none';
+  const ch = card.offsetHeight || 150;
+  const cw = card.offsetWidth || 300;
+  
+  // 2. حساب مكان البطاقة بشكل آمن
+  let topPos;
   const header = document.querySelector('.header');
   const headerH = (header && getComputedStyle(header).position === 'sticky') ? header.offsetHeight : 0;
   
-  // حساب ارتفاع الشريط السفلي عالموبايل
-  const bottomNav = document.querySelector('.bottom-nav');
-  const bottomNavH = (bottomNav && getComputedStyle(bottomNav).display !== 'none') ? bottomNav.offsetHeight : 0;
-
-  const r = el.getBoundingClientRect();
-  const pad = 6;
-
-  let spotTop = r.top - pad;
-  let spotHeight = r.height + pad * 2;
-  
-  // قص التظليل من فوق عشان الهيدر (للكمبيوتر)
-  if (headerH > 0 && spotTop < headerH) {
-    const cut = headerH - spotTop;
-    spotTop = headerH;
-    spotHeight = Math.max(0, spotHeight - cut);
-  }
-  
-  // قص التظليل من تحت عشان الشريط السفلي (للموبايل والتابلت)
-  const maxVisibleY = window.innerHeight - bottomNavH;
-  if (spotTop + spotHeight > maxVisibleY) {
-    spotHeight = Math.max(0, maxVisibleY - spotTop);
-  }
-
-  Object.assign(spot.style, {
-    top: spotTop + 'px',
-    left: (r.left - pad) + 'px',
-    width: (r.width + pad * 2) + 'px',
-    height: spotHeight + 'px'
-  });
-
-  const ch = card.offsetHeight, cw = card.offsetWidth;
-  const spaceBelow = maxVisibleY - r.bottom;
-  const spaceAbove = r.top - headerH;
-
-  let top;
-  if (spaceBelow > ch + 24) {
-    top = r.bottom + 14;
-  } else if (spaceAbove > ch + 24) {
-    top = r.top - ch - 14;
+  if (r.bottom + ch + 15 < window.innerHeight) {
+    topPos = r.bottom + 15; // في مساحة تحت العنصر
+  } else if (r.top - ch - 15 > headerH) {
+    topPos = r.top - ch - 15; // في مساحة فوق العنصر
   } else {
-    // سنترة البطاقة إذا كان العنصر كبير
-    top = headerH + (maxVisibleY - headerH - ch) / 2;
-    top = Math.max(headerH + 12, top);
+    topPos = (window.innerHeight - ch) / 2; // سنترة بنص الشاشة إذا العنصر ضخم
   }
 
-  let left = r.left + r.width / 2 - cw / 2;
-  left = Math.max(12, left);
-  left = Math.min(window.innerWidth - cw - 12, left);
+  // منع البطاقة من الخروج عن حواف الشاشة يميناً ويساراً
+  let leftPos = r.left + (r.width / 2) - (cw / 2);
+  leftPos = Math.max(10, Math.min(leftPos, window.innerWidth - cw - 10));
 
-  Object.assign(card.style, { top: top + 'px', left: left + 'px' });
+  Object.assign(card.style, {
+    top: topPos + 'px',
+    left: leftPos + 'px'
+  });
 }
     function tourGo(delta) {
       if (!tour) return;
@@ -1495,8 +1479,10 @@
   if (step.prep) step.prep();
   const el = tourEl(step);
   if (!el) { tourGo(1); return; }
+  
   const tall = el.getBoundingClientRect().height > window.innerHeight * 0.6;
-  el.scrollIntoView({ block: tall ? 'start' : 'center', behavior: 'smooth' });   // العنصر الطويل: منبيّن راسه
+  el.scrollIntoView({ block: tall ? 'start' : 'center', behavior: 'smooth' });
+
   let card = document.querySelector('.tour-card');
   if (!card) {
     const spot = document.createElement('div'); spot.className = 'tour-spot'; document.body.appendChild(spot);
@@ -1515,13 +1501,19 @@
       ${last ? '' : `<button class="btn btn-ghost" onclick="endTour()">تخطّي</button>`}
     </div>
     <button type="button" class="tour-off" onclick="stopAllTours()">ما بدي شروحات تلقائية</button>`;
-  
+
   placeTour();
   let ticks = 0;
   const scrollAnim = setInterval(() => {
     placeTour();
-    if (++ticks > 50) clearInterval(scrollAnim);
-  }, 20);
+    if (++ticks > 40) {
+      clearInterval(scrollAnim);
+      // إرجاع نعومة الحركة (Animation) بعد انتهاء التمرير
+      const s = document.querySelector('.tour-spot'), c = document.querySelector('.tour-card');
+      if(s) s.style.transition = 'width .25s ease, height .25s ease';
+      if(c) c.style.transition = 'transform .25s ease';
+    }
+  }, 25);
 
   const b = card.querySelector('.btn-teal'); if (b) b.focus({ preventScroll: true });
 }
