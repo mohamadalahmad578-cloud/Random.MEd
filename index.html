@@ -1420,41 +1420,88 @@ function tourCleanup() {
       else if (e.key === 'ArrowLeft') { e.preventDefault(); tourGo(1); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); tourGo(-1); }
     }
+ function getVisibleRect(el) {
+  let r = el.getBoundingClientRect();
+  let top = r.top, left = r.left, right = r.right, bottom = r.bottom;
+  let curr = el.parentElement;
+  while (curr && curr !== document.body && curr !== document.documentElement) {
+    const style = getComputedStyle(curr);
+    if (style.overflow === 'auto' || style.overflow === 'hidden' || style.overflowY === 'auto' || style.overflowY === 'hidden') {
+      const cr = curr.getBoundingClientRect();
+      top = Math.max(top, cr.top);
+      left = Math.max(left, cr.left);
+      right = Math.min(right, cr.right);
+      bottom = Math.min(bottom, cr.bottom);
+    }
+    curr = curr.parentElement;
+  }
+  return { top, left, width: Math.max(0, right - left), height: Math.max(0, bottom - top), bottom, right };
+}   
  function placeTour() {
   if (!tour) return;
-  const el = tourEl(tour.steps[tour.idx]);
+  // التثبيت: ما نغير العنصر إذا صار مخفي جزئياً بسبب السكرول
+  let el = tour.currentEl;
+  if (!el || !el.isConnected) {
+    el = tourEl(tour.steps[tour.idx]);
+    if (tour) tour.currentEl = el;
+  }
+  if (!el) return;
+
   const spot = document.querySelector('.tour-spot');
   const card = document.querySelector('.tour-card');
-  if (!el || !spot || !card) return;
+  if (!spot || !card) return;
 
-  const r = el.getBoundingClientRect();
+  const r = getVisibleRect(el); // استخدام المساحة المرئية فقط
   const pad = 6;
   const header = document.querySelector('.header');
   const isSticky = window.innerWidth > 920; 
   const headerH = (header && isSticky) ? header.offsetHeight : 0;
+  const bottomNav = document.querySelector('.bottom-nav');
+  const bottomNavH = (bottomNav && getComputedStyle(bottomNav).display !== 'none') ? bottomNav.offsetHeight : 0;
+
   const winH = window.innerHeight;
   const winW = window.innerWidth;
   const ch = card.offsetHeight || 150;
   const cw = card.offsetWidth || 300;
 
+  // إخفاء المربع إذا اختفى العنصر بالكامل جوا القائمة الممررة
+  if (r.height <= 0 || r.width <= 0) {
+    spot.style.opacity = '0';
+  } else {
+    spot.style.opacity = '1';
+    let spotTop = r.top - pad;
+    let spotHeight = r.height + pad * 2;
+    
+    // منع المربع من تغطية الهيدر أو الشريط السفلي
+    const maxVisibleY = winH - bottomNavH;
+    if (spotTop < headerH) {
+      const cut = headerH - spotTop;
+      spotTop = headerH;
+      spotHeight = Math.max(0, spotHeight - cut);
+    }
+    if (spotTop + spotHeight > maxVisibleY) {
+      spotHeight = Math.max(0, maxVisibleY - spotTop);
+    }
+
+    spot.style.top = spotTop + 'px';
+    spot.style.left = (r.left - pad) + 'px';
+    spot.style.width = (r.width + pad * 2) + 'px';
+    spot.style.height = spotHeight + 'px';
+    spot.style.transition = 'none';
+  }
+
   let topPos;
-  if (r.bottom + ch + 15 < winH) {
+  if (r.bottom + ch + 15 < winH - bottomNavH) {
     topPos = r.bottom + 15;
   } else if (r.top - ch - 15 > headerH) {
     topPos = r.top - ch - 15;
   } else {
-    topPos = headerH + Math.max(10, (winH - headerH - ch) / 2);
+    topPos = headerH + Math.max(10, (winH - bottomNavH - headerH - ch) / 2);
   }
-  topPos = Math.max(headerH + 10, Math.min(topPos, winH - ch - 10));
+  topPos = Math.max(headerH + 10, Math.min(topPos, winH - bottomNavH - ch - 10));
 
   let leftPos = r.left + (r.width / 2) - (cw / 2);
   leftPos = Math.max(10, Math.min(leftPos, winW - cw - 10));
-
-  spot.style.top = (r.top - pad) + 'px';
-  spot.style.left = (r.left - pad) + 'px';
-  spot.style.width = (r.width + pad * 2) + 'px';
-  spot.style.height = (r.height + pad * 2) + 'px';
-  spot.style.transition = 'none';
 
   card.style.top = topPos + 'px';
   card.style.left = leftPos + 'px';
@@ -1473,12 +1520,14 @@ function tourCleanup() {
       tour.idx = n; renderTourStep();
     }
     window.tourGo = tourGo; window.endTour = endTour;
-  function renderTourStep() {
+ function renderTourStep() {
   const step = tour.steps[tour.idx];
   if (step.prep) step.prep();
   const el = tourEl(step);
   if (!el) { tourGo(1); return; }
   
+  tour.currentEl = el; // تثبيت العنصر عشان ما يضيع وقت السكرول
+
   const tall = el.getBoundingClientRect().height > window.innerHeight * 0.6;
   el.scrollIntoView({ block: tall ? 'start' : 'center', behavior: 'smooth' });
 
