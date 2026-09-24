@@ -1390,13 +1390,16 @@
       }
     }
     let tourRaf = 0;
-    function tourFollow() { cancelAnimationFrame(tourRaf); tourRaf = requestAnimationFrame(placeTour); }   // الإضاءة بتلحق أي تمرير
-    function tourCleanup() {                        // تنظيف فقط — بدون ما نعتبر الجولة خلصت
-      document.querySelectorAll('.tour-spot, .tour-card').forEach(e => e.remove());
-      document.removeEventListener('keydown', tourKeys, true);
-      window.removeEventListener('resize', placeTour);
-      window.removeEventListener('scroll', tourFollow, true);
-    }
+function tourFollow() { 
+  if (!tour) return;
+  placeTour(); 
+  tourRaf = requestAnimationFrame(tourFollow);
+}
+function tourCleanup() {
+  cancelAnimationFrame(tourRaf);
+  document.querySelectorAll('.tour-spot, .tour-card').forEach(e => e.remove());
+  document.removeEventListener('keydown', tourKeys, true);
+}
     function endTour() {
       const name = tour ? tour.name : 'main';
       tourCleanup(); tour = null;
@@ -1420,46 +1423,42 @@
  function placeTour() {
   if (!tour) return;
   const el = tourEl(tour.steps[tour.idx]);
-  const spot = document.querySelector('.tour-spot'), card = document.querySelector('.tour-card');
+  const spot = document.querySelector('.tour-spot');
+  const card = document.querySelector('.tour-card');
   if (!el || !spot || !card) return;
 
   const r = el.getBoundingClientRect();
   const pad = 6;
-  
-  // 1. تظليل العنصر بحجمه الطبيعي وين ما كان
-  Object.assign(spot.style, {
-    top: (r.top - pad) + 'px',
-    left: (r.left - pad) + 'px',
-    width: (r.width + pad * 2) + 'px',
-    height: (r.height + pad * 2) + 'px',
-    transition: 'none' // إيقاف التحريك المؤقت لمنع الارتجاج أثناء التمرير
-  });
-
-  card.style.transition = 'none';
+  const header = document.querySelector('.header');
+  const isSticky = window.innerWidth > 920; 
+  const headerH = (header && isSticky) ? header.offsetHeight : 0;
+  const winH = window.innerHeight;
+  const winW = window.innerWidth;
   const ch = card.offsetHeight || 150;
   const cw = card.offsetWidth || 300;
-  
-  // 2. حساب مكان البطاقة بشكل آمن
+
   let topPos;
-  const header = document.querySelector('.header');
-  const headerH = (header && getComputedStyle(header).position === 'sticky') ? header.offsetHeight : 0;
-  
-  if (r.bottom + ch + 15 < window.innerHeight) {
-    topPos = r.bottom + 15; // في مساحة تحت العنصر
+  if (r.bottom + ch + 15 < winH) {
+    topPos = r.bottom + 15;
   } else if (r.top - ch - 15 > headerH) {
-    topPos = r.top - ch - 15; // في مساحة فوق العنصر
+    topPos = r.top - ch - 15;
   } else {
-    topPos = (window.innerHeight - ch) / 2; // سنترة بنص الشاشة إذا العنصر ضخم
+    topPos = headerH + Math.max(10, (winH - headerH - ch) / 2);
   }
+  topPos = Math.max(headerH + 10, Math.min(topPos, winH - ch - 10));
 
-  // منع البطاقة من الخروج عن حواف الشاشة يميناً ويساراً
   let leftPos = r.left + (r.width / 2) - (cw / 2);
-  leftPos = Math.max(10, Math.min(leftPos, window.innerWidth - cw - 10));
+  leftPos = Math.max(10, Math.min(leftPos, winW - cw - 10));
 
-  Object.assign(card.style, {
-    top: topPos + 'px',
-    left: leftPos + 'px'
-  });
+  spot.style.top = (r.top - pad) + 'px';
+  spot.style.left = (r.left - pad) + 'px';
+  spot.style.width = (r.width + pad * 2) + 'px';
+  spot.style.height = (r.height + pad * 2) + 'px';
+  spot.style.transition = 'none';
+
+  card.style.top = topPos + 'px';
+  card.style.left = leftPos + 'px';
+  card.style.transition = 'none';
 }
     function tourGo(delta) {
       if (!tour) return;
@@ -1474,7 +1473,7 @@
       tour.idx = n; renderTourStep();
     }
     window.tourGo = tourGo; window.endTour = endTour;
-   function renderTourStep() {
+  function renderTourStep() {
   const step = tour.steps[tour.idx];
   if (step.prep) step.prep();
   const el = tourEl(step);
@@ -1502,41 +1501,29 @@
     </div>
     <button type="button" class="tour-off" onclick="stopAllTours()">ما بدي شروحات تلقائية</button>`;
 
-  placeTour();
-  let ticks = 0;
-  const scrollAnim = setInterval(() => {
-    placeTour();
-    if (++ticks > 40) {
-      clearInterval(scrollAnim);
-      // إرجاع نعومة الحركة (Animation) بعد انتهاء التمرير
-      const s = document.querySelector('.tour-spot'), c = document.querySelector('.tour-card');
-      if(s) s.style.transition = 'width .25s ease, height .25s ease';
-      if(c) c.style.transition = 'transform .25s ease';
-    }
-  }, 25);
-
   const b = card.querySelector('.btn-teal'); if (b) b.focus({ preventScroll: true });
 }
     // بيشغّل جولة شاشة معيّنة. force = من زر «؟»
-    window.startTour = function(nameOrForce, force) {
-      let name = nameOrForce;
-      if (typeof nameOrForce === 'boolean' || nameOrForce === undefined) { force = !!nameOrForce; name = force ? currentTourContext() : 'main'; }
-      if (!TOURS[name]) return;
-      if (!force && (tourDone(name) || toursOff() || tour)) return;
-      if (!document.getElementById('ui-modal').hidden) return;          // ما منقاطع نافذة مفتوحة
-      const onApp = document.getElementById('app-screen').style.display === 'block';
-      const onEditor = document.getElementById('editor-screen').style.display === 'block';
-      if (!onApp && !onEditor) return;
-      const steps = TOURS[name].steps.filter(s => s.prep || tourEl(s));
-      if (!steps.length) { if (force) toast('ما في شي نشرحه بهالشاشة حاليًا.', 'success'); return; }
-      tourCleanup();
-      if (name === 'main') { try { localStorage.removeItem(TOUR_KEY); } catch (e) {} if (typeof renderWelcome === 'function') renderWelcome(); }
-      tour = { name, steps, idx: 0 };
-      document.addEventListener('keydown', tourKeys, true);
-      window.addEventListener('resize', placeTour);
-      window.addEventListener('scroll', tourFollow, { capture: true, passive: true });   // capture: كمان تمرير الحاويات الداخلية
-      renderTourStep();
-    };
+   window.startTour = function(nameOrForce, force) {
+  let name = nameOrForce;
+  if (typeof nameOrForce === 'boolean' || nameOrForce === undefined) { force = !!nameOrForce; name = force ? currentTourContext() : 'main'; }
+  if (!TOURS[name]) return;
+  if (!force && (tourDone(name) || toursOff() || tour)) return;
+  if (!document.getElementById('ui-modal').hidden) return;
+  const onApp = document.getElementById('app-screen').style.display === 'block';
+  const onEditor = document.getElementById('editor-screen').style.display === 'block';
+  if (!onApp && !onEditor) return;
+  const steps = TOURS[name].steps.filter(s => s.prep || tourEl(s));
+  if (!steps.length) { if (force) toast('ما في شي نشرحه بهالشاشة حاليًا.', 'success'); return; }
+  
+  tourCleanup();
+  if (name === 'main') { try { localStorage.removeItem(TOUR_KEY); } catch (e) {} if (typeof renderWelcome === 'function') renderWelcome(); }
+  tour = { name, steps, idx: 0 };
+  document.addEventListener('keydown', tourKeys, true);
+  
+  renderTourStep();
+  tourFollow();
+};
     // أي شاشة أنت فيها هلق؟
     function currentTourContext() {
       if (document.getElementById('editor-screen').style.display === 'block')
