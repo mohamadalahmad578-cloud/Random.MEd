@@ -1417,7 +1417,7 @@
       else if (e.key === 'ArrowLeft') { e.preventDefault(); tourGo(1); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); tourGo(-1); }
     }
-   function placeTour() {
+  function placeTour() {
   if (!tour) return;
   const el = tourEl(tour.steps[tour.idx]);
   const spot = document.querySelector('.tour-spot'), card = document.querySelector('.tour-card');
@@ -1425,19 +1425,39 @@
 
   const header = document.querySelector('.header');
   const headerH = (header && getComputedStyle(header).position === 'sticky') ? header.offsetHeight : 0;
+  
+  // حساب ارتفاع الشريط السفلي عالموبايل
+  const bottomNav = document.querySelector('.bottom-nav');
+  const bottomNavH = (bottomNav && getComputedStyle(bottomNav).display !== 'none') ? bottomNav.offsetHeight : 0;
 
   const r = el.getBoundingClientRect();
   const pad = 6;
 
+  let spotTop = r.top - pad;
+  let spotHeight = r.height + pad * 2;
+  
+  // قص التظليل من فوق عشان الهيدر (للكمبيوتر)
+  if (headerH > 0 && spotTop < headerH) {
+    const cut = headerH - spotTop;
+    spotTop = headerH;
+    spotHeight = Math.max(0, spotHeight - cut);
+  }
+  
+  // قص التظليل من تحت عشان الشريط السفلي (للموبايل والتابلت)
+  const maxVisibleY = window.innerHeight - bottomNavH;
+  if (spotTop + spotHeight > maxVisibleY) {
+    spotHeight = Math.max(0, maxVisibleY - spotTop);
+  }
+
   Object.assign(spot.style, {
-    top: Math.max(headerH + 4, r.top - pad) + 'px',
+    top: spotTop + 'px',
     left: (r.left - pad) + 'px',
     width: (r.width + pad * 2) + 'px',
-    height: Math.min(r.height + pad * 2, window.innerHeight - headerH - 20) + 'px'
+    height: spotHeight + 'px'
   });
 
   const ch = card.offsetHeight, cw = card.offsetWidth;
-  const spaceBelow = window.innerHeight - r.bottom;
+  const spaceBelow = maxVisibleY - r.bottom;
   const spaceAbove = r.top - headerH;
 
   let top;
@@ -1446,7 +1466,9 @@
   } else if (spaceAbove > ch + 24) {
     top = r.top - ch - 14;
   } else {
-    top = Math.max(headerH + 12, window.innerHeight - ch - 12);
+    // سنترة البطاقة إذا كان العنصر كبير
+    top = headerH + (maxVisibleY - headerH - ch) / 2;
+    top = Math.max(headerH + 12, top);
   }
 
   let left = r.left + r.width / 2 - cw / 2;
@@ -1468,41 +1490,41 @@
       tour.idx = n; renderTourStep();
     }
     window.tourGo = tourGo; window.endTour = endTour;
-    function renderTourStep() {
-      const step = tour.steps[tour.idx];
-      if (step.prep) step.prep();
-      const el = tourEl(step);
-      if (!el) { tourGo(1); return; }
-      const tall = el.getBoundingClientRect().height > window.innerHeight * 0.6;
-      el.scrollIntoView({ block: tall ? 'start' : 'center', behavior: 'smooth' });   // العنصر الطويل: منبيّن راسه
-      let card = document.querySelector('.tour-card');
-      if (!card) {
-        const spot = document.createElement('div'); spot.className = 'tour-spot'; document.body.appendChild(spot);
-        card = document.createElement('div'); card.className = 'tour-card'; card.setAttribute('role', 'dialog'); card.setAttribute('aria-modal', 'true');
-        document.body.appendChild(card);
-      }
-      const total = tour.steps.length, last = tour.idx === total - 1;
-      card.setAttribute('aria-label', `شرح: ${TOURS[tour.name].label}`);
-      card.innerHTML = `<div class="tour-step"><span class="tour-where">${esc(TOURS[tour.name].label)}</span> · ${tour.idx + 1} / ${total}</div>
-        <p class="tour-title">${esc(step.title)}</p><p class="tour-text">${esc(step.text)}</p>
-        <div class="tour-actions">
-          <button class="btn btn-teal" onclick="tourGo(1)">${last ? (tour.name === 'main' ? 'يلّا نبلّش' : 'فهمت') : 'التالي'}</button>
-          ${tour.idx ? `<button class="btn btn-ghost" onclick="tourGo(-1)">السابق</button>` : ''}
-          <span class="spacer"></span>
-          <div class="tour-dots">${tour.steps.map((_, i) => `<span class="${i === tour.idx ? 'on' : ''}"></span>`).join('')}</div>
-          ${last ? '' : `<button class="btn btn-ghost" onclick="endTour()">تخطّي</button>`}
-        </div>
-        <button type="button" class="tour-off" onclick="stopAllTours()">ما بدي شروحات تلقائية</button>`;
-     placeTour();
-      let ticks = 0;
-      const scrollAnim = setInterval(() => {
-        placeTour();
-        if (++ticks > 25) clearInterval(scrollAnim);
-      }, 20);
+   function renderTourStep() {
+  const step = tour.steps[tour.idx];
+  if (step.prep) step.prep();
+  const el = tourEl(step);
+  if (!el) { tourGo(1); return; }
+  const tall = el.getBoundingClientRect().height > window.innerHeight * 0.6;
+  el.scrollIntoView({ block: tall ? 'start' : 'center', behavior: 'smooth' });   // العنصر الطويل: منبيّن راسه
+  let card = document.querySelector('.tour-card');
+  if (!card) {
+    const spot = document.createElement('div'); spot.className = 'tour-spot'; document.body.appendChild(spot);
+    card = document.createElement('div'); card.className = 'tour-card'; card.setAttribute('role', 'dialog'); card.setAttribute('aria-modal', 'true');
+    document.body.appendChild(card);
+  }
+  const total = tour.steps.length, last = tour.idx === total - 1;
+  card.setAttribute('aria-label', `شرح: ${TOURS[tour.name].label}`);
+  card.innerHTML = `<div class="tour-step"><span class="tour-where">${esc(TOURS[tour.name].label)}</span> · ${tour.idx + 1} / ${total}</div>
+    <p class="tour-title">${esc(step.title)}</p><p class="tour-text">${esc(step.text)}</p>
+    <div class="tour-actions">
+      <button class="btn btn-teal" onclick="tourGo(1)">${last ? (tour.name === 'main' ? 'يلّا نبلّش' : 'فهمت') : 'التالي'}</button>
+      ${tour.idx ? `<button class="btn btn-ghost" onclick="tourGo(-1)">السابق</button>` : ''}
+      <span class="spacer"></span>
+      <div class="tour-dots">${tour.steps.map((_, i) => `<span class="${i === tour.idx ? 'on' : ''}"></span>`).join('')}</div>
+      ${last ? '' : `<button class="btn btn-ghost" onclick="endTour()">تخطّي</button>`}
+    </div>
+    <button type="button" class="tour-off" onclick="stopAllTours()">ما بدي شروحات تلقائية</button>`;
+  
+  placeTour();
+  let ticks = 0;
+  const scrollAnim = setInterval(() => {
+    placeTour();
+    if (++ticks > 50) clearInterval(scrollAnim);
+  }, 20);
 
-      const b = card.querySelector('.btn-teal'); 
-      if (b) b.focus({ preventScroll: true });
-    }
+  const b = card.querySelector('.btn-teal'); if (b) b.focus({ preventScroll: true });
+}
     // بيشغّل جولة شاشة معيّنة. force = من زر «؟»
     window.startTour = function(nameOrForce, force) {
       let name = nameOrForce;
