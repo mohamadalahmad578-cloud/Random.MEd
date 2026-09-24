@@ -1389,11 +1389,11 @@
         msUI.data.open = msUI.data.courses[0]; wzRender(true);
       }
     }
-    let tourRaf = 0;
+   let tourRaf = 0;
 function tourFollow() { 
   if (!tour) return;
   placeTour(); 
-  tourRaf = requestAnimationFrame(tourFollow); // تتبع 60 مرة بالثانية
+  tourRaf = requestAnimationFrame(tourFollow);
 }
 function tourCleanup() {
   cancelAnimationFrame(tourRaf);
@@ -1423,32 +1423,39 @@ function tourCleanup() {
  
  function placeTour() {
   if (!tour) return;
-  const el = tourEl(tour.steps[tour.idx]);
+  let el = tour.currentEl;
+  if (!el || !el.isConnected) {
+    el = tourEl(tour.steps[tour.idx]);
+    if (tour) tour.currentEl = el;
+  }
+  if (!el) return;
+
   const spot = document.querySelector('.tour-spot');
   const card = document.querySelector('.tour-card');
-  if (!el || !spot || !card) return;
+  if (!spot || !card) return;
+
+  spot.style.position = 'absolute';
+  card.style.position = 'absolute';
 
   const r = el.getBoundingClientRect();
+  const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  const scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
   const pad = 6;
   
-  // إخفاء الشرح إذا كان العنصر مختفي تماماً
   if (r.width === 0 || r.height === 0) {
     spot.style.opacity = '0';
     card.style.opacity = '0';
     return;
   }
-  
   spot.style.opacity = '1';
   card.style.opacity = '1';
 
-  // 1. رسم التظليل فوق العنصر مباشرة (بدون حسابات قص معقدة)
-  spot.style.top = (r.top - pad) + 'px';
-  spot.style.left = (r.left - pad) + 'px';
+  spot.style.top = (r.top + scrollY - pad) + 'px';
+  spot.style.left = (r.left + scrollX - pad) + 'px';
   spot.style.width = (r.width + pad * 2) + 'px';
   spot.style.height = (r.height + pad * 2) + 'px';
-  spot.style.transition = 'none'; // منع الارتجاج أثناء التمرير
+  spot.style.transition = 'none';
 
-  // 2. حساب موقع البطاقة بأمان
   const winH = window.innerHeight;
   const winW = window.innerWidth;
   const ch = card.offsetHeight || 150;
@@ -1459,23 +1466,25 @@ function tourCleanup() {
   const bottomNav = document.querySelector('.bottom-nav');
   const navH = (bottomNav && getComputedStyle(bottomNav).display !== 'none') ? bottomNav.offsetHeight : 0;
 
-  let topPos;
+  let absTop;
   if (r.bottom + pad + ch + 15 <= winH - navH) {
-    topPos = r.bottom + pad + 15; // تحت العنصر
+    absTop = r.bottom + pad + 15 + scrollY;
   } else if (r.top - pad - ch - 15 >= headerH) {
-    topPos = r.top - pad - ch - 15; // فوق العنصر
+    absTop = r.top - pad - ch - 15 + scrollY;
   } else {
-    topPos = headerH + (winH - navH - headerH - ch) / 2; // بالوسط
+    absTop = headerH + (winH - navH - headerH - ch) / 2 + scrollY;
   }
 
-  // منع الخروج عن حواف الشاشة
-  topPos = Math.max(headerH + 10, Math.min(topPos, winH - navH - ch - 10));
-  let leftPos = r.left + (r.width / 2) - (cw / 2);
-  leftPos = Math.max(10, Math.min(leftPos, winW - cw - 10));
+  const minTop = scrollY + headerH + 10;
+  const maxTop = scrollY + winH - navH - ch - 10;
+  absTop = Math.max(minTop, Math.min(absTop, maxTop));
 
-  card.style.top = topPos + 'px';
-  card.style.left = leftPos + 'px';
-  card.style.transition = 'none'; // منع الارتجاج
+  let absLeft = r.left + (r.width / 2) - (cw / 2) + scrollX;
+  absLeft = Math.max(scrollX + 10, Math.min(absLeft, scrollX + winW - cw - 10));
+
+  card.style.top = absTop + 'px';
+  card.style.left = absLeft + 'px';
+  card.style.transition = 'none';
 }
     function tourGo(delta) {
       if (!tour) return;
@@ -1490,12 +1499,14 @@ function tourCleanup() {
       tour.idx = n; renderTourStep();
     }
     window.tourGo = tourGo; window.endTour = endTour;
- function renderTourStep() {
+function renderTourStep() {
   const step = tour.steps[tour.idx];
   if (step.prep) step.prep();
+  
   const el = tourEl(step);
   if (!el) { tourGo(1); return; }
-  
+  tour.currentEl = el;
+
   const tall = el.getBoundingClientRect().height > window.innerHeight * 0.6;
   el.scrollIntoView({ block: tall ? 'start' : 'center', behavior: 'smooth' });
 
@@ -1539,7 +1550,7 @@ function tourCleanup() {
   document.addEventListener('keydown', tourKeys, true);
   
   renderTourStep();
-  tourFollow(); // تشغيل الرادار اللحظي
+  tourFollow();
 };
     // أي شاشة أنت فيها هلق؟
     function currentTourContext() {
