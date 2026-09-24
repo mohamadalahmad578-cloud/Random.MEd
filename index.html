@@ -6,7 +6,7 @@
 
    هذا الكود والتصميم والشعار ومحتوى الموقع ملكية خاصة لـ Random MEd.
    يُمنع نسخ الكود أو أي جزء منه، أو تعديله، أو إعادة نشره، أو استخدامه
-   في أي موقع أو تطبيق آخر، أو استخدامه لأغراض تجارية، بدون إذن خطي
+   في أي موقع أو تطبيق آخر، أو استخدامه لاي أغراض ، بدون إذن خطي
    مسبق من المالك. إتاحة الكود للقراءة في المتصفح لا تعني منح أي ترخيص.
 
    This source code, design, logo and content are proprietary.
@@ -80,6 +80,7 @@
   :root[data-theme="dark"] #search:focus{ background:#1F2A42; border-color:var(--brass); }
 
   *{ box-sizing:border-box; transition: background-color .25s ease, border-color .25s ease, color .25s ease; }
+  * { scroll-margin-top: calc(var(--header-h, 0px) + 24px); }
   @keyframes fadeInUp{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
   @keyframes cardIn{ from{ opacity:0; transform:translateY(16px) scale(.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
   @keyframes chipPop{ 0%{ transform:scale(1); } 45%{ transform:scale(1.14); } 100%{ transform:scale(1); } }
@@ -832,6 +833,10 @@
     .summary-table th{ background:#333 !important; color:#fff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     .time-chip-time, .matrix-title, .section-name{ color:#000 !important; }
   }
+
+.bulk-ex-chip { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; padding:4px 9px; border-radius:8px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); cursor:pointer; user-select:none; }
+.bulk-ex-chip input { margin:0; cursor:pointer; }
+.bulk-ex-chip:has(input:checked) { background:var(--rose-soft); border-color:var(--rose); color:var(--rose); font-weight:700; }
 </style>
 </head>
 <body>
@@ -902,7 +907,14 @@
                 <label><input type="radio" name="bulk-type" value="practical" onchange="bulkPreview()"> العملي</label>
               </div></div>
             <div class="bulk-field"><label for="bulk-scope">المواد</label>
-              <select id="bulk-scope" class="editor-input" onchange="bulkPreview()"><option value="">كل المواد</option></select></div>
+  <select id="bulk-scope" class="editor-input" onchange="onBulkScopeChange()"><option value="">كل المواد</option></select></div>
+<div id="bulk-exceptions-wrap" style="grid-column: 1 / -1; display: block; margin-top: 4px;">
+  <label style="font-size:11.5px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:6px;">
+    استثناء مواد من الرفع (اختياري عند اختيار كل المواد):
+  </label>
+  <div id="bulk-exceptions-list" style="display:flex; flex-wrap:wrap; gap:6px; max-height:120px; overflow-y:auto; padding:6px; background:var(--surface); border:1px solid var(--line); border-radius:10px;">
+  </div>
+</div>
             <div class="bulk-field"><label for="bulk-mode">العملية</label>
               <select id="bulk-mode" class="editor-input" onchange="bulkPreview()">
                 <option value="add">زيادة السعة بمقدار</option>
@@ -1405,20 +1417,44 @@
       else if (e.key === 'ArrowLeft') { e.preventDefault(); tourGo(1); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); tourGo(-1); }
     }
-    function placeTour() {
-      if (!tour) return;
-      const el = tourEl(tour.steps[tour.idx]);
-      const spot = document.querySelector('.tour-spot'), card = document.querySelector('.tour-card');
-      if (!el || !spot || !card) return;
-      const r = el.getBoundingClientRect(), pad = 6;
-      Object.assign(spot.style, { top: Math.max(4, r.top - pad) + 'px', left: (r.left - pad) + 'px', width: (r.width + pad * 2) + 'px', height: Math.min(r.height + pad * 2, window.innerHeight - 20) + 'px' });
-      const ch = card.offsetHeight, cw = card.offsetWidth;
-      const below = window.innerHeight - r.bottom > ch + 24;
-      const above = r.top > ch + 24;
-      const top = below ? r.bottom + 14 : above ? r.top - ch - 14 : Math.max(12, window.innerHeight - ch - 90);
-      const left = Math.min(Math.max(12, r.left + r.width / 2 - cw / 2), window.innerWidth - cw - 12);
-      Object.assign(card.style, { top: top + 'px', left: left + 'px' });
-    }
+   function placeTour() {
+  if (!tour) return;
+  const el = tourEl(tour.steps[tour.idx]);
+  const spot = document.querySelector('.tour-spot'), card = document.querySelector('.tour-card');
+  if (!el || !spot || !card) return;
+
+  const header = document.querySelector('.header');
+  const headerH = (header && getComputedStyle(header).position === 'sticky') ? header.offsetHeight : 0;
+
+  const r = el.getBoundingClientRect();
+  const pad = 6;
+
+  Object.assign(spot.style, {
+    top: Math.max(headerH + 4, r.top - pad) + 'px',
+    left: (r.left - pad) + 'px',
+    width: (r.width + pad * 2) + 'px',
+    height: Math.min(r.height + pad * 2, window.innerHeight - headerH - 20) + 'px'
+  });
+
+  const ch = card.offsetHeight, cw = card.offsetWidth;
+  const spaceBelow = window.innerHeight - r.bottom;
+  const spaceAbove = r.top - headerH;
+
+  let top;
+  if (spaceBelow > ch + 24) {
+    top = r.bottom + 14;
+  } else if (spaceAbove > ch + 24) {
+    top = r.top - ch - 14;
+  } else {
+    top = Math.max(headerH + 12, window.innerHeight - ch - 12);
+  }
+
+  let left = r.left + r.width / 2 - cw / 2;
+  left = Math.max(12, left);
+  left = Math.min(window.innerWidth - cw - 12, left);
+
+  Object.assign(card.style, { top: top + 'px', left: left + 'px' });
+}
     function tourGo(delta) {
       if (!tour) return;
       const n = tour.idx + delta;
@@ -1457,8 +1493,15 @@
           ${last ? '' : `<button class="btn btn-ghost" onclick="endTour()">تخطّي</button>`}
         </div>
         <button type="button" class="tour-off" onclick="stopAllTours()">ما بدي شروحات تلقائية</button>`;
-      setTimeout(placeTour, 380); placeTour();
-      const b = card.querySelector('.btn-teal'); if (b) b.focus({ preventScroll: true });
+     placeTour();
+      let ticks = 0;
+      const scrollAnim = setInterval(() => {
+        placeTour();
+        if (++ticks > 25) clearInterval(scrollAnim);
+      }, 20);
+
+      const b = card.querySelector('.btn-teal'); 
+      if (b) b.focus({ preventScroll: true });
     }
     // بيشغّل جولة شاشة معيّنة. force = من زر «؟»
     window.startTour = function(nameOrForce, force) {
@@ -1999,16 +2042,24 @@
     const isAdminClosed = sec => /مغلقة|غير متاحة/.test(sec.status || '');
     function statusFor(enrolled, capacity) { return enrolled < capacity ? 'فئة متاحة' : 'فئة ممتلئة'; }
 
-    function bulkTargets() {
-      const type = (document.querySelector('input[name="bulk-type"]:checked') || {}).value || 'all';
-      const scope = document.getElementById('bulk-scope').value;
-      const out = [];
-      Object.keys(parsedCourses).forEach(c => {
-        if (scope && c !== scope) return;
-        (parsedCourses[c] || []).forEach(sec => { if (type === 'all' || sec.type === type) out.push({ c, sec }); });
-      });
-      return out;
-    }
+     function bulkTargets() {
+  const type = (document.querySelector('input[name="bulk-type"]:checked') || {}).value || 'all';
+  const scope = document.getElementById('bulk-scope').value;
+  
+  const excludedCourses = new Set(
+    scope === '' 
+      ? [...document.querySelectorAll('.bulk-ex-cb:checked')].map(cb => cb.value)
+      : []
+  );
+
+  const out = [];
+  Object.keys(parsedCourses).forEach(c => {
+    if (scope && c !== scope) return;
+    if (excludedCourses.has(c)) return;
+    (parsedCourses[c] || []).forEach(sec => { if (type === 'all' || sec.type === type) out.push({ c, sec }); });
+  });
+  return out;
+}
     // بيحسب شو رح يصير بدون ما يغيّر شي
     function bulkPlan(withRaise) {
       const mode = document.getElementById('bulk-mode').value;
@@ -2064,7 +2115,11 @@
       if (plan.invalid || !plan.changes.length) return;
       const mode = document.getElementById('bulk-mode').value, amount = document.getElementById('bulk-amount').value;
       const typeTxt = { all: 'كل الفئات', theory: 'فئات النظري', practical: 'فئات العملي' }[(document.querySelector('input[name="bulk-type"]:checked') || {}).value || 'all'];
-      const scope = document.getElementById('bulk-scope').value || 'كل المواد';
+      let scope = document.getElementById('bulk-scope').value || 'كل المواد';
+const excludedCount = document.querySelectorAll('.bulk-ex-cb:checked').length;
+if (!document.getElementById('bulk-scope').value && excludedCount > 0) {
+  scope += ` (مع استثناء ${excludedCount} مادة)`;
+}
       if (!await uiConfirm(`${mode === 'set' ? `تعيين السعة إلى ${amount}` : `زيادة السعة بمقدار ${amount}`}\nعلى: ${typeTxt} — ${scope}\n\nرح تتغيّر ${plan.changes.length} فئة${plan.opened ? `، و${plan.opened} ممتلئة رح تصير متاحة` : ''}.`, { okText: 'طبّق' })) return;
       bulkCommit(plan, 'تم رفع السعة');
     };
@@ -2074,11 +2129,31 @@
       if (!await uiConfirm(`رح تتصحح حالة ${plan.changes.length} فئة حسب المقاعد${plan.opened ? ` (${plan.opened} رح تصير متاحة)` : ''}${plan.filled ? ` (${plan.filled} رح تصير ممتلئة)` : ''}.`, { okText: 'صحّح' })) return;
       bulkCommit(plan, 'تم تصحيح الحالات');
     };
-    function populateBulkScope() {
-      const sel = document.getElementById('bulk-scope'); if (!sel) return;
-      sel.innerHTML = '<option value="">كل المواد</option>' + Object.keys(parsedCourses).map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
-      bulkPreview();
-    }
+    window.onBulkScopeChange = function() {
+  const scope = document.getElementById('bulk-scope').value;
+  const exWrap = document.getElementById('bulk-exceptions-wrap');
+  if (exWrap) {
+    exWrap.style.display = (scope === '') ? 'block' : 'none';
+  }
+  bulkPreview();
+};
+
+function populateBulkScope() {
+  const sel = document.getElementById('bulk-scope'); if (!sel) return;
+  const courses = Object.keys(parsedCourses);
+  sel.innerHTML = '<option value="">كل المواد</option>' + courses.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  
+  const exList = document.getElementById('bulk-exceptions-list');
+  if (exList) {
+    exList.innerHTML = courses.map(c => `
+      <label class="bulk-ex-chip" title="استثناء ${esc(c)} من العملية">
+        <input type="checkbox" class="bulk-ex-cb" value="${esc(c)}" onchange="bulkPreview()">
+        <span>${esc(c)}</span>
+      </label>
+    `).join('');
+  }
+  onBulkScopeChange();
+}
 
     window.renderCourseEditor = function() {
       let cName = document.getElementById('editor-course-select').value;
