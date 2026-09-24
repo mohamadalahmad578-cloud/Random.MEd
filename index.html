@@ -1393,7 +1393,7 @@
 function tourFollow() { 
   if (!tour) return;
   placeTour(); 
-  tourRaf = requestAnimationFrame(tourFollow);
+  tourRaf = requestAnimationFrame(tourFollow); // تتبع 60 مرة بالثانية
 }
 function tourCleanup() {
   cancelAnimationFrame(tourRaf);
@@ -1420,92 +1420,62 @@ function tourCleanup() {
       else if (e.key === 'ArrowLeft') { e.preventDefault(); tourGo(1); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); tourGo(-1); }
     }
- function getVisibleRect(el) {
-  let r = el.getBoundingClientRect();
-  let top = r.top, left = r.left, right = r.right, bottom = r.bottom;
-  let curr = el.parentElement;
-  while (curr && curr !== document.body && curr !== document.documentElement) {
-    const style = getComputedStyle(curr);
-    if (style.overflow === 'auto' || style.overflow === 'hidden' || style.overflowY === 'auto' || style.overflowY === 'hidden') {
-      const cr = curr.getBoundingClientRect();
-      top = Math.max(top, cr.top);
-      left = Math.max(left, cr.left);
-      right = Math.min(right, cr.right);
-      bottom = Math.min(bottom, cr.bottom);
-    }
-    curr = curr.parentElement;
-  }
-  return { top, left, width: Math.max(0, right - left), height: Math.max(0, bottom - top), bottom, right };
-}   
+ 
  function placeTour() {
   if (!tour) return;
-  // التثبيت: ما نغير العنصر إذا صار مخفي جزئياً بسبب السكرول
-  let el = tour.currentEl;
-  if (!el || !el.isConnected) {
-    el = tourEl(tour.steps[tour.idx]);
-    if (tour) tour.currentEl = el;
-  }
-  if (!el) return;
-
+  const el = tourEl(tour.steps[tour.idx]);
   const spot = document.querySelector('.tour-spot');
   const card = document.querySelector('.tour-card');
-  if (!spot || !card) return;
+  if (!el || !spot || !card) return;
 
-  const r = getVisibleRect(el); // استخدام المساحة المرئية فقط
+  const r = el.getBoundingClientRect();
   const pad = 6;
-  const header = document.querySelector('.header');
-  const isSticky = window.innerWidth > 920; 
-  const headerH = (header && isSticky) ? header.offsetHeight : 0;
-  const bottomNav = document.querySelector('.bottom-nav');
-  const bottomNavH = (bottomNav && getComputedStyle(bottomNav).display !== 'none') ? bottomNav.offsetHeight : 0;
+  
+  // إخفاء الشرح إذا كان العنصر مختفي تماماً
+  if (r.width === 0 || r.height === 0) {
+    spot.style.opacity = '0';
+    card.style.opacity = '0';
+    return;
+  }
+  
+  spot.style.opacity = '1';
+  card.style.opacity = '1';
 
+  // 1. رسم التظليل فوق العنصر مباشرة (بدون حسابات قص معقدة)
+  spot.style.top = (r.top - pad) + 'px';
+  spot.style.left = (r.left - pad) + 'px';
+  spot.style.width = (r.width + pad * 2) + 'px';
+  spot.style.height = (r.height + pad * 2) + 'px';
+  spot.style.transition = 'none'; // منع الارتجاج أثناء التمرير
+
+  // 2. حساب موقع البطاقة بأمان
   const winH = window.innerHeight;
   const winW = window.innerWidth;
   const ch = card.offsetHeight || 150;
   const cw = card.offsetWidth || 300;
 
-  // إخفاء المربع إذا اختفى العنصر بالكامل جوا القائمة الممررة
-  if (r.height <= 0 || r.width <= 0) {
-    spot.style.opacity = '0';
-  } else {
-    spot.style.opacity = '1';
-    let spotTop = r.top - pad;
-    let spotHeight = r.height + pad * 2;
-    
-    // منع المربع من تغطية الهيدر أو الشريط السفلي
-    const maxVisibleY = winH - bottomNavH;
-    if (spotTop < headerH) {
-      const cut = headerH - spotTop;
-      spotTop = headerH;
-      spotHeight = Math.max(0, spotHeight - cut);
-    }
-    if (spotTop + spotHeight > maxVisibleY) {
-      spotHeight = Math.max(0, maxVisibleY - spotTop);
-    }
-
-    spot.style.top = spotTop + 'px';
-    spot.style.left = (r.left - pad) + 'px';
-    spot.style.width = (r.width + pad * 2) + 'px';
-    spot.style.height = spotHeight + 'px';
-    spot.style.transition = 'none';
-  }
+  const header = document.querySelector('.header');
+  const headerH = (header && getComputedStyle(header).position === 'sticky') ? header.offsetHeight : 0;
+  const bottomNav = document.querySelector('.bottom-nav');
+  const navH = (bottomNav && getComputedStyle(bottomNav).display !== 'none') ? bottomNav.offsetHeight : 0;
 
   let topPos;
-  if (r.bottom + ch + 15 < winH - bottomNavH) {
-    topPos = r.bottom + 15;
-  } else if (r.top - ch - 15 > headerH) {
-    topPos = r.top - ch - 15;
+  if (r.bottom + pad + ch + 15 <= winH - navH) {
+    topPos = r.bottom + pad + 15; // تحت العنصر
+  } else if (r.top - pad - ch - 15 >= headerH) {
+    topPos = r.top - pad - ch - 15; // فوق العنصر
   } else {
-    topPos = headerH + Math.max(10, (winH - bottomNavH - headerH - ch) / 2);
+    topPos = headerH + (winH - navH - headerH - ch) / 2; // بالوسط
   }
-  topPos = Math.max(headerH + 10, Math.min(topPos, winH - bottomNavH - ch - 10));
 
+  // منع الخروج عن حواف الشاشة
+  topPos = Math.max(headerH + 10, Math.min(topPos, winH - navH - ch - 10));
   let leftPos = r.left + (r.width / 2) - (cw / 2);
   leftPos = Math.max(10, Math.min(leftPos, winW - cw - 10));
 
   card.style.top = topPos + 'px';
   card.style.left = leftPos + 'px';
-  card.style.transition = 'none';
+  card.style.transition = 'none'; // منع الارتجاج
 }
     function tourGo(delta) {
       if (!tour) return;
@@ -1526,8 +1496,6 @@ function tourCleanup() {
   const el = tourEl(step);
   if (!el) { tourGo(1); return; }
   
-  tour.currentEl = el; // تثبيت العنصر عشان ما يضيع وقت السكرول
-
   const tall = el.getBoundingClientRect().height > window.innerHeight * 0.6;
   el.scrollIntoView({ block: tall ? 'start' : 'center', behavior: 'smooth' });
 
@@ -1571,7 +1539,7 @@ function tourCleanup() {
   document.addEventListener('keydown', tourKeys, true);
   
   renderTourStep();
-  tourFollow();
+  tourFollow(); // تشغيل الرادار اللحظي
 };
     // أي شاشة أنت فيها هلق؟
     function currentTourContext() {
