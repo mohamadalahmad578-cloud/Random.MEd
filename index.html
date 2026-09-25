@@ -1009,6 +1009,27 @@
 .add-section-row{ display:flex; gap:8px; flex-wrap:wrap; margin:4px 0 16px; }
 .add-section-row .btn{ margin-top:0; }
 
+/* ---------- «شو حابب تعمل؟» ---------- */
+.intent-modal{ z-index:1002; }
+.intent-box{ position:relative; width:100%; max-width:560px; max-height:calc(100vh - 40px); overflow-y:auto; background:var(--surface); color:var(--ink); border-radius:18px; padding:20px; box-shadow:0 24px 60px rgba(10,15,28,.35); animation:fadeInUp .2s ease; }
+.intent-box h3{ margin:0; font-family:var(--font-display); font-size:20px; }
+.intent-sub{ margin:4px 0 14px; font-size:12.5px; color:var(--ink-soft); }
+.intent-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.intent-card{ display:flex; align-items:center; gap:12px; text-align:start; padding:14px; border-radius:14px; border:none; background:var(--paper); color:var(--ink); font:inherit; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease; }
+.intent-card:hover{ transform:translateY(-1px); box-shadow:0 0 0 2px var(--brass); }
+.intent-card .em{ font-size:24px; line-height:1; flex-shrink:0; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:var(--surface); }
+.intent-card b{ display:block; font-size:13.5px; }
+.intent-card small{ display:block; font-size:11px; color:var(--ink-soft); margin-top:2px; line-height:1.5; }
+.intent-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.intent-foot .btn{ margin-top:0; }
+@media (max-width:640px){
+  .intent-modal{ align-items:flex-end; padding:0; }
+  .intent-box{ max-width:none; border-radius:18px 18px 0 0; padding:16px 14px calc(16px + env(safe-area-inset-bottom, 0px)); max-height:85vh; }
+  .intent-grid{ gap:8px; }
+  .intent-card{ flex-direction:column; align-items:flex-start; gap:8px; padding:12px; }
+}
+@media print{ .intent-modal{ display:none !important; } }
+
 /* ---------- اختيار الثيم ---------- */
 .theme-picker{ position:fixed; z-index:1001; top:calc(var(--header-h, 0px) + 12px); bottom:12px; inset-inline-end:12px; width:380px; max-width:calc(100vw - 24px);
   display:flex; flex-direction:column; gap:12px; background:var(--surface); color:var(--ink); border-radius:18px; padding:16px; box-shadow:0 24px 60px rgba(10,15,28,.35); animation:fadeInUp .2s ease; }
@@ -1064,6 +1085,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       <div class="header-tools">
         <button type="button" class="hdr-btn" id="hdr-admin-btn" onclick="openEditor()" title="لوحة التحكم" aria-label="لوحة التحكم"></button>
         <button type="button" class="hdr-btn help-btn" id="help-btn" onclick="startTour(true)" title="شرح الشاشة يلي أنت فيها" aria-label="شرح هالشاشة">؟</button>
+        <button type="button" class="hdr-btn" id="intent-btn" onclick="openIntent()" title="شو حابب تعمل؟" aria-label="شو حابب تعمل؟"></button>
         <button type="button" class="hdr-btn" id="palette-btn" onclick="openThemePicker()" title="شكل الموقع وألوانه" aria-label="اختيار ثيم الألوان"></button>
         <button type="button" class="hdr-btn theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع الليلي/النهاري" aria-label="تبديل المظهر"></button>
         <div class="font-controls">
@@ -1322,6 +1344,18 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
   <div id="gen-fab" class="gen-fab" hidden>
     <button type="button" onclick="runGenerator()"><span class="gen-fab-icon"></span><span>توليد الجداول</span><span class="gen-fab-count" id="gen-fab-count"></span></button>
   </div>
+  <div id="intent-sheet" class="ui-modal intent-modal" hidden>
+    <div class="ui-modal-backdrop" onclick="closeIntent()"></div>
+    <div class="intent-box" role="dialog" aria-modal="true" aria-labelledby="intent-title">
+      <h3 id="intent-title">شو حابب تعمل اليوم؟</h3>
+      <p class="intent-sub">اختار وبنوديك مباشرة على المكان الصح.</p>
+      <div id="intent-grid" class="intent-grid"></div>
+      <div class="intent-foot">
+        <label class="gh-remember"><input type="checkbox" id="intent-off"> لا تسألني كل مرة</label>
+        <button type="button" class="btn btn-ghost" onclick="closeIntent()">بس بتفرّج</button>
+      </div>
+    </div>
+  </div>
   <div id="theme-picker" class="theme-picker" hidden role="dialog" aria-modal="false" aria-labelledby="tp-title">
     <div class="tp-head">
       <div>
@@ -1467,6 +1501,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
         search: '<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
         plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
         calc: '<rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="16" y1="11" x2="16" y2="11.01"/><line x1="8" y1="15" x2="8" y2="15.01"/><line x1="12" y1="15" x2="12" y2="15.01"/><line x1="16" y1="15" x2="16" y2="18"/><line x1="8" y1="18" x2="12" y2="18"/>',
+        compass: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
         palette: '<circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.15-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-5-4.5-9-10-9z"/>',
         gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
         trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
@@ -1563,6 +1598,59 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('theme-switching')));
     }
     applyPalette(savedPalette() || DEFAULT_PALETTE);
+
+    // ---- «شو حابب تعمل؟»: بتوجّه الطالب مباشرة للمكان الصح ----
+    const INTENT_OFF_KEY = 'spu_intent_off', INTENT_SESSION_KEY = 'spu_intent_seen';
+    const INTENTS = [
+      { id: 'generate', em: '🗓️', t: 'أعمل جدول جديد', d: 'اختار موادك وبولّدلك أفضل الجداول' },
+      { id: 'manual', em: '✍️', t: 'أبني جدولي بإيدي', d: 'تختار كل فئة بنفسك خطوة خطوة' },
+      { id: 'add', em: '➕', t: 'أضيف مادة', d: 'على جدولي بأقل تغيير ممكن' },
+      { id: 'drop', em: '➖', t: 'أسحب مادة', d: 'من جدولي وبرتّب الباقي' },
+      { id: 'change', em: '🔄', t: 'أغيّر فئة', d: 'بدّل فئة مادة بجدولي' },
+      { id: 'gpa', em: '🧮', t: 'أحسب معدلي', d: 'الفصل والتراكمي وشو لازم جيب' },
+      { id: 'favorites', em: '⭐', t: 'جداولي المحفوظة', d: 'يلي حفظتها بالمفضّلة' },
+      { id: 'friends', em: '👥', t: 'جدول مع أصحابي', d: 'نفس الفئات مع أصدقائك' },
+    ];
+    let intentOnClose = null;
+    window.openIntent = function(onClose) {
+      intentOnClose = typeof onClose === 'function' ? onClose : null;
+      document.getElementById('intent-grid').innerHTML = INTENTS.map(x => `<button type="button" class="intent-card" onclick="chooseIntent('${x.id}')"><span class="em">${x.em}</span><span><b>${esc(x.t)}</b><small>${esc(x.d)}</small></span></button>`).join('');
+      let off = false; try { off = !!localStorage.getItem(INTENT_OFF_KEY); } catch (e) {}
+      document.getElementById('intent-off').checked = off;
+      document.getElementById('intent-sheet').hidden = false;
+      try { sessionStorage.setItem(INTENT_SESSION_KEY, '1'); } catch (e) {}
+    };
+    function finishIntent() {
+      try { if (document.getElementById('intent-off').checked) localStorage.setItem(INTENT_OFF_KEY, '1'); else localStorage.removeItem(INTENT_OFF_KEY); } catch (e) {}
+      document.getElementById('intent-sheet').hidden = true;
+      const cb = intentOnClose; intentOnClose = null;
+      return cb;
+    }
+    window.closeIntent = function() { const cb = finishIntent(); if (cb) cb(); };
+    function hasMySchedule() { const ms = loadMySchedule(); return !!(ms && ms.sections.length); }
+    function goMain(tab) { if (isPhone()) mobileNav(tab); else switchResultsTab(tab); }
+    window.chooseIntent = function(id) {
+      const cb = finishIntent();
+      const tourSoon = () => setTimeout(() => { if (cb) cb(); else maybeTour(currentTourContext()); }, 450);
+      const needSchedule = () => { goMain('myschedule'); toast('لسا ما عندك جدول بـ«جدولي» — ابنيه أول (من جدول مولّد أو من المفضّلة أو يدويًا).', 'error', 7000); tourSoon(); };
+      if (id === 'generate' || id === 'friends') {
+        goMain('results');
+        const search = document.getElementById('search');
+        setTimeout(() => { search.scrollIntoView({ behavior: 'smooth', block: 'center' }); if (!isPhone()) search.focus({ preventScroll: true }); }, 250);
+        if (id === 'friends') { const b = document.getElementById('ic-addfriend-btn'); setTimeout(() => { b.scrollIntoView({ behavior: 'smooth', block: 'center' }); b.classList.add('pulse-hint'); setTimeout(() => b.classList.remove('pulse-hint'), 2400); }, 300); toast('ضيف صديق من «إضافة صديق»، وحدد موادك ومواده، وبعدين ولّد.', 'success', 7000); }
+        else toast('اختار موادك من القائمة، وبعدين اكبس «توليد الجداول».', 'success', 6000);
+      } else if (id === 'manual') { goMain('myschedule'); msStartEmpty(); }
+      else if (id === 'add') { if (!hasMySchedule()) return needSchedule(); goMain('myschedule'); msOpenAdd(); }
+      else if (id === 'drop') { if (!hasMySchedule()) return needSchedule(); goMain('myschedule'); msOpenDrop(); }
+      else if (id === 'change') { if (!hasMySchedule()) return needSchedule(); goMain('myschedule'); toast('اكبس «تغيير الفئة» على المادة يلي بدك تبدّلها.', 'success', 6000); }
+      else if (id === 'gpa') goMain('gpa');
+      else if (id === 'favorites') goMain('favorites');
+      tourSoon();
+    };
+    function shouldAskIntent() {
+      try { return !localStorage.getItem(INTENT_OFF_KEY) && !sessionStorage.getItem(INTENT_SESSION_KEY); } catch (e) { return false; }
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('intent-sheet').hidden) closeIntent(); });
 
     // ---- نافذة اختيار الثيم: كل كبسة بتطبّق فورًا، و«إلغاء» بيرجّع القديم ----
     let tpState = null;
@@ -1699,6 +1787,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       document.getElementById('ic-refresh-btn').innerHTML = ic('refresh') + ' تحديث';
       document.getElementById('hdr-admin-btn').innerHTML = ic('gear');
       document.getElementById('palette-btn').innerHTML = ic('palette');
+      document.getElementById('intent-btn').innerHTML = ic('compass');
       document.getElementById('ic-generate-btn').innerHTML = ic('zap') + ' توليد الجداول';
       document.getElementById('tab-results').innerHTML = ic('calendar') + ' نتائج التوليد';
       document.getElementById('tab-gpa').innerHTML = ic('calc') + ' المعدل';
@@ -1823,8 +1912,9 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
         { sel: '#prefs-panel', title: 'رتّب حسب راحتك', text: 'اختياري: أقل أيام دوام، بلا محاضرات الساعة 8، أقل فراغات، أو خلّص بكّير. المقاعد المتاحة وشمولية فئات النظري بيضلّوا الأولوية دايمًا.' },
         { sel: '#ic-addfriend-btn', title: 'جداول مع أصدقائك', text: 'ضيف صديق وحدد موادهم بعمود اسمه. الموقع بيدوّر على جداول بتجمعكن بنفس الفئات قد ما فيه، مع الحفاظ على الشمولية والمقاعد.' },
         { sel: '#ic-generate-btn', title: 'ولّد الجداول', text: 'بيطلعلك أفضل 10 جداول ممكنة. كل فئة نظري اخترتها بتظهر بجدول واحد على الأقل، والجداول يلي كل فئاتها متاحة بتتقدّم.' },
-        { sel: () => isPhone() ? '#bottom-nav' : '.main-content > .results-tabs', title: 'التوليد، جدولي، والمفضّلة', text: 'النتائج بتطلع بـ«التوليد». الجداول يلي بتعجبك احفظها بـ«المفضّلة» ⭐. وبـ«جدولي» بتبني جدولك وبتعدّل عليه: إضافة، سحب، تبديل فئات، وأكتر من خطة.' },
+        { sel: () => isPhone() ? '#bottom-nav' : '.main-content > .results-tabs', title: 'التوليد، جدولي، المفضّلة، والمعدل', text: 'النتائج بتطلع بـ«التوليد». الجداول يلي بتعجبك احفظها بـ«المفضّلة» ⭐. وبـ«جدولي» بتبني جدولك وبتعدّل عليه: إضافة، سحب، تبديل فئات، وأكتر من خطة. وبـ«المعدل» بتحسب معدلك وشو لازم تجيب.' },
         { sel: '#data-freshness', title: 'حداثة البيانات', text: 'آخر مرة انتحدّثت فيها بيانات المواد والمقاعد. إذا صارت قديمة بتتلوّن بالأحمر، فخود أرقام المقاعد بحذر.' },
+        { sel: '#intent-btn', title: 'شو حابب تعمل؟', text: 'بيفتحلك قائمة سريعة: جدول جديد، إضافة أو سحب مادة، تغيير فئة، حساب المعدل… وبيوديك مباشرة على المكان الصح.' },
         { sel: '#help-btn', title: 'شرح بأي وقت', text: 'بأي شاشة بتفوت عليها، اكبس «؟» وبيطلعلك شرح الشاشة يلي أنت فيها بالتفصيل.' },
       ]},
       results: { label: 'نتائج التوليد', steps: [
@@ -1835,6 +1925,13 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
         { sel: '#results-container .btn-star', title: 'احفظه بالمفضّلة', text: 'النجمة بتحفظ الجدول بشكل دائم على جهازك. ما بينمسح مع «ابدأ من جديد» ولا مع تحديث الصفحة.' },
         { sel: '#results-container .result-card .result-actions', title: 'شارك أو صدّر', text: '«تحميل كصورة» بيعطيك صورة جاهزة للواتساب، و«تصدير لـ Word» بينسخ الجدول كجدول Word منسّق.' },
         { sel: '#results-container .closed-filter', title: 'فلتر الفئات الممتلئة', text: 'فعّله إذا بدك تشوف بس الجداول يلي كل فئاتها فيها مقاعد حاليًا.' },
+      ]},
+      gpa: { label: 'حساب المعدل', steps: [
+        { sel: '#gpa-results', title: 'نتيجتك', text: 'هون بيطلع معدل هالفصل والتراكمي الجديد والساعات المنجزة. الشريط بيبين وين معدلك: أحمر تحت الإنذار، ذهبي لحد 3.00، وأخضر فوقها.' },
+        { sel: '#gpa-cgpa', title: 'معدلك قبل هالفصل', text: 'اكتب معدلك التراكمي وساعاتك المنجزة من كشف العلامات (بدون الساعات المعادلة). بدونهن بينحسب معدل الفصل بس.' },
+        { sel: '[onclick="gpaFromSchedule()"]', title: 'جيب موادك', text: 'بيعبّي مواد «جدولي» مع ساعاتها لحالها. أو ضيف مادة بإيدك من «+ مادة».' },
+        { sel: '#gpa-rows .gpa-row', title: 'علامة كل مادة', text: 'اختار العلامة بالحرف، أو اكتبها من 100 وبتتحوّل لحالها (مثلًا 96 ← A). إذا عم تعيد المادة، علّم «عم أعيد» واختار علامتك القديمة — الجديدة بتحل محلها.' },
+        { sel: '#gpa-target', title: 'شو لازم جيب؟', text: 'اكتب المعدل يلي بدك توصلو، وبيقلّك المعدل المطلوب بهالفصل — أو إذا مو ممكن، أو مضمون.' },
       ]},
       favorites: { label: 'المفضّلة', steps: [
         { sel: '#favorites-container', title: 'مفضّلتك', text: 'كل جدول ميّزته بنجمة محفوظ هون بشكل دائم على هالجهاز، حتى لو ولّدت جداول جديدة أو بلّشت من جديد.' },
@@ -2130,7 +2227,7 @@ function renderTourStep() {
   let name = nameOrForce;
   if (typeof nameOrForce === 'boolean' || nameOrForce === undefined) { force = !!nameOrForce; name = force ? currentTourContext() : 'main'; }
   if (!TOURS[name]) return;
-  if (!force && (tourDone(name) || toursOff() || tour)) return;
+  if (!force && (tourDone(name) || toursOff() || tour || overlayOpen())) return;
   if (!document.getElementById('ui-modal').hidden) return;
   const onApp = document.getElementById('app-screen').style.display === 'block';
   const onEditor = document.getElementById('editor-screen').style.display === 'block';
@@ -2152,6 +2249,7 @@ function renderTourStep() {
         return document.getElementById('editor-main-content').style.display === 'block' ? 'admin' : 'admin_gate';
       const tab = document.body.dataset.mtab || 'results';
       if (tab === 'favorites') return 'favorites';
+      if (tab === 'gpa') return 'gpa';
       if (tab === 'myschedule') {
         const m = msUI.mode;
         if (m === 'view') { const ms = loadMySchedule(); return ms && ms.sections.length ? 'ms_view' : 'ms_empty'; }
@@ -2163,8 +2261,13 @@ function renderTourStep() {
     }
     // تشغيل تلقائي (أول مرة بس) مع تأخير بسيط حتى تستقر الشاشة
     const tourTimers = {};
+    // ما منبلش جولة تلقائية وفي نافذة «شو حابب تعمل؟» أو لوحة الثيمات مفتوحة — بتبلش بعد ما يختار
+    function overlayOpen() {
+      const a = document.getElementById('intent-sheet'), b = document.getElementById('theme-picker');
+      return (a && !a.hidden) || (b && !b.hidden);
+    }
     function maybeTour(name) {
-      if (!name || tourDone(name) || toursOff() || tour) return;
+      if (!name || tourDone(name) || toursOff() || tour || overlayOpen()) return;
       clearTimeout(tourTimers[name]);
       tourTimers[name] = setTimeout(() => { if (currentTourContext() === name) startTour(name, false); }, 700);
     }
@@ -2338,6 +2441,13 @@ function renderTourStep() {
       } catch (e) { toast('تعذّر قراءة البيانات — تأكد من صيغة JSON.', 'error'); }
     };
 
+    // أول ما يفوت: «شو حابب تعمل؟» (مرة بكل زيارة إلا إذا وقّفها)، وبعدها الجولة يلي بتناسب المكان يلي راح عليه
+    function askIntentThenTour() {
+      const editorOpen = document.getElementById('editor-screen').style.display === 'block';
+      if (!editorOpen && shouldAskIntent()) openIntent(() => setTimeout(() => startTour(currentTourContext(), false), 300));
+      else if (!editorOpen) startTour('main', false);   // أول زيارة بس
+    }
+
     function bootApp() {
       appBooted = true;
       const dataProblems = indexCourses();
@@ -2365,8 +2475,8 @@ function renderTourStep() {
       renderWelcome();
       if (!savedPalette()) {
         // أول زيارة: منطلب من الطالب يختار ثيم، وبعدها بتبلش الجولة
-        setTimeout(() => { openThemePicker(true); tpState.onClose = () => setTimeout(() => startTour('main', false), 400); }, 500);
-      } else setTimeout(() => startTour('main', false), 800);   // أول زيارة بس
+        setTimeout(() => { openThemePicker(true); tpState.onClose = () => setTimeout(askIntentThenTour, 400); }, 500);
+      } else setTimeout(askIntentThenTour, 600);
       if (hadAnyChecked) toast('تم استرجاع اختياراتك المحفوظة من زيارتك السابقة.', 'success');
     }
 
@@ -2420,6 +2530,7 @@ function renderTourStep() {
 
     window.openEditor = function(collegeView) {
       if (tpState) (tpState.first ? saveThemePicker : cancelThemePicker)();   // لوحة الثيمات ما لازم تغطّي لوحة التحكم
+      if (!document.getElementById('intent-sheet').hidden) { intentOnClose = null; finishIntent(); }
       setTimeout(() => maybeTour(currentTourContext()), 50);
       document.getElementById('app-screen').style.display = 'none';
       document.getElementById('setup-screen').style.display = 'none';
@@ -4305,7 +4416,7 @@ function populateBulkScope() {
       try { localStorage.setItem(ckey('spu_last_tab'), tab); } catch (e) {}   // نرجع لنفس التبويب بعد تحديث الصفحة
       if (tab === 'favorites') { renderFavorites(); maybeTour('favorites'); }
       else if (tab === 'myschedule') { msUI = { mode: 'view', data: null }; renderMySchedule(); }
-      else if (tab === 'gpa') renderGPA();
+      else if (tab === 'gpa') { renderGPA(); maybeTour('gpa'); }
       else syncResultStars();
       updateBottomNav();
       if (typeof updateGenFab === 'function') updateGenFab();
