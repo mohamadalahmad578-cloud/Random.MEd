@@ -1044,6 +1044,30 @@ body:not(.admin-device) .admin-only{ display:none !important; }
 .gpa-share .gs-row small{ display:block; color:#C7D2E0; font-size:14px; } .gpa-share .gs-row b{ font-size:34px; }
 .gpa-share .gs-foot{ text-align:center; color:#8B97AD; font-size:13px; margin-top:20px; }
 @container main (max-width: 600px){ .gpa-scen{ grid-template-columns:repeat(3, minmax(0,1fr)); } }
+.gpa-two{ grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); }
+.gpa-three{ display:grid; grid-template-columns:2fr 1fr 1fr; gap:10px; align-items:end; margin-bottom:6px; }
+.gpa-three label{ display:block; font-size:11.5px; font-weight:700; color:var(--ink-soft); margin-bottom:4px; }
+.gpa-three .editor-input, .mf-line .editor-input{ width:100%; box-sizing:border-box; margin:0; background:var(--surface); }
+.gpa-mform{ background:var(--paper); border-radius:14px; padding:12px 14px; margin-top:12px; }
+.gpa-sub-h{ font-size:13px; font-weight:800; color:var(--ink); margin:12px 0 6px; }
+.gpa-mform .gpa-sub-h:first-child{ margin-top:0; }
+.mf-line{ display:grid; grid-template-columns:minmax(0,1fr) 80px auto; gap:6px; align-items:center; margin-bottom:6px; }
+.mf-line[data-mf-kind="cond"]{ grid-template-columns:minmax(0,1fr) 80px 110px auto; }
+.gpa-mini{ margin-top:0 !important; padding:6px 12px !important; font-size:12px !important; }
+.gpa-issue{ background:var(--paper); border-radius:12px; padding:10px 12px; margin-bottom:8px; border-inline-start:4px solid var(--rose); }
+.gpa-issue.c{ border-inline-start-color:var(--brass); }
+.gpa-issue .gi-main{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.gpa-issue .gi-main b{ font-size:13.5px; }
+.gi-tag{ font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:99px; background:var(--rose-soft); color:var(--rose-text); }
+.gpa-issue.c .gi-tag{ background:rgba(169,118,30,.14); color:var(--brass-deep); }
+.gi-tag.soft{ background:var(--surface); color:var(--ink-soft); }
+.gi-meta{ font-size:11.5px; color:var(--ink-soft); margin-inline-start:auto; }
+.gi-sub{ font-size:12px; color:var(--ink-soft); margin:4px 0 6px; line-height:1.7; }
+.gi-sub .ok{ color:var(--teal-text); font-weight:700; } .gi-sub .bad{ color:var(--rose-text); font-weight:700; }
+.gpa-issue .gi-sub:last-child{ margin-bottom:0; }
+.gpa-floor{ margin:10px 0 0; padding:10px 12px; border-radius:12px; background:var(--paper); font-size:13px; line-height:1.8; }
+.gpa-floor.good{ background:var(--teal-soft); color:var(--teal-text); } .gpa-floor.bad{ background:var(--rose-soft); color:var(--rose-text); }
+@container main (max-width: 600px){ .gpa-three{ grid-template-columns:1fr 1fr; } .gpa-three > div:first-child{ grid-column:1 / -1; } .mf-line[data-mf-kind="cond"]{ grid-template-columns:minmax(0,1fr) 70px 90px auto; } }
 
 /* ---------- تبويبات صفحة الكلية ---------- */
 .admin-tabs{ display:flex; gap:4px; background:var(--paper); border-radius:12px; padding:4px; margin:4px 0 16px; }
@@ -4942,16 +4966,27 @@ function populateBulkScope() {
       const baseP = P - repP, baseH = H - repH;
       return { P: baseP + semP, H: baseH + semH, done, semP, semH, rowsH, baseP, baseH };
     }
+    // المعدل قبل السجل: الساعات المنجزة + الساعات الراسبة يلي ما انعادت (الراسبة بتدخل بالمعدل بصفر)
     function manualBase(st) {
-      const cg = parseFloat(st.cgpa), H = parseFloat(st.done);
-      const ok = Number.isFinite(cg) && cg >= 0 && cg <= 4 && H > 0;
-      return ok ? { P: cg * H, H, done: H, ok } : { P: 0, H: 0, done: 0, ok };
+      const cg = parseFloat(st.cgpa), D = parseFloat(st.done), F = Math.max(0, parseFloat(st.failedH) || 0);
+      const ok = Number.isFinite(cg) && cg >= 0 && cg <= 4 && D + F > 0 && D >= 0;
+      return ok ? { P: cg * (D + F), H: D + F, done: D || 0, ok } : { P: 0, H: 0, done: 0, ok };
+    }
+    // الناجح بشرط: علامة ناجحة بس تحت 2.00 (متل D و D+)
+    function isConditionalGrade(g) { const p = gradePoints(g); return p != null && p > 0 && p < 2; }
+    function conditionalGrades() { return gradeScale().filter(g => g.p > 0 && g.p < 2).map(g => g.l); }
+    // فصل من السجل: إما مواد بعلاماتها، أو يدوي (ساعات + معدل + الراسبة والشرطية)
+    function applyHistoryEntry(acc, h) {
+      if (h.type !== 'manual') return applySemester(acc, h.rows);
+      const hours = parseFloat(h.hours) || 0, gpa = parseFloat(h.gpa) || 0;
+      const failedH = (h.failed || []).reduce((n, f) => n + (parseFloat(f.hours) || 0), 0);
+      return { P: acc.P + gpa * hours, H: acc.H + hours, done: acc.done + Math.max(0, hours - failedH), semP: gpa * hours, semH: hours, rowsH: hours, baseP: acc.P, baseH: acc.H };
     }
     // الحالة قبل الفصل الحالي: المعدل اليدوي + كل فصول السجل بالترتيب
     function baseBeforeCurrent(st) {
       const m = manualBase(st); let acc = { P: m.P, H: m.H, done: m.done };
       const series = [];
-      st.history.forEach(h => { const r = applySemester(acc, h.rows); acc = { P: r.P, H: r.H, done: r.done }; series.push({ name: h.name, sem: r.semH ? r.semP / r.semH : NaN, cum: r.H > 0 ? r.P / r.H : NaN, hours: r.semH }); });
+      st.history.forEach(h => { const r = applyHistoryEntry(acc, h); acc = { P: r.P, H: r.H, done: r.done }; series.push({ name: h.name, sem: r.semH ? r.semP / r.semH : NaN, cum: r.H > 0 ? r.P / r.H : NaN, hours: r.semH }); });
       return { acc, series, hasPrev: m.ok || st.history.length > 0 };
     }
     function computeGPA(st) {
@@ -4968,6 +5003,13 @@ function populateBulkScope() {
     function gradHours() { const v = currentCollege && Number(currentCollege.gradHours); return v > 0 ? v : 0; }
     function letterAtLeast(v) { const g = gradeScale().slice().reverse().find(x => x.p >= v - 1e-9); return g ? g.l : null; }
 
+    function probationFloorHTML(r) {
+      if (!r.hasPrev || !(r.rowsH > 0)) return '';
+      const lim = probationLimit(), need = (lim * (r.baseH + r.rowsH) - r.baseP) / r.rowsH;
+      if (need <= 0) return `<p class="gpa-floor good">🛡️ تراكميك رح يضل فوق حد الإنذار (${lim.toFixed(2)}) مهما جبت بهالفصل.</p>`;
+      if (need > 4) return `<p class="gpa-floor bad">🚨 حتى لو جبت +A بكل المواد، تراكميك رح يضل تحت ${lim.toFixed(2)} بهالفصل — ركّز على إعادة الراسبة.</p>`;
+      return `<p class="gpa-floor">🛡️ لتضل فوق حد الإنذار (${lim.toFixed(2)}) لازم معدل فصلك يكون <b>${need.toFixed(2)}</b> على الأقل (${esc(letterAtLeast(need) || '')}).</p>`;
+    }
     function gpaTargetHTML(st, r) {
       const t = parseFloat(st.target);
       if (!Number.isFinite(t)) return 'اكتب المعدل التراكمي يلي بدك توصلو، وبقلّك شو لازم تجيب بهالفصل.';
@@ -4978,6 +5020,48 @@ function populateBulkScope() {
       if (need > 4) return { cls: 'bad', html: `ما بتقدر توصل لـ <strong>${t.toFixed(2)}</strong> بهالفصل — حتى لو جبت +A بكل المواد بيطلع تراكميك <strong>${fmtGpa((r.baseP + 4 * r.rowsH) / (r.baseH + r.rowsH))}</strong>.` };
       if (need <= 0) return { cls: 'good', html: `مضمون 👌 — تراكميك رح يضل فوق <strong>${t.toFixed(2)}</strong> مهما جبت بهالفصل.` };
       return { cls: '', html: `لازم معدل فصلك يكون <strong>${need.toFixed(2)}</strong> على الأقل (${r.rowsH} ساعة) — يعني تقريبًا <strong>${esc(letterAtLeast(need) || 'A+')}</strong> أو أعلى بالمتوسط.` };
+    }
+
+    // كل المواد الراسبة والشرطية من السجل، مع حالتها (انعادت ولا لأ)
+    function collectIssues(st) {
+      const items = [];
+      const norm = x => String(x || '').trim();
+      st.history.forEach((h, hi) => {
+        if (h.type === 'manual') {
+          (h.failed || []).forEach(f => items.push({ kind: 'F', name: norm(f.name), hours: parseFloat(f.hours) || 0, grade: 'F', sem: h.name, hi }));
+          (h.cond || []).forEach(c => items.push({ kind: 'C', name: norm(c.name), hours: parseFloat(c.hours) || 0, grade: c.grade, sem: h.name, hi }));
+        } else (h.rows || []).forEach(r => {
+          if (r.grade === 'F') items.push({ kind: 'F', name: norm(r.name), hours: parseFloat(r.hours) || 0, grade: 'F', sem: h.name, hi });
+          else if (isConditionalGrade(r.grade)) items.push({ kind: 'C', name: norm(r.name), hours: parseFloat(r.hours) || 0, grade: r.grade, sem: h.name, hi });
+        });
+      });
+      // انعادت؟ منشوف إذا نفس الاسم انأخد بعدين (بفصل مواد لاحق أو بهالفصل)
+      items.forEach(it => {
+        let later = null;
+        st.history.forEach((h, hi) => { if (hi > it.hi && h.type !== 'manual') (h.rows || []).forEach(r => { if (norm(r.name) === it.name && it.name) later = { grade: r.grade, where: h.name }; }); });
+        const cur = st.rows.find(r => norm(r.name) === it.name && it.name);
+        if (cur) it.current = cur;
+        it.redone = later;
+      });
+      return items;
+    }
+    function issuesHTML(st, r) {
+      const items = collectIssues(st);
+      if (!items.length) return '<p class="gpa-muted">ما في مواد راسبة ولا ناجحة بشرط بسجلك 👌 — بتطلع هون لحالها لما تسجّل فصل فيه F أو علامة تحت C- (متل D و D+).</p>';
+      const denom = r.H1 > 0 ? r.H1 : 0;
+      const row = it => {
+        const oldP = it.kind === 'F' ? 0 : gradePoints(it.grade) || 0;
+        const gainB = denom && it.hours ? ((3 - oldP) * it.hours) / denom : 0;
+        const status = it.redone ? `<span class="ok">✅ انعادت بـ ${esc(it.redone.where)} (${esc(it.redone.grade)})</span>`
+          : it.current ? `<span class="ok">🔁 عم تعيدها هالفصل</span>`
+          : `<span class="bad">${it.kind === 'F' ? 'لسا ما انعادت — ساعاتها ما انحسبت منجزة' : 'بتنصح تعيدها لترفع معدلك'}</span>`;
+        const act = !it.redone && !it.current && it.name
+          ? `<button type="button" class="btn btn-ghost gpa-mini" data-redo="${esc(it.name)}" data-redo-h="${it.hours}" data-redo-g="${esc(it.grade)}">${ic('plus')} أضفها كإعادة لهالفصل</button>` : '';
+        return `<div class="gpa-issue ${it.kind === 'F' ? 'f' : 'c'}"><div class="gi-main"><b>${esc(it.name || 'مادة بدون اسم')}</b><span class="gi-tag">${it.kind === 'F' ? 'راسب F' : `ناجح بشرط ${esc(it.grade)}`}</span><span class="gi-meta">${it.hours || '؟'} س · ${esc(it.sem)}</span></div>
+          <div class="gi-sub">${status}${!it.redone && gainB > 0 && r.hasPrev ? ` · إذا أعدتها وجبت B بيرتفع تراكميك تقريبًا <b>+${gainB.toFixed(2)}</b>` : ''}</div>${act}</div>`;
+      };
+      const f = items.filter(x => x.kind === 'F'), c = items.filter(x => x.kind === 'C');
+      return `${f.length ? `<p class="gpa-sub-h">❌ راسبة (${f.length})</p>${f.map(row).join('')}` : ''}${c.length ? `<p class="gpa-sub-h">⚠️ ناجح بشرط (${c.length})</p>${c.map(row).join('')}` : ''}`;
     }
 
     // «لو جبت…»: كل مواد الفصل بنفس العلامة
@@ -5038,11 +5122,39 @@ function populateBulkScope() {
     function historyHTML(st, r) {
       const series = r.series.slice();
       if (r.semH) series.push({ name: 'هالفصل', sem: r.sem, cum: r.cum });
-      const list = st.history.map((h, i) => { const x = r.series[i] || {};
-        return `<div class="gpa-hist-row"><span class="nm">${esc(h.name)}</span><span>الفصل <b>${fmtGpa(x.sem)}</b></span><span>التراكمي <b>${fmtGpa(x.cum)}</b></span><span class="muted">${x.hours || 0} س</span>
-          <span class="acts"><button type="button" class="gpa-ic" data-hist-edit="${i}" title="رجّعه للتعديل">↩</button><button type="button" class="gpa-ic" data-hist-rename="${i}" title="إعادة تسمية">✎</button><button type="button" class="gpa-ic del" data-hist-del="${i}" title="حذف">${ic('trash')}</button></span></div>`; }).join('');
+      const list = st.history.map((h, i) => { const x = r.series[i] || {}; const manual = h.type === 'manual';
+        const extra = manual ? [(h.failed || []).length ? `❌ ${(h.failed || []).length} راسبة` : '', (h.cond || []).length ? `⚠️ ${(h.cond || []).length} بشرط` : ''].filter(Boolean).join(' · ') : '';
+        return `<div class="gpa-hist-row"><span class="nm">${esc(h.name)} ${manual ? '<span class="gi-tag soft">يدوي</span>' : ''}</span><span>الفصل <b>${fmtGpa(x.sem)}</b></span><span>التراكمي <b>${fmtGpa(x.cum)}</b></span><span class="muted">${x.hours || 0} س${extra ? ' · ' + extra : ''}</span>
+          <span class="acts">${manual ? `<button type="button" class="gpa-ic" data-hist-form="${i}" title="تعديل">✎</button>` : `<button type="button" class="gpa-ic" data-hist-edit="${i}" title="رجّعه للتعديل">↩</button><button type="button" class="gpa-ic" data-hist-rename="${i}" title="إعادة تسمية">✎</button>`}<button type="button" class="gpa-ic del" data-hist-del="${i}" title="حذف">${ic('trash')}</button></span></div>`; }).join('');
       return `${series.length ? historyChartSVG(series, probationLimit()) : ''}
-        ${list ? `<div class="gpa-hist">${list}</div>` : '<p class="gpa-muted">لسا ما سجّلت ولا فصل. لما تخلص فصل، عبّي علاماته واكبس «حفظ هالفصل بالسجل» — وبعدها التراكمي بينحسب لحاله.</p>'}`;
+        ${list ? `<div class="gpa-hist">${list}</div>` : '<p class="gpa-muted">لسا ما سجّلت ولا فصل. سجّل فصولك السابقة يدويًا (ساعات ومعدل)، أو عبّي علامات هالفصل واكبس «حفظ هالفصل بالسجل».</p>'}
+        ${st.form ? manualFormHTML(st.form) : ''}
+        <div class="gpa-actions">${st.form ? '' : `<button type="button" class="btn btn-secondary" onclick="gpaOpenManual()">${ic('plus')} فصل يدوي (ساعات ومعدل)</button>`}
+          ${st.history.length || st.rows.length || st.cgpa || st.done ? `<button type="button" class="btn btn-ghost" onclick="gpaResetAll()">${ic('trash')} مسح كل بيانات المعدل</button>` : ''}</div>`;
+    }
+    function manualFormHTML(f) {
+      const cg = conditionalGrades();
+      const line = (kind, it, k) => `<div class="mf-line" data-mf-kind="${kind}" data-mf-i="${k}">
+          <input class="editor-input" data-mf-f="name" value="${esc(it.name || '')}" placeholder="اسم المادة">
+          <input class="editor-input mf-h" data-mf-f="hours" type="number" min="0" step="0.5" inputmode="decimal" value="${esc(it.hours ?? '')}" placeholder="ساعات">
+          ${kind === 'cond' ? `<select class="editor-input mf-g" data-mf-f="grade">${cg.map(g => `<option value="${esc(g)}" ${g === it.grade ? 'selected' : ''}>${esc(g)} (${gradePoints(g).toFixed(2)})</option>`).join('')}</select>` : ''}
+          <button type="button" class="gpa-ic del" data-mf-del="1" title="حذف">${ic('trash')}</button></div>`;
+      return `<div class="gpa-mform">
+        <p class="gpa-sub-h">${f.edit != null ? '✎ تعديل فصل' : '➕ فصل يدوي'}</p>
+        <div class="gpa-three">
+          <div><label>اسم الفصل</label><input class="editor-input" data-mf-top="name" value="${esc(f.name || '')}" placeholder="مثال: الفصل الأول 2025"></div>
+          <div><label>الساعات (مع الراسبة)</label><input class="editor-input" data-mf-top="hours" type="number" min="0" step="0.5" inputmode="decimal" value="${esc(f.hours ?? '')}" placeholder="مثال: 18"></div>
+          <div><label>معدل الفصل</label><input class="editor-input" data-mf-top="gpa" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(f.gpa ?? '')}" placeholder="مثال: 2.90"></div>
+        </div>
+        <p class="gpa-sub-h">❌ المواد الراسبة (F) — اختياري</p>
+        ${(f.failed || []).map((it, k) => line('failed', it, k)).join('')}
+        <button type="button" class="btn btn-ghost gpa-mini" data-mf-add="failed">${ic('plus')} مادة راسبة</button>
+        <p class="gpa-sub-h">⚠️ الناجح بشرط (${cg.join(' / ') || 'تحت 2.00'}) — اختياري</p>
+        ${(f.cond || []).map((it, k) => line('cond', it, k)).join('')}
+        <button type="button" class="btn btn-ghost gpa-mini" data-mf-add="cond">${ic('plus')} مادة ناجح فيها بشرط</button>
+        <p class="gpa-muted" style="margin-top:8px">المعدل يلي بتكتبه بيتضمّن الراسبة بصفر. الراسبة ما بتنحسب منجزة، ولما تعيدها العلامة الجديدة بتحل محلها.</p>
+        <div class="gpa-actions"><button type="button" class="btn btn-teal" onclick="gpaSaveManual()">${ic('check')} ${f.edit != null ? 'حفظ التعديل' : 'إضافة للسجل'}</button><button type="button" class="btn btn-ghost" onclick="gpaCancelManual()">إلغاء</button></div>
+      </div>`;
     }
 
     // مقارنة خطط «جدولي»: العلامات من المواد يلي عبّيتها، والباقي بالافتراض
@@ -5074,11 +5186,13 @@ function populateBulkScope() {
         <div class="gpa-bar-labels"><span style="left:0">0</span><span style="left:${L}%">${lim.toFixed(2)} إنذار</span><span style="left:${G}%">3.00</span><span style="left:100%">4.00</span></div>`; })() : ''}`;
       const t = gpaTargetHTML(st, r), out = document.getElementById('gpa-target-out');
       if (out) { out.className = 'gpa-target-out ' + (t.cls || ''); out.innerHTML = t.html || esc(t); }
+      const fl = document.getElementById('gpa-floor-box'); if (fl) fl.innerHTML = probationFloorHTML(r);
       const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
       set('gpa-scen-box', scenariosHTML(st, r));
       set('gpa-plan-box', planningHTML(st, r));
       document.getElementById('gpa-plan-card').hidden = !planningHTML(st, r);
       set('gpa-history-box', historyHTML(st, r));
+      set('gpa-issues-box', issuesHTML(st, r));
       set('gpa-plans-box', plansHTML(st));
       // أثر كل مادة على التراكمي
       const denom = r.baseH + r.rowsH; let maxW = 0, maxId = null;
@@ -5086,7 +5200,7 @@ function populateBulkScope() {
       st.rows.forEach(row => { const el = document.querySelector(`#gpa-rows .gpa-row[data-id="${row.id}"] .gpa-impact`); if (!el) return; const h = parseFloat(row.hours);
         if (!(h > 0) || !(denom > 0)) { el.textContent = ''; return; }
         const w = h / denom * 100, step = .25 * h / denom;
-        el.innerHTML = `${row.id === maxId && st.rows.filter(x => parseFloat(x.hours) > 0).length > 1 ? '⭐ الأكثر تأثيرًا · ' : ''}وزنها <b>${w.toFixed(1)}%</b> من ${r.hasPrev ? 'تراكميك' : 'معدل الفصل'} · كل درجة أعلى (+0.25) = <b>+${step.toFixed(3)}</b>`; });
+        el.innerHTML = `${row.grade === 'F' ? '❌ راسب — بتدخل بالمعدل بصفر وما بتنحسب منجزة · ' : isConditionalGrade(row.grade) ? '⚠️ ناجح بشرط · ' : ''}${row.id === maxId && st.rows.filter(x => parseFloat(x.hours) > 0).length > 1 ? '⭐ الأكثر تأثيرًا · ' : ''}وزنها <b>${w.toFixed(1)}%</b> من ${r.hasPrev ? 'تراكميك' : 'معدل الفصل'} · كل درجة أعلى (+0.25) = <b>+${step.toFixed(3)}</b>`; });
       saveGPA(st);
     }
 
@@ -5113,6 +5227,7 @@ function populateBulkScope() {
           <div class="gpa-two">
             <div><label>المعدل التراكمي</label><input class="editor-input" id="gpa-cgpa" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.cgpa ?? '')}" placeholder="مثال: 2.85"></div>
             <div><label>الساعات المنجزة</label><input class="editor-input" id="gpa-done" type="number" min="0" step="1" inputmode="numeric" value="${esc(st.done ?? '')}" placeholder="مثال: 64"></div>
+            <div><label>ساعات راسبة ما أعدتها (اختياري)</label><input class="editor-input" id="gpa-failedh" type="number" min="0" step="1" inputmode="numeric" value="${esc(st.failedH ?? '')}" placeholder="مثال: 3"></div>
           </div></div>
         <div class="gpa-card"><h3>مواد هالفصل</h3><p>اختار العلامة بالحرف، أو اكتبها من 100 وبتتحوّل لحالها. تحت كل مادة بيبين قديش بتأثر على معدلك.</p>
           ${st.rows.length ? `<div class="gpa-head"><span>المادة</span><span>الساعات</span><span>العلامة</span><span>من 100</span><span></span></div><div class="gpa-rows" id="gpa-rows">${rows}</div>` : '<div class="gpa-empty">ما في مواد لسا — جيبها من «جدولي» أو ضيفها بإيدك.</div>'}
@@ -5126,7 +5241,8 @@ function populateBulkScope() {
           <div class="gpa-target">
             <div><label>المعدل الهدف</label><input class="editor-input" id="gpa-target" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.target ?? '')}" placeholder="مثال: 3.00"></div>
             <div id="gpa-target-out" class="gpa-target-out"></div>
-          </div></div>
+          </div><div id="gpa-floor-box"></div></div>
+        <div class="gpa-card"><h3>📋 المواد الراسبة والشرطية</h3><p>من فصولك المسجّلة — مع حالة كل مادة وقديش إعادتها بترفع معدلك.</p><div id="gpa-issues-box"></div></div>
         <div class="gpa-card" id="gpa-plan-card"><h3>🧭 الخطة الجاية</h3><div id="gpa-plan-box"></div></div>
         <div class="gpa-card"><h3>📈 سجل الفصول</h3><p>كل فصل بتحفظه بيدخل بحساب التراكمي لحاله، وبتشوف تطوّر معدلك.</p><div id="gpa-history-box"></div></div>
         <div class="gpa-card"><h3>🗂️ مقارنة خطط «جدولي»</h3><p>المعدل المتوقع لكل خطة — المواد يلي عبّيت علامتها فوق بتنحسب بعلامتها.</p><div id="gpa-plans-box"></div></div>
@@ -5139,6 +5255,9 @@ function populateBulkScope() {
       const t = e.target; if (!gpaState || !t.closest || !t.closest('#gpa-container')) return;
       if (t.id === 'gpa-cgpa') gpaState.cgpa = t.value;
       else if (t.id === 'gpa-done') gpaState.done = t.value;
+      else if (t.id === 'gpa-failedh') gpaState.failedH = t.value;
+      else if (t.dataset && t.dataset.mfTop) { gpaState.form[t.dataset.mfTop] = t.value; saveGPA(gpaState); return; }
+      else if (t.dataset && t.dataset.mfF) { const ln = t.closest('.mf-line'); const arr = gpaState.form[ln.dataset.mfKind]; arr[+ln.dataset.mfI][t.dataset.mfF] = t.value; saveGPA(gpaState); return; }
       else if (t.id === 'gpa-target') gpaState.target = t.value;
       else if (t.id === 'gpa-grad-target') { gpaState.gradTarget = t.value; const pos = t.selectionStart; renderGPAResults(); const n = document.getElementById('gpa-grad-target'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (er) {} } return; }
       else if (t.id === 'gpa-plan-assume') gpaState.planAssume = t.value;
@@ -5157,14 +5276,23 @@ function populateBulkScope() {
       const rowEl = t.closest('.gpa-row'); const row = rowEl && gpaState.rows.find(r => r.id === rowEl.dataset.id);
       if (row && t.dataset.f === 'repeat') { row.repeat = t.checked; if (!t.checked) row.oldGrade = ''; saveGPA(gpaState); renderGPA(); }
       if (t.id === 'gpa-plan-assume') { gpaState.planAssume = t.value; renderGPAResults(); }
+      if (t.dataset && t.dataset.mfF === 'grade') { const ln = t.closest('.mf-line'); gpaState.form[ln.dataset.mfKind][+ln.dataset.mfI].grade = t.value; saveGPA(gpaState); }
     });
     document.addEventListener('click', async e => {
       if (!gpaState || !e.target.closest) return;
       const b = e.target.closest('#gpa-container [data-del]');
       if (b) { const id = b.closest('.gpa-row').dataset.id; gpaState.rows = gpaState.rows.filter(r => r.id !== id); saveGPA(gpaState); renderGPA(); return; }
+      const add = e.target.closest('#gpa-container [data-mf-add]');
+      if (add) { const k = add.dataset.mfAdd; gpaState.form[k] = gpaState.form[k] || []; gpaState.form[k].push(k === 'cond' ? { name: '', hours: '', grade: conditionalGrades()[0] || 'D' } : { name: '', hours: '' }); saveGPA(gpaState); renderGPA(); return; }
+      const mdel = e.target.closest('#gpa-container [data-mf-del]');
+      if (mdel) { const ln = mdel.closest('.mf-line'); gpaState.form[ln.dataset.mfKind].splice(+ln.dataset.mfI, 1); saveGPA(gpaState); renderGPA(); return; }
+      const redo = e.target.closest('#gpa-container [data-redo]');
+      if (redo) { gpaState.rows.push({ id: gpaRowId(), name: redo.dataset.redo, hours: redo.dataset.redoH || '', grade: '', repeat: true, oldGrade: redo.dataset.redoG }); saveGPA(gpaState); renderGPA(); toast('انضافت لمواد هالفصل كإعادة — اختار العلامة المتوقعة.', 'success'); return; }
+      const hf = e.target.closest('#gpa-container [data-hist-form]');
+      if (hf) { const i = +hf.dataset.histForm, h0 = gpaState.history[i]; gpaState.form = { edit: i, name: h0.name, hours: h0.hours, gpa: h0.gpa, failed: JSON.parse(JSON.stringify(h0.failed || [])), cond: JSON.parse(JSON.stringify(h0.cond || [])) }; saveGPA(gpaState); renderGPA(); document.querySelector('.gpa-mform')?.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
       const h = e.target.closest('#gpa-container [data-hist-del], #gpa-container [data-hist-rename], #gpa-container [data-hist-edit]'); if (!h) return;
       const i = +(h.dataset.histDel ?? h.dataset.histRename ?? h.dataset.histEdit), sem = gpaState.history[i]; if (!sem) return;
-      if (h.dataset.histDel != null) { if (!await uiConfirm(`تحذف «${sem.name}» من السجل؟`, { okText: 'حذف', danger: true })) return; gpaState.history.splice(i, 1); }
+      if (h.dataset.histDel != null) { if (!await uiConfirm(`تحذف «${sem.name}» من السجل؟`, { okText: 'حذف', danger: true })) return; gpaState.history.splice(i, 1); if (gpaState.form && gpaState.form.edit != null) gpaState.form = null; }
       else if (h.dataset.histRename != null) { const n = ((await uiPrompt('اسم الفصل:', sem.name)) || '').trim(); if (!n) return; sem.name = n; }
       else {
         if (gpaState.rows.length && !await uiConfirm(`رح تنرجع مواد «${sem.name}» لخانة «مواد هالفصل» وتنشال من السجل — والمواد يلي هلق هونيك رح تنمسح. متأكد؟`)) return;
@@ -5190,6 +5318,32 @@ function populateBulkScope() {
     window.gpaClear = async function() {
       if (!await uiConfirm('تمسح كل مواد هالفصل من الحاسبة؟', { okText: 'مسح', danger: true })) return;
       gpaState.rows = []; saveGPA(gpaState); renderGPA();
+    };
+    window.gpaOpenManual = function() {
+      gpaState.form = { edit: null, name: `الفصل ${gpaState.history.length + 1}`, hours: '', gpa: '', failed: [], cond: [] };
+      saveGPA(gpaState); renderGPA(); setTimeout(() => document.querySelector('.gpa-mform')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 50);
+    };
+    window.gpaCancelManual = function() { gpaState.form = null; saveGPA(gpaState); renderGPA(); };
+    window.gpaSaveManual = function() {
+      const f = gpaState.form; if (!f) return;
+      const name = String(f.name || '').trim(), hours = parseFloat(f.hours), gpa = parseFloat(f.gpa);
+      if (!name) { toast('اكتب اسم الفصل.', 'error'); return; }
+      if (!(hours > 0)) { toast('ساعات الفصل لازم تكون رقم أكبر من صفر.', 'error'); return; }
+      if (!(gpa >= 0 && gpa <= 4)) { toast('معدل الفصل لازم يكون بين 0 و 4.', 'error'); return; }
+      const clean = (arr, withGrade) => (arr || []).filter(x => String(x.name || '').trim() || parseFloat(x.hours) > 0).map(x => Object.assign({ name: String(x.name || '').trim(), hours: parseFloat(x.hours) || 0 }, withGrade ? { grade: x.grade } : {}));
+      const failed = clean(f.failed), cond = clean(f.cond, true);
+      if (failed.concat(cond).some(x => !(x.hours > 0))) { toast('كل مادة راسبة أو شرطية لازم يكون إلها ساعات.', 'error'); return; }
+      const extraH = failed.concat(cond).reduce((n, x) => n + x.hours, 0);
+      if (extraH > hours) { toast(`مجموع ساعات الراسبة والشرطية (${extraH}) أكبر من ساعات الفصل (${hours}).`, 'error', 6000); return; }
+      if (failed.length && gpa * hours > 4 * (hours - failed.reduce((n, x) => n + x.hours, 0)) + 1e-9) { toast('المعدل أعلى من الممكن مع هالمواد الراسبة — تأكد من الأرقام.', 'error', 6000); return; }
+      const entry = { id: f.edit != null ? gpaState.history[f.edit].id : gpaRowId(), type: 'manual', name, hours, gpa, failed, cond };
+      if (f.edit != null) gpaState.history[f.edit] = entry; else gpaState.history.push(entry);
+      gpaState.form = null; saveGPA(gpaState); renderGPA();
+      toast(f.edit != null ? `تم تعديل «${name}».` : `انضاف «${name}» للسجل.`, 'success');
+    };
+    window.gpaResetAll = async function() {
+      if (!await uiConfirm('تمسح كل بيانات المعدل؟ (المعدل السابق، السجل، ومواد هالفصل) — ما في رجعة.', { okText: 'مسح الكل', danger: true })) return;
+      gpaState = { rows: [], history: [] }; saveGPA(gpaState); renderGPA(); toast('انمسحت كل بيانات المعدل.', 'success');
     };
     window.gpaSaveSemester = async function() {
       const graded = gpaState.rows.filter(r => parseFloat(r.hours) > 0 && gradePoints(r.grade) != null);
