@@ -84,6 +84,7 @@
   :root[data-theme="dark"] #search:focus{ background:#1F2A42; border-color:var(--brass); }
 
   *{ box-sizing:border-box; }
+  [hidden]{ display:none !important; }   /* أي عنصر مخفي بيضل مخفي حتى لو صنفه (متل .btn) بيحدد display */
   .theme-switching, .theme-switching *{ transition:none !important; }
   * { scroll-margin-top: calc(var(--header-h, 0px) + 24px); }
   @keyframes fadeInUp{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
