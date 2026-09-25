@@ -2660,6 +2660,7 @@ function renderTourStep() {
         console.warn('مشاكل في بيانات المواد:', dataProblems);
         toast(`تنبيه: في ${dataProblems.length} مشكلة ببيانات المواد — بعض الفئات قد لا تظهر صح. راجع لوحة التحكم.`, 'error', 8000);
       }
+      reconcileSavedData();
       document.getElementById('setup-screen').style.display = 'none';
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'block';
@@ -4960,6 +4961,59 @@ function populateBulkScope() {
       if (!c || !parsedCourses[c]) return null;
       return parsedCourses[c].find(s => s.id === id) || null;
     }
+    // تحديث البيانات بيولّد معرّفات (id) جديدة للفئات، فمنربط الفئة المحفوظة بنسختها الحالية:
+    // بالمعرّف، وإلا بالمادة + النوع + اسم الفئة، وإلا بالمادة + النوع + نفس الأوقات
+    function timesKey(sec) { return (sec.times || []).map(t => `${t.day}|${+t.start}|${+t.end}`).sort().join(';'); }
+    function resolveSavedSection(sec) {
+      if (!sec) return null;
+      const byId = findSectionById(sec.id); if (byId) return byId;
+      const list = (parsedCourses[courseNameOf(sec)] || []).filter(x => x.type === sec.type);
+      const byName = list.filter(x => x.className === sec.className);
+      if (byName.length === 1) return byName[0];
+      const tk = timesKey(sec), byTime = tk ? list.filter(x => timesKey(x) === tk) : [];
+      return byTime.length === 1 ? byTime[0] : null;
+    }
+    // بيحدّث قائمة فئات محفوظة لآخر بيانات؛ الفئة يلي ما إلها مقابل بتضل متل ما هي (ما منشيل شي من جدول الطالب)
+    function reconcileSections(arr) {
+      const idMap = {}; let changed = 0, missing = 0;
+      const out = (arr || []).map(sec => {
+        const cur = resolveSavedSection(sec);
+        if (!cur) { missing++; return sec; }
+        if (cur.id !== sec.id) idMap[sec.id] = cur.id;
+        const fresh = JSON.parse(JSON.stringify(cur));
+        if (JSON.stringify(fresh) !== JSON.stringify(sec)) changed++;
+        return fresh;
+      });
+      return { sections: out, idMap, changed, missing };
+    }
+    function reconcileLocks(L, idMap) {
+      if (!L) return L;
+      return { courses: L.courses || [], sections: (L.sections || []).map(id => idMap[id] || id) };
+    }
+    // مرة وحدة بعد تحميل البيانات: جدولي، كل الخطط، والمفضّلة
+    function reconcileSavedData() {
+      let remapped = 0;
+      try {
+        const raw = JSON.parse(localStorage.getItem(MS_KEY) || 'null');
+        if (raw && Array.isArray(raw.sections) && raw.sections.length) {
+          const r = reconcileSections(raw.sections);
+          if (r.changed) { remapped += Object.keys(r.idMap).length; localStorage.setItem(MS_KEY, JSON.stringify(Object.assign({}, raw, { sections: r.sections, locks: reconcileLocks(raw.locks, r.idMap) }))); }
+        }
+      } catch (e) {}
+      try {
+        const d = JSON.parse(localStorage.getItem(DRAFTS_KEY) || 'null'); let dirty = false;
+        if (d && d.store) Object.keys(d.store).forEach(k => { const x = d.store[k]; if (!x || !Array.isArray(x.sections)) return;
+          const r = reconcileSections(x.sections); if (r.changed) { dirty = true; d.store[k] = Object.assign({}, x, { sections: r.sections, locks: reconcileLocks(x.locks, r.idMap) }); } });
+        if (dirty) localStorage.setItem(DRAFTS_KEY, JSON.stringify(d));
+      } catch (e) {}
+      try {
+        const favs = JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); let dirty = false;
+        (Array.isArray(favs) ? favs : []).forEach(f => (f.groupSchedules || []).forEach(p => { if (!Array.isArray(p.schedule)) return;
+          const r = reconcileSections(p.schedule); if (Object.keys(r.idMap).length) { dirty = true; p.schedule = p.schedule.map(sec => r.idMap[sec.id] ? Object.assign({}, sec, { id: r.idMap[sec.id] }) : sec); } }));
+        if (dirty) localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+      } catch (e) {}
+      return remapped;
+    }
     function seatsOf(sec) { return sec.seats || sec.capacity || sec.seatCount || ''; }
 
     let CREDIT_LIMIT = 25;                // الحد الأقصى للساعات بالفصل (بيتغيّر حسب الكلية: creditLimit بـ colleges.json)
@@ -5624,6 +5678,7 @@ function populateBulkScope() {
     function courseChoices(courseName, opts) {
       const exDays = opts.excludedDays || [];
       const allowFull = !!opts.allowFull;
+      const own = opts.own || null;         // فئات جدولك الحالي: مقعدك فيها محجوز، فالامتلاء ما بيمنعها
       const list = parsedCourses[courseName] || [];
       const rejected = [];
       const usable = { theory: [], practical: [] };
@@ -5632,7 +5687,7 @@ function populateBulkScope() {
         if (sec.times.length === 0) { rejected.push({ section: sec, reason: 'no-times' }); return; }
         const badDays = [...new Set(sec.times.filter(t => exDays.includes(t.day)).map(t => t.day))];
         if (badDays.length) { rejected.push({ section: sec, reason: 'excluded-day', days: badDays }); return; }
-        if (isSectionClosed(sec) && !allowFull) { rejected.push({ section: sec, reason: 'full' }); return; }
+        if (isSectionClosed(sec) && !allowFull && !(own && own.has(sec.id))) { rejected.push({ section: sec, reason: 'full' }); return; }
         usable[sec.type].push(sec);
       });
 
@@ -5671,6 +5726,7 @@ function populateBulkScope() {
         (currentByCourse[c] = currentByCourse[c] || []).push(sec.id);
       });
 
+      const own = new Set(base.map(s => s.id));
       const lockedCourses = new Set((opts.locked || []).map(id => COURSE_OF_ID[id]));
       dropCourses = dropCourses.filter(c => !lockedCourses.has(c));
       const keep = Object.keys(currentByCourse).filter(c => !dropCourses.includes(c));
@@ -5679,9 +5735,14 @@ function populateBulkScope() {
       const pools = [];
       const blocked = [];
       for (const c of courses) {
-        // الفئات المثبّتة بتضل مكانها — منسمح بالمثبّتة حتى لو ممتلئة لأن الطالب ثبّتها قصدًا
+        // الفئات المثبّتة بتضل مكانها — منسمح بالمثبّتة حتى لو ممتلئة لأن الطالب ثبّتها قصدًا (هي بس، مو باقي فئات المادة)
         const lockedHere = (opts.locked || []).filter(id => COURSE_OF_ID[id] === c);
-        const res = courseChoices(c, { excludedDays: exDays, allowFull: allowFull || lockedHere.length > 0 });
+        const res = courseChoices(c, { excludedDays: exDays, allowFull, own: lockedHere.length ? new Set([...own, ...lockedHere]) : own });
+        // مادة بجدولك ما عادت موجودة بالبيانات (أو فئتها انحذفت): بتضل متل ما هي بدل ما يفشل الحل كله
+        if (!res.choices.length && currentByCourse[c] && !(parsedCourses[c] || []).some(x => (currentByCourse[c] || []).includes(x.id))) {
+          const saved = base.filter(x => courseNameOf(x) === c);
+          if (saved.length && !(opts.force && opts.force[c])) res.choices = [saved];
+        }
         if (lockedHere.length) res.choices = res.choices.filter(ch => lockedHere.every(id => ch.some(s => s.id === id)));
         if (opts.force && opts.force[c]) res.choices = res.choices.filter(ch => ch.some(s => s.id === opts.force[c]));
         if (res.choices.length === 0) { blocked.push({ course: c, info: res }); continue; }
@@ -5689,7 +5750,7 @@ function populateBulkScope() {
         // رتّب الخيارات: الأقرب للجدول الحالي أولًا، ثم المتاحة قبل الممتلئة
         res.choices.forEach(ch => {
           ch.__changes = cur.length === 0 ? 0 : ch.filter(s => !cur.includes(s.id)).length;
-          ch.__closed = closedCountOf(ch);
+          ch.__closed = ch.filter(s => isSectionClosed(s) && !own.has(s.id) && !lockedHere.includes(s.id)).length;   // بس الممتلئة الجديدة
         });
         res.choices.sort((a, b) => (a.__changes - b.__changes) || (a.__closed - b.__closed));
         pools.push({ course: c, choices: res.choices, isNew: !currentByCourse[c] });
@@ -5701,6 +5762,9 @@ function populateBulkScope() {
 
       const solutions = [];
       let nodes = 0, bestChanges = Infinity;
+      // أقل مجموع تغييرات ممكن لباقي المواد (حد أدنى متفائل) — للتقليم
+      const minRest = new Array(pools.length + 1).fill(0);
+      for (let i = pools.length - 1; i >= 0; i--) minRest[i] = minRest[i + 1] + Math.min(...pools[i].choices.map(ch => ch.__changes));
 
       function conflictsWith(chosen, cand) {
         for (let i = 0; i < cand.length; i++) {
@@ -5710,23 +5774,40 @@ function populateBulkScope() {
         return false;
       }
 
-      (function dfs(depth, chosen, changes, closed) {
-        if (nodes++ > MS_MAX_NODES || solutions.length >= MS_MAX_SOLUTIONS) return;
-        if (changes > bestChanges + 2) return;                 // تقليم: لا تبتعد كثيرًا عن الأفضل
-        if (depth === pools.length) {
-          if (changes < bestChanges) bestChanges = changes;
-          solutions.push({ sections: chosen.slice(), changes, closed });
-          return;
-        }
+      // ١) أقل عدد تغييرات ممكن فعليًا (بحث بالتفرّع والتقليم)
+      (function best(depth, chosen, changes) {
+        if (nodes++ > MS_MAX_NODES || changes + minRest[depth] >= bestChanges) return;
+        if (depth === pools.length) { bestChanges = changes; return; }
         for (const ch of pools[depth].choices) {
           if (conflictsWith(chosen, ch)) continue;
           const before = chosen.length;
           chosen.push(...ch);
-          dfs(depth + 1, chosen, changes + ch.__changes, closed + ch.__closed);
+          best(depth + 1, chosen, changes + ch.__changes);
           chosen.length = before;
-          if (nodes > MS_MAX_NODES || solutions.length >= MS_MAX_SOLUTIONS) return;
+          if (nodes > MS_MAX_NODES) return;
         }
-      })(0, [], 0, 0);
+      })(0, [], 0);
+      // ٢) منجمع الحلول بالترتيب: يلي بأقل تغيير أولًا، وبعدها +1 و+2 — حتى ما يعبّي الحد حلول أسوأ ويضيع الأفضل
+      const phase1Nodes = nodes; nodes = 0;
+      for (let target = bestChanges; Number.isFinite(target) && target <= bestChanges + 2 && solutions.length < MS_MAX_SOLUTIONS; target++) {
+        (function dfs(depth, chosen, changes, closed) {
+          if (nodes++ > MS_MAX_NODES || solutions.length >= MS_MAX_SOLUTIONS) return;
+          if (changes + minRest[depth] > target) return;
+          if (depth === pools.length) {
+            if (changes === target) solutions.push({ sections: chosen.slice(), changes, closed });
+            return;
+          }
+          for (const ch of pools[depth].choices) {
+            if (conflictsWith(chosen, ch)) continue;
+            const before = chosen.length;
+            chosen.push(...ch);
+            dfs(depth + 1, chosen, changes + ch.__changes, closed + ch.__closed);
+            chosen.length = before;
+            if (nodes > MS_MAX_NODES || solutions.length >= MS_MAX_SOLUTIONS) return;
+          }
+        })(0, [], 0, 0);
+      }
+      nodes = Math.max(nodes, phase1Nodes);
 
       // الترتيب: المقاعد أولًا (أقل فئات ممتلئة) ثم أقل تغييرات
       const sPrefs = activePrefs();
@@ -6152,7 +6233,7 @@ function populateBulkScope() {
       return '❌ غير متوافقة مع القيود الحالية';
     }
 
-    function fullSectionsOf(sections) { return sections.filter(isSectionClosed); }
+    function fullSectionsOf(sections, base) { const own = new Set((base || []).map(x => x.id)); return sections.filter(x => isSectionClosed(x) && !own.has(x.id)); }
 
     function renderSolutionsHTML(d) {
       const { result, conditional, addCourses, dropCourses, base } = d;
@@ -6189,7 +6270,7 @@ function populateBulkScope() {
         }
         html += cond.slice(0, MS_SHOW_SOLUTIONS).map((s, i) => {
           const ops = diffSchedules(base, s.sections);
-          const fulls = fullSectionsOf(s.sections);
+          const fulls = fullSectionsOf(s.sections, base);
           return `<div class="ms-opt blocked">
             <div class="ms-opt-head">
               <span class="ms-opt-title">خيار مشروط #${i + 1}</span>
@@ -6533,8 +6614,10 @@ function populateBulkScope() {
 
     // ---- منطق مشترك: حالة كل فئة وكل مادة (المقاعد ما إلها دور هون) ----
     const WZ_LABEL = { theory: 'النظري', practical: 'العملي' };
-    function wzTypes(c) { const l = parsedCourses[c] || []; return ['theory', 'practical'].filter(t => l.some(s => s.type === t)); }
-    function wzPicked(d) { return d.courses.flatMap(c => Object.values(d.picks[c] || {}).filter(Boolean)).map(findSectionById).filter(Boolean); }
+    function wzTypes(c, d) { const l = parsedCourses[c] || []; const saved = d && d.batch && !l.length ? d.base.filter(s => courseNameOf(s) === c) : l; return ['theory', 'practical'].filter(t => saved.some(s => s.type === t)); }
+    // الفئة المختارة: من البيانات الحالية، وإلا (بالتعديل المتعدد) نسختها المحفوظة بجدولك — حتى ما تنسحب مادة بسبب تحديث البيانات
+    function wzSec(d, id) { return findSectionById(id) || (d && d.batch && id ? (d.base || []).find(s => s.id === id) || null : null); }
+    function wzPicked(d) { return d.courses.flatMap(c => Object.values(d.picks[c] || {}).filter(Boolean)).map(id => wzSec(d, id)).filter(Boolean); }
     function wzStatus(d, c, sec) {
       const exDays = excludedDaysNow();
       if (!sec.times.length) return { ok: false, why: 'ما إلها أوقات مسجّلة' };
@@ -6548,9 +6631,9 @@ function populateBulkScope() {
       return { ok: true };
     }
     function wzCourseState(d, c) {
-      const types = wzTypes(c), p = d.picks[c] || {};
+      const types = wzTypes(c, d), p = d.picks[c] || {};
       const missing = types.filter(t => !p[t]);
-      const secs = types.map(t => p[t]).filter(Boolean).map(findSectionById).filter(Boolean);
+      const secs = types.map(t => p[t]).filter(Boolean).map(id => wzSec(d, id)).filter(Boolean);
       const bad = secs.find(s => !wzStatus(d, c, s).ok);
       if (bad) return { state: 'bad', text: `⛔ ${wzStatus(d, c, bad).why}` };
       if (missing.length) return { state: 'todo', text: `لسا ما اخترت: ${missing.map(t => WZ_LABEL[t]).join(' و')}` };
@@ -6561,7 +6644,7 @@ function populateBulkScope() {
     const wzTimes = sec => sec.times.length ? sec.times.map(t => `${t.day} ${clockText(t.start)}–${clockText(t.end)}`).join(' · ') : 'بلا أوقات';
 
     // وضع «تعديل متعدد»: نفس المعالج بس بيبلّش من جدولك، وبيعرف شو تغيّر عن الأصل
-    function wzCandidate(d) { return cloneSections(d.courses.flatMap(c => Object.values(d.picks[c] || {}).filter(Boolean).map(findSectionById).filter(Boolean))); }
+    function wzCandidate(d) { return cloneSections(d.courses.flatMap(c => Object.values(d.picks[c] || {}).filter(Boolean).map(id => wzSec(d, id)).filter(Boolean))); }
     function wzBatchChanges(d) {
       if (!d.batch) return null;
       const ops = diffSchedules(d.base, wzCandidate(d));
@@ -6615,7 +6698,7 @@ function populateBulkScope() {
     }
     // «اسحب X وخود هالفئة»: منسحب المواد يلي بتتعارض مباشرة معها (غير المثبّتة) ومنشوف إذا بتزبط
     function wzDropFix(d, c, sid) {
-      const target = findSectionById(sid); if (!target) return null;
+      const target = wzSec(d, sid); if (!target) return null;
       const base = wzCandidate(d);
       const locked = wzLockedIds(d);
       const clashing = [...new Set(base.filter(s => courseNameOf(s) !== c && clashBetween(s, target)).map(courseNameOf))];
@@ -6666,7 +6749,7 @@ function populateBulkScope() {
         </div>`;
 
       const items = d.courses.map((c, i) => {
-        const st = states[i], open = d.open === c, types = wzTypes(c), list = parsedCourses[c] || [];
+        const st = states[i], open = d.open === c, types = wzTypes(c, d), list = parsedCourses[c] || [];
         const cArg = esc(c).replace(/'/g, "\\'");
         // قائمة اختيار مصممة (بدل قائمة المتصفح): زر بيعرض الاختيار الحالي، وبيفتح لائحة خيارات تحته
         const chips = sec => sec.times.length
@@ -6675,7 +6758,7 @@ function populateBulkScope() {
         const selects = types.map(t => {
           const opts = list.filter(s => s.type === t);
           const curId = (d.picks[c] || {})[t];
-          const cur = curId ? findSectionById(curId) : null;
+          const cur = curId ? wzSec(d, curId) : null;
           const curSt = cur ? wzStatus(d, c, cur) : { ok: true };
           const usable = opts.filter(s => wzStatus(d, c, s).ok).length;
           const locked = wzLockedType(d, c, t);
@@ -7040,11 +7123,11 @@ function populateBulkScope() {
     function renderPreviewHTML(d) {
       const ops = diffSchedules(d.base, d.candidate);
       const baseIds = new Set(d.base.map(s => s.id));
-      const closed = d.fromBatch ? d.candidate.filter(s => !baseIds.has(s.id) && isSectionClosed(s)).length : closedCountOf(d.candidate);
+      const closed = d.candidate.filter(s => !baseIds.has(s.id) && isSectionClosed(s)).length;   // مقعدك بفئاتك الحالية محجوز
       return `<div class="ms-panel">
         <p class="ms-panel-title">${ic('alert')} معاينة التعديل قبل الاعتماد</p>
         <p class="ms-panel-note">جدولك الحالي ما تغيّر لسا. اضغط «اعتماد» حتى يصير هو جدولك.</p>
-        ${closed ? `<div class="ms-warn">${ic('alert')} ${d.fromBatch ? `في ${closed} فئة جديدة ممتلئة حسب آخر بيانات — ما فيك تسجّل فيها إلا إذا فضي مقعد.` : `هالجدول فيه ${closed} فئة ممتلئة.`}</div>` : ''}
+        ${closed ? `<div class="ms-warn">${ic('alert')} في ${closed} فئة جديدة ممتلئة حسب آخر بيانات — ما فيك تسجّل فيها إلا إذا فضي مقعد.</div>` : ''}
         ${opsListHTML(ops)}
         <div class="ms-preview-cols" style="margin-top:14px;">
           <div class="ms-preview-col"><h5>قبل</h5>${buildSummaryHTML(d.base, [])}</div>
@@ -7171,8 +7254,8 @@ function populateBulkScope() {
       const result = solveSchedule(base, addCourses, dropCourses, { allowFull: false, locked });
       // معلوماتي فقط: حلول ما بتصير إلا لو فضي مقعد بفئة ممتلئة
       const withFull = solveSchedule(base, addCourses, dropCourses, { allowFull: true, locked });
-      const lockedSet = new Set(locked);
-      const unlockedFull = s => s.sections.some(x => isSectionClosed(x) && !lockedSet.has(x.id));
+      const ownSet = new Set(base.map(s => s.id));
+      const unlockedFull = s => s.sections.some(x => isSectionClosed(x) && !ownSet.has(x.id));
       result.solutions = result.solutions.concat(withFull.solutions.filter(s => s.closed > 0 && !unlockedFull(s)))
         .filter((s, i, arr) => arr.findIndex(t => t.sections.map(x => x.id).sort().join() === s.sections.map(x => x.id).sort().join()) === i);
       const conditional = withFull.solutions.filter(unlockedFull);
@@ -7268,7 +7351,7 @@ function populateBulkScope() {
     window.msPreviewConditional = async function(i) {
       const d = msUI.data; if (!d) return;
       const sol = (d.conditional || [])[i]; if (!sol) return;
-      const fulls = fullSectionsOf(sol.sections).map(f => `${courseNameOf(f)} — ${f.className}`).join('\n');
+      const fulls = fullSectionsOf(sol.sections, d.base).map(f => `${courseNameOf(f)} — ${f.className}`).join('\n');
       if (!await uiConfirm('تنبيه: هالجدول فيه فئة ممتلئة حسب آخر بيانات الموقع:\n\n' + fulls + '\n\nيعني ما فيك تسجّل فيه هلق إلا إذا فضي مقعد. بدك تكمل؟', { okText: 'كمّل', danger: true })) return;
       msUI = { mode: 'preview', data: { base: d.base, candidate: cloneSections(sol.sections), from: d } };
       renderMySchedule();
