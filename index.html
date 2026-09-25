@@ -268,6 +268,7 @@
 
   /* ---------- app shell ---------- */
   .grid-layout{ display:grid; grid-template-columns: 350px 1fr; gap:22px; align-items:start; animation:fadeInUp .45s ease; }
+  @media (max-width: 1180px) and (min-width: 921px){ .grid-layout{ grid-template-columns: 310px 1fr; gap:16px; } }
   @media (max-width: 920px){
     .grid-layout{ grid-template-columns: 1fr; }
     .header{ position:relative; }
@@ -361,6 +362,7 @@
   .course-row-users{ padding:0 13px 10px; display:flex; gap:6px; flex-wrap:wrap; }
   .course-body{ display:grid; grid-template-rows:0fr; background:rgba(20,27,46,.02); transition:grid-template-rows .35s ease; }
   .course-row.open .course-body{ grid-template-rows:1fr; }
+  .course-row:not(.open) .course-body-inner{ padding-top:0; padding-bottom:0; }
   .course-body-inner{ overflow:hidden; min-height:0; padding:2px 13px 14px; display:flex; flex-direction:column; gap:9px; }
 
   .section-row{ display:flex; flex-direction:column; gap:7px; padding:10px 11px; border:1px solid var(--line); border-radius:9px; background:var(--surface); }
@@ -402,14 +404,20 @@
   .result-header{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--paper); flex-wrap:wrap; }
   .result-actions{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 
-  .results-tabs{ display:flex; gap:6px; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:5px; margin-bottom:14px; }
-  .results-tab{ flex:1; display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:10px 12px; border:none; border-radius:9px; background:transparent; color:var(--ink-soft); font-family:var(--font-display); font-weight:700; font-size:13.5px; cursor:pointer; transition:background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+  .results-tabs{ display:flex; gap:4px; min-width:0; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:5px; margin-bottom:14px; }
+  .results-tab{ flex:1 1 0; min-width:0; white-space:nowrap; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:10px 8px; border:none; border-radius:9px; background:transparent; color:var(--ink-soft); font-family:var(--font-display); font-weight:700; font-size:13.5px; cursor:pointer; transition:background-color .2s ease, color .2s ease, box-shadow .2s ease; }
   .results-tab:hover{ color:var(--ink); }
   .results-tab.active{ background:var(--surface); color:var(--ink); box-shadow:0 1px 3px rgba(20,27,46,.1); }
   .results-tab#tab-favorites.active{ color:var(--brass-deep); }
   .tab-count{ min-width:20px; height:20px; padding:0 6px; border-radius:999px; background:var(--brass-badge); color:#fff; font-size:11px; font-family:var(--font-mono); display:inline-flex; align-items:center; justify-content:center; }
   .tab-count.zero{ background:var(--line); color:var(--ink-soft); }
   .tab-count.bump{ animation:chipPop .35s ease; }
+  .results-tab .ic, .tab-count{ flex-shrink:0; }
+  /* التبويبات بتتقلّص حسب عرض عمود النتائج نفسه (مش الشاشة) — حتى ما يطلع تبويب برّا الإطار */
+  .main-content{ container-type:inline-size; container-name:main; }
+  @container main (max-width: 600px){ .results-tab{ font-size:12.5px; gap:4px; padding:9px 5px; } .results-tab .ic{ width:14px; height:14px; } }
+  @container main (max-width: 500px){ .results-tab > .ic{ display:none; } .tab-count{ min-width:17px; height:17px; padding:0 4px; font-size:10px; } }
+  @container main (max-width: 400px){ .results-tab{ font-size:11.5px; } }
   #favorites-container{ background:var(--paper); border-radius:12px; padding:20px; border:1px dashed var(--line); flex-grow:1; overflow-y:auto; min-height:0; animation:fadeInUp .3s ease; }
   #myschedule-container{ background:var(--paper); border-radius:12px; padding:20px; border:1px dashed var(--line); flex-grow:1; overflow-y:auto; min-height:0; animation:fadeInUp .3s ease; }
   .results-tab#tab-myschedule.active{ color:var(--teal-text); }
@@ -973,7 +981,8 @@
 .gpa-target-out.bad{ background:var(--rose-soft); color:var(--rose-text); }
 .gpa-target-out.good{ background:var(--teal-soft); color:var(--teal-text); }
 .gpa-empty{ text-align:center; color:var(--ink-soft); font-size:13px; padding:14px; background:var(--paper); border-radius:12px; }
-@media (max-width:640px){
+/* تخطيط الحاسبة بيمشي مع عرض عمود النتائج نفسه (الموبايل، والتابلت، والكمبيوتر بشاشة ضيقة) */
+@container main (max-width: 600px){
   #gpa-container{ padding:10px !important; }
   .gpa-head{ display:none; }
   .gpa-row{ grid-template-columns:62px minmax(0,1fr) 62px auto; }
@@ -2019,13 +2028,20 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
         { sel: '#gh-token', title: 'مفتاح الوصول', text: 'استخدم مفتاح Fine-grained محصور بهالمستودع وبصلاحية Contents: Read and write فقط.' },
         { sel: '#gh-remember', title: 'تذكّرني', text: 'بيحفظ الجلسة 3 أشهر على هالجهاز. لا تفعّله على جهاز مشترك.' },
       ]},
-      admin: { label: 'لوحة التحكم', steps: [
+      admin_home: { label: 'لوحة التحكم — الكليات', steps: [
+        { sel: '#admin-college-grid', title: 'كل الكليات', text: 'كل كلية بطاقة: ظاهرة أو مخفية، ورمزها، وعدد موادها. كبسة على البطاقة بتفتح صفحة الكلية لتدير موادها وإعداداتها لحالها.' },
+        { sel: '#admin-home details.college-admin', title: 'إضافة كلية', text: 'اسم ورمز قصير بالإنكليزي وحد الساعات. بتنضاف مخفية لحد ما تستورد بياناتها وتظهّرها من إعداداتها.' },
+        { sel: '[onclick="msLockAdminNow()"]', title: 'قفل الجلسة', text: 'بيمسح المفتاح من هالجهاز فورًا.' },
+      ]},
+      admin: { label: 'لوحة التحكم — صفحة الكلية', steps: [
+        { sel: '#college-settings', title: 'إعدادات الكلية', text: 'الاسم، حد الساعات، حد الإنذار، ظاهرة أو مخفية، رسالة للطلاب، وأرقام واتساب. «حفظ ونشر» بيحدّثها عند الطلاب خلال دقيقة.' },
         { sel: '.bulk-panel', title: 'أدوات جماعية', text: 'رفع سعة الفئات (نظري، عملي، أو الكل) لكل المواد أو لمادة وحدة. الرفع بيغيّر السعة بس — مثلًا 25/37 ← 25/40 — وبيصحح حالة كل فئة حسب مقاعدها.' },
         { sel: '#bulk-preview', title: 'معاينة قبل التطبيق', text: 'بتشوف كم فئة رح تتغيّر، وكم ممتلئة رح تفتح، وتحذير إذا السعة صارت أقل من المسجلين. وبعد التطبيق في «تراجع».' },
-        { sel: '#editor-course-select', title: 'تعديل مادة', text: 'اختار مادة لتعدّل ساعاتها وأسماء فئاتها ومقاعدها وحالتها وأوقاتها. الحالة بتمشي مع المقاعد تلقائيًا.' },
+        { sel: '.admin-tabs', title: 'طريقتين للتعديل', text: '«تعديل مادة مادة»: بتختار مادة وبتعدّل فئاتها أو بتضيف وبتحذف. «تعديل شامل»: بتلصق data.json كامل وبتشوف ملخص التغييرات قبل النشر.' },
+        { sel: '#editor-course-select', title: 'تعديل مادة', text: 'اختار مادة لتعدّل ساعاتها وأسماء فئاتها ومقاعدها وحالتها وأوقاتها. وفيك تضيف مادة جديدة أو فئة نظري/عملي، أو تحذف.' },
         { sel: '#ic-save-btn', title: 'حفظ مؤقت', text: 'بيحفظ تعديلات المادة بذاكرة الصفحة.' },
         { sel: '#ic-publish-btn', title: 'نشر للطلاب', text: 'بينشر بيانات الكلية يلي عم تعدّلها وملف ساعاتها مباشرة على GitHub، وبيتحدّث الموقع للطلاب خلال دقيقة.' },
-        { sel: '[onclick="msLockAdminNow()"]', title: 'قفل الجلسة', text: 'بيمسح المفتاح من هالجهاز فورًا.' },
+        { sel: '[onclick="showAdminHome()"]', title: 'رجوع للكليات', text: 'بيرجّعك لصفحة كل الكليات. إذا في تعديلات ما نشرتها بينبهك قبل ما تنتقل لكلية تانية.' },
       ]},
     };
 
@@ -2246,7 +2262,8 @@ function renderTourStep() {
     // أي شاشة أنت فيها هلق؟
     function currentTourContext() {
       if (document.getElementById('editor-screen').style.display === 'block')
-        return document.getElementById('editor-main-content').style.display === 'block' ? 'admin' : 'admin_gate';
+        return document.getElementById('editor-main-content').style.display === 'block'
+          ? (document.getElementById('admin-home').style.display === 'block' ? 'admin_home' : 'admin') : 'admin_gate';
       const tab = document.body.dataset.mtab || 'results';
       if (tab === 'favorites') return 'favorites';
       if (tab === 'gpa') return 'gpa';
@@ -2577,6 +2594,7 @@ function renderTourStep() {
       document.getElementById('admin-college-view').style.display = 'none';
       document.getElementById('admin-home').style.display = 'block';
       document.getElementById('ic-editor-title').innerHTML = ic('gear') + ' لوحة التحكم';
+      maybeTour('admin_home');
       document.getElementById('admin-college-grid').innerHTML = colleges.map(c => {
         const isCur = currentCollege && currentCollege.id === c.id;
         const count = isCur ? Object.keys(parsedCourses).length : null;
@@ -2596,6 +2614,7 @@ function renderTourStep() {
       let tab = 'course'; try { tab = sessionStorage.getItem('spu_admin_tab') || (Object.keys(parsedCourses).length ? 'course' : 'bulk'); } catch (e) {}
       if (!Object.keys(parsedCourses).length) tab = 'bulk';   // كلية بدون مواد ← منبلش بلصق البيانات
       adminTab(tab);
+      maybeTour('admin');
     }
 
     window.adminOpenCollege = async function(id) {
