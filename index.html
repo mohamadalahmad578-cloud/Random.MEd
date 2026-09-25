@@ -146,6 +146,13 @@
   .college-admin summary{ cursor:pointer; font-weight:700; font-size:13px; color:var(--ink); }
   .college-admin .gh-fields{ margin-top:10px; }
   .college-admin textarea{ width:100%; min-height:120px; margin-top:8px; }
+  .college-manage-row{ display:grid; grid-template-columns:minmax(0,1fr) 100px auto auto; align-items:end; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .college-manage-row:last-child{ border-bottom:none; }
+  .college-manage-row label{ display:block; font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:4px; }
+  .college-manage-row label code{ font-weight:600; margin-inline-start:4px; }
+  .college-manage-row .editor-input{ width:100%; min-width:0; box-sizing:border-box; margin:0; }
+  .college-manage-row .btn{ margin:0; width:auto; white-space:nowrap; padding:8px 16px; font-size:12.5px; }
+  @media (max-width:560px){ .college-manage-row{ grid-template-columns:minmax(0,1fr) 90px; } }
   .college-admin-note{ font-size:11.5px; color:var(--ink-soft); line-height:1.7; margin:8px 0 0; }
 
   .container{ max-width:1320px; margin:26px auto; padding:0 18px 60px; }
@@ -956,6 +963,11 @@
             <button type="button" class="btn btn-teal" style="margin-top:8px;" onclick="importCollegeData()">استيراد البيانات</button>
           </details>
           <details>
+            <summary>🏫 إدارة الكليات (تعديل الاسم والساعات، حذف)</summary>
+            <div id="college-manage-list"></div>
+            <p class="college-admin-note">الحذف بيشيل الكلية من القائمة يلي بتطلع للطلاب بس — ملفات بياناتها بتضل على GitHub، وإذا رجعت ضفتها بنفس الرمز بترجع بياناتها.</p>
+          </details>
+          <details>
             <summary>➕ إضافة كلية جديدة</summary>
             <div class="gh-fields">
               <div><label>اسم الكلية</label><input type="text" id="new-college-name" class="editor-input" placeholder="مثال: كلية طب الأسنان"></div>
@@ -1104,6 +1116,7 @@
     // وأي كلية جديدة بياناتها بـ colleges/<id>/data.json و colleges/<id>/credits.json.
     const COLLEGE_KEY = 'spu_college';
     const PENDING_COLLEGES_KEY = 'spu_pending_colleges';
+    const PENDING_COLLEGES_MS = 5 * 60 * 1000;
     const COLLEGE_ID_RE = /^[a-z0-9-]{1,30}$/;
     const LEGACY_COLLEGE = 'med';          // بيانات الطلاب المحفوظة لهالكلية بتضل على المفاتيح القديمة بدون لاحقة
     const DEFAULT_COLLEGES = [{ id: 'med', name: 'كلية الطب البشري', data: 'data.json', credits: 'credits.json' }];
@@ -1137,12 +1150,10 @@
           && typeof c.name === 'string' && c.name.trim() && !seen.has(c.id) && seen.add(c.id));
         if (clean.length) colleges = clean;
       } catch (e) { /* بدون الملف منكمل بكلية الطب لحالها */ }
-      // كلية أضافها المشرف هلق: GitHub Pages بياخد دقيقة ليحدّث colleges.json، فمنضيفها من الجلسة لحد ما توصل
+      // المشرف عدّل القائمة هلق: GitHub Pages بياخد دقيقة ليحدّث colleges.json، فمنعتمد نسخته من الجلسة لكم دقيقة
       try {
-        const pending = JSON.parse(sessionStorage.getItem(PENDING_COLLEGES_KEY) || '[]').filter(c => c && COLLEGE_ID_RE.test(c.id));
-        const left = pending.filter(c => !colleges.some(x => x.id === c.id));
-        colleges = colleges.concat(left);
-        if (left.length) sessionStorage.setItem(PENDING_COLLEGES_KEY, JSON.stringify(left));
+        const pending = JSON.parse(sessionStorage.getItem(PENDING_COLLEGES_KEY) || 'null');
+        if (pending && Array.isArray(pending.list) && pending.list.length && Date.now() - pending.at < PENDING_COLLEGES_MS) colleges = pending.list;
         else sessionStorage.removeItem(PENDING_COLLEGES_KEY);
       } catch (e) {}
     }
@@ -2057,6 +2068,7 @@ function renderTourStep() {
       document.getElementById('admin-college-path').textContent = collegeDataPath(currentCollege);
       document.getElementById('admin-college-select').innerHTML = colleges.map(c =>
         `<option value="${esc(c.id)}" ${c.id === currentCollege.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
+      renderCollegeManager();
     }
 
     window.adminSwitchCollege = async function(id) {
@@ -2102,6 +2114,67 @@ function renderTourStep() {
       if (problems.length) console.warn('ملاحظات الاستيراد:', problems);
     };
 
+    // بينشر قائمة الكليات الجديدة على GitHub وبيحفظها بالجلسة لحد ما يتحدّث الموقع
+    async function publishColleges(next, message) {
+      const cfg = getGithubConfig();
+      if (!cfg) { toast('لازم تتحقق كمشرف أولًا.', 'error'); return false; }
+      try {
+        await githubPutJson(cfg, 'colleges.json', next, message);
+      } catch (e) {
+        toast('فشل نشر قائمة الكليات: ' + friendlyGithubError(e), 'error', 9000);
+        return false;
+      }
+      colleges = next;
+      try { sessionStorage.setItem(PENDING_COLLEGES_KEY, JSON.stringify({ at: Date.now(), list: next })); } catch (e) {}
+      return true;
+    }
+
+    function renderCollegeManager() {
+      const box = document.getElementById('college-manage-list');
+      if (!box) return;
+      box.innerHTML = colleges.map(c => `<div class="college-manage-row" data-id="${esc(c.id)}">
+          <div class="cm-name"><label>اسم الكلية <code dir="ltr">${esc(c.id)}</code></label><input type="text" class="editor-input cm-name-inp" value="${esc(c.name)}"></div>
+          <div class="cm-limit"><label>حد الساعات</label><input type="number" min="1" step="1" class="editor-input cm-limit-inp" value="${esc(Number(c.creditLimit) > 0 ? c.creditLimit : 25)}"></div>
+          <button type="button" class="btn btn-teal" onclick="saveCollegeRow('${esc(c.id)}')">حفظ</button>
+          <button type="button" class="btn btn-danger-ghost" onclick="deleteCollege('${esc(c.id)}')" ${colleges.length < 2 ? 'disabled title="لازم تضل كلية وحدة على الأقل"' : ''}>${ic('trash')} حذف</button>
+        </div>`).join('');
+    }
+
+    window.saveCollegeRow = async function(id) {
+      const row = document.querySelector(`.college-manage-row[data-id="${id}"]`);
+      const name = row.querySelector('.cm-name-inp').value.trim();
+      const limit = parseInt(row.querySelector('.cm-limit-inp').value, 10);
+      if (!name) { toast('اسم الكلية ما لازم يكون فاضي.', 'error'); return; }
+      if (!(limit > 0)) { toast('حد الساعات لازم يكون رقم أكبر من صفر.', 'error'); return; }
+      const next = colleges.map(c => {
+        if (c.id !== id) return c;
+        const e = Object.assign({}, c, { name });
+        if (limit !== 25) e.creditLimit = limit; else delete e.creditLimit;
+        return e;
+      });
+      if (!await publishColleges(next, `تعديل ${name} بقائمة الكليات`)) return;
+      if (currentCollege && currentCollege.id === id) {
+        currentCollege = colleges.find(c => c.id === id);
+        CREDIT_LIMIT = Number(currentCollege.creditLimit) > 0 ? Number(currentCollege.creditLimit) : 25;
+        renderCollegeChip();
+      }
+      renderCollegeAdmin();
+      toast(`تم حفظ «${name}». بيتحدّث عند الطلاب خلال دقيقة.`, 'success', 6000);
+    };
+
+    window.deleteCollege = async function(id) {
+      const c = colleges.find(x => x.id === id);
+      if (!c || colleges.length < 2) return;
+      if (!await uiConfirm(`متأكد إنك بدك تحذف «${c.name}» من قائمة الكليات؟ الطلاب ما عاد رح يشوفوها (ملفات بياناتها بتضل على GitHub).`, { okText: 'حذف', danger: true })) return;
+      const next = colleges.filter(x => x.id !== id);
+      if (!await publishColleges(next, `حذف ${c.name} من قائمة الكليات`)) return;
+      toast(`تم حذف «${c.name}».`, 'success', 6000);
+      if (currentCollege && currentCollege.id === id) {
+        // كنت عم تعدّل الكلية المحذوفة ← منروح على أول كلية بالقائمة
+        setTimeout(() => { try { localStorage.setItem(COLLEGE_KEY, next[0].id); } catch (e) {} location.href = collegeUrl(next[0].id, { admin: '1' }); }, 1200);
+      } else renderCollegeAdmin();
+    };
+
     window.addCollege = async function() {
       const name = document.getElementById('new-college-name').value.trim();
       const id = document.getElementById('new-college-id').value.trim().toLowerCase();
@@ -2109,23 +2182,11 @@ function renderTourStep() {
       if (!name) { toast('اكتب اسم الكلية.', 'error'); return; }
       if (!COLLEGE_ID_RE.test(id)) { toast('الرمز لازم يكون أحرف إنكليزية صغيرة أو أرقام أو -، بدون فراغات (مثال: dent).', 'error', 7000); return; }
       if (colleges.some(c => c.id === id)) { toast('في كلية بنفس الرمز.', 'error'); return; }
-      const cfg = getGithubConfig();
-      if (!cfg) { toast('لازم تتحقق كمشرف أولًا.', 'error'); return; }
       const entry = { id, name };
       if (Number.isFinite(limit) && limit > 0 && limit !== 25) entry.creditLimit = limit;
-      const next = colleges.concat([entry]);
-      try {
-        await githubPutJson(cfg, 'colleges.json', next, `إضافة ${name} لقائمة الكليات`);
-        colleges = next;
-        try {
-          const pending = JSON.parse(sessionStorage.getItem(PENDING_COLLEGES_KEY) || '[]');
-          sessionStorage.setItem(PENDING_COLLEGES_KEY, JSON.stringify(pending.concat([entry])));
-        } catch (e) {}
-        toast(`تمت إضافة «${name}». هلق منحوّلك عليها لتستورد بياناتها.`, 'success', 6000);
-        setTimeout(() => { try { localStorage.setItem(COLLEGE_KEY, id); } catch (e) {} location.href = collegeUrl(id, { admin: '1' }); }, 1500);
-      } catch (e) {
-        toast('فشل نشر قائمة الكليات: ' + friendlyGithubError(e), 'error', 9000);
-      }
+      if (!await publishColleges(colleges.concat([entry]), `إضافة ${name} لقائمة الكليات`)) return;
+      toast(`تمت إضافة «${name}». هلق منحوّلك عليها لتستورد بياناتها.`, 'success', 6000);
+      setTimeout(() => { try { localStorage.setItem(COLLEGE_KEY, id); } catch (e) {} location.href = collegeUrl(id, { admin: '1' }); }, 1500);
     };
 
     // ==========================================
