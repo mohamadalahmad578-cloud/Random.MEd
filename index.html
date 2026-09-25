@@ -1113,6 +1113,41 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <p class="college-admin-note">الحذف بيشيل الكلية من القائمة بس — ملفات بياناتها بتضل على GitHub، وإذا رجعت ضفتها بنفس الرمز بترجع بياناتها. إذا بدك توقفها مؤقتًا، شيل «ظاهرة للطلاب» أحسن.</p>
           </details>
         </div>
+        <details class="bulk-panel" open>
+          <summary>⚙️ أدوات جماعية — رفع السعة وتصحيح الحالات</summary>
+          <p class="bulk-note">الرفع بيزيد <strong>السعة بس</strong> (الرقم التاني) وما بيلمس عدد المسجلين: مثلًا <bdi>25/37</bdi> مع رفع 3 ← <bdi>25/40</bdi>. وبعد الرفع بتتصحح حالة كل فئة لحالها: فيها مقاعد ← «فئة متاحة»، ما فيها ← «فئة ممتلئة».</p>
+          <div class="bulk-grid">
+            <div class="bulk-field"><label>نوع الفئات</label>
+              <div class="bulk-seg" role="radiogroup">
+                <label><input type="radio" name="bulk-type" value="all" checked onchange="bulkPreview()"> الكل</label>
+                <label><input type="radio" name="bulk-type" value="theory" onchange="bulkPreview()"> النظري</label>
+                <label><input type="radio" name="bulk-type" value="practical" onchange="bulkPreview()"> العملي</label>
+              </div></div>
+            <div class="bulk-field"><label for="bulk-scope">المواد</label>
+  <select id="bulk-scope" class="editor-input" onchange="onBulkScopeChange()"><option value="">كل المواد</option></select></div>
+<div id="bulk-exceptions-wrap" style="grid-column: 1 / -1; display: block; margin-top: 4px;">
+  <label style="font-size:11.5px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:6px;">
+    استثناء مواد من الرفع (اختياري عند اختيار كل المواد):
+  </label>
+  <div id="bulk-exceptions-list" style="display:flex; flex-wrap:wrap; gap:6px; max-height:120px; overflow-y:auto; padding:6px; background:var(--surface); border:1px solid var(--line); border-radius:10px;">
+  </div>
+</div>
+            <div class="bulk-field"><label for="bulk-mode">العملية</label>
+              <select id="bulk-mode" class="editor-input" onchange="bulkPreview()">
+                <option value="add">زيادة السعة بمقدار</option>
+                <option value="set">تعيين السعة إلى</option>
+              </select></div>
+            <div class="bulk-field"><label for="bulk-amount">الرقم</label>
+              <input id="bulk-amount" type="number" min="1" step="1" value="3" class="editor-input" oninput="bulkPreview()"></div>
+          </div>
+          <label class="bulk-check"><input type="checkbox" id="bulk-include-closed" onchange="bulkPreview()"> صحّح كمان الفئات «المغلقة» إداريًا (افتراضيًا ما منلمسها)</label>
+          <div class="bulk-preview" id="bulk-preview" aria-live="polite"></div>
+          <div class="bulk-actions">
+            <button type="button" class="btn btn-teal" id="bulk-apply-btn" onclick="bulkApply()">⬆️ طبّق الرفع</button>
+            <button type="button" class="btn btn-secondary" onclick="bulkFixStatuses()">✔️ صحّح حالات كل الفئات بدون رفع</button>
+          </div>
+        </details>
+
         <div class="admin-tabs" role="tablist">
           <button type="button" role="tab" data-tab="course" class="on" onclick="adminTab('course')">✏️ تعديل مادة مادة</button>
           <button type="button" role="tab" data-tab="bulk" onclick="adminTab('bulk')">📋 تعديل شامل</button>
@@ -1131,40 +1166,6 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <div id="import-preview" class="bulk-preview" aria-live="polite">الصق البيانات لتشوف الملخص هون.</div>
             <button type="button" class="btn btn-primary" id="import-publish-btn" onclick="importAndPublish()" disabled>نشر على GitHub</button>
           </div>
-          <details class="bulk-panel">
-            <summary>⚙️ أدوات جماعية — رفع السعة وتصحيح الحالات</summary>
-            <p class="bulk-note">الرفع بيزيد <strong>السعة بس</strong> (الرقم التاني) وما بيلمس عدد المسجلين: مثلًا <bdi>25/37</bdi> مع رفع 3 ← <bdi>25/40</bdi>. وبعد الرفع بتتصحح حالة كل فئة لحالها: فيها مقاعد ← «فئة متاحة»، ما فيها ← «فئة ممتلئة».</p>
-            <div class="bulk-grid">
-              <div class="bulk-field"><label>نوع الفئات</label>
-                <div class="bulk-seg" role="radiogroup">
-                  <label><input type="radio" name="bulk-type" value="all" checked onchange="bulkPreview()"> الكل</label>
-                  <label><input type="radio" name="bulk-type" value="theory" onchange="bulkPreview()"> النظري</label>
-                  <label><input type="radio" name="bulk-type" value="practical" onchange="bulkPreview()"> العملي</label>
-                </div></div>
-              <div class="bulk-field"><label for="bulk-scope">المواد</label>
-  <select id="bulk-scope" class="editor-input" onchange="onBulkScopeChange()"><option value="">كل المواد</option></select></div>
-<div id="bulk-exceptions-wrap" style="grid-column: 1 / -1; display: block; margin-top: 4px;">
-  <label style="font-size:11.5px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:6px;">
-    استثناء مواد من الرفع (اختياري عند اختيار كل المواد):
-  </label>
-  <div id="bulk-exceptions-list" style="display:flex; flex-wrap:wrap; gap:6px; max-height:120px; overflow-y:auto; padding:6px; background:var(--surface); border:1px solid var(--line); border-radius:10px;">
-  </div>
-</div>
-              <div class="bulk-field"><label for="bulk-mode">العملية</label>
-                <select id="bulk-mode" class="editor-input" onchange="bulkPreview()">
-                  <option value="add">زيادة السعة بمقدار</option>
-                  <option value="set">تعيين السعة إلى</option>
-                </select></div>
-              <div class="bulk-field"><label for="bulk-amount">الرقم</label>
-                <input id="bulk-amount" type="number" min="1" step="1" value="3" class="editor-input" oninput="bulkPreview()"></div>
-            </div>
-            <label class="bulk-check"><input type="checkbox" id="bulk-include-closed" onchange="bulkPreview()"> صحّح كمان الفئات «المغلقة» إداريًا (افتراضيًا ما منلمسها)</label>
-            <div class="bulk-preview" id="bulk-preview" aria-live="polite"></div>
-            <div class="bulk-actions">
-              <button type="button" class="btn btn-teal" id="bulk-apply-btn" onclick="bulkApply()">⬆️ طبّق الرفع</button>
-              <button type="button" class="btn btn-secondary" onclick="bulkFixStatuses()">✔️ صحّح حالات كل الفئات بدون رفع</button>
-            </div>
-          </details>
 
         </div>
 
