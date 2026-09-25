@@ -1458,26 +1458,36 @@
       if (r.width < 1 || r.height < 1) { spot.style.opacity = '0'; card.style.opacity = '0'; return; }
       spot.style.opacity = '1'; card.style.opacity = '1';
 
-      const winW = window.innerWidth, winH = window.innerHeight, pad = 6;
+      // الجزء الظاهر فعليًا للعين (visualViewport). على التابلت بوضع «موقع سطح المكتب» أو مع تكبير
+      // بالإصبعين، هاد بيكون أصغر من عرض الصفحة، ولازم البطاقة تنحط جوّاه هو — مش جوّا عرض الصفحة كله.
+      const vv = window.visualViewport;
+      const vL = vv ? vv.offsetLeft : 0, vT = vv ? vv.offsetTop : 0;
+      const vW = vv ? vv.width : window.innerWidth, vH = vv ? vv.height : window.innerHeight;
+      const winW = vL + vW, winH = vT + vH, pad = 6;
+      const zoom = vv ? vv.scale || 1 : 1;
 
-      // حدود آمنة: تحت الهيدر اللاصق فوق، وفوق الشريط السفلي (لو ظاهر)
+      // حدود آمنة: تحت الهيدر اللاصق فوق، وفوق الشريط السفلي (لو ظاهر) — ومحصورة بالجزء الظاهر
       const header = document.querySelector('.header');
       const headerBox = header ? header.getBoundingClientRect() : null;
       const headerH = (headerBox && getComputedStyle(header).position === 'sticky' && headerBox.bottom > 0) ? headerBox.bottom : 0;
       const bottomNav = document.querySelector('.bottom-nav');
-      const navH = (bottomNav && getComputedStyle(bottomNav).display !== 'none') ? bottomNav.getBoundingClientRect().height : 0;
-      const safeTop = headerH + 8, safeBottom = winH - navH - 8, safeH = safeBottom - safeTop;
+      const navTop = (bottomNav && getComputedStyle(bottomNav).display !== 'none') ? bottomNav.getBoundingClientRect().top : Infinity;
+      const safeTop = Math.max(vT, headerH) + 8, safeBottom = Math.min(winH, navTop) - 8, safeH = safeBottom - safeTop;
+      // البطاقة ما لازم تكون أعرض من الجزء الظاهر
+      card.style.width = Math.min(330, vW - 24) + 'px';
       const gap = 14, minUseful = 70;   // أقل ارتفاع بطاقة مفيد (بعده منعتبر المساحة "ما بتكفي")
 
-      // قياس أولي بأقصى ارتفاع ممكن (المساحة الآمنة كلها) لنعرف طول المحتوى الطبيعي
-      card.style.maxHeight = Math.max(minUseful, safeH - 8) + 'px';
+      // قياس أولي: على الشاشات (أو الأجزاء الظاهرة) القصيرة، البطاقة ما بتاخد أكتر من نص المساحة تقريبًا
+      // وبيتمرر نصها جوّاها — حتى يضل مطرح للعنصر المشروح نفسه
+      const cardCap = vH < 620 ? Math.max(150, safeH * 0.5) : safeH - 8;
+      card.style.maxHeight = Math.max(minUseful, Math.min(safeH - 8, cardCap)) + 'px';
       let ch = card.offsetHeight || 160;
       const cw = card.offsetWidth || 300;
 
       const spotTop = Math.max(2, r.top - pad), spotBottom = Math.min(winH - 2, r.bottom + pad);   // الإضاءة بتتبع العنصر بإحداثيات الشاشة الحقيقية دايمًا
       spot.style.top = spotTop + 'px';
-      spot.style.left = Math.max(2, r.left - pad) + 'px';
-      spot.style.width = Math.min(winW - 4, r.width + pad * 2) + 'px';
+      spot.style.left = (r.left - pad) + 'px';
+      spot.style.width = (r.width + pad * 2) + 'px';
       spot.style.height = Math.max(4, spotBottom - spotTop) + 'px';
 
       // مكان البطاقة لازم يضل بالمنطقة الآمنة (مو تحت الهيدر اللاصق ولا فوق الشريط السفلي)
@@ -1485,6 +1495,18 @@
       const cardZoneTop = Math.max(spotTop, safeTop), cardZoneBottom = Math.min(spotBottom, safeBottom);
       const spaceBelow = safeBottom - cardZoneBottom - gap, spaceAbove = cardZoneTop - safeTop - gap;
       let top;
+      // عنصر أطول من المساحة المتاحة (ولا تحته ولا فوقه بتسع البطاقة): منأطّر أوله بس
+      // (العنوان وبداية المحتوى) ومنحط البطاقة تحت الجزء المأطّر مباشرة — بدون أي تغطية.
+      if (ch > spaceBelow && ch > spaceAbove) {
+        const trimmedBottom = safeBottom - gap - ch;
+        if (trimmedBottom - Math.max(spotTop, safeTop) >= Math.min(80, safeH * 0.25)) {
+          spot.style.height = Math.max(4, trimmedBottom - spotTop) + 'px';
+          card.style.top = (trimmedBottom + gap) + 'px';
+          let l = r.left + r.width / 2 - cw / 2;
+          card.style.left = Math.max(vL + 8, Math.min(l, winW - cw - 8)) + 'px';   // جوّا الجزء الظاهر (حتى مع التكبير)
+          return;
+        }
+      }
       if (ch <= spaceBelow) {
         top = cardZoneBottom + gap;                                 // بحجمها الطبيعي تحت الإضاءة (أو تحت الهيدر إذا العنصر جواته)
       } else if (ch <= spaceAbove) {
@@ -1501,7 +1523,7 @@
       top = Math.max(safeTop + 4, Math.min(top, safeBottom - ch - 4));
 
       let left = r.left + r.width / 2 - cw / 2;
-      left = Math.max(8, Math.min(left, winW - cw - 8));
+      left = Math.max(vL + 8, Math.min(left, winW - cw - 8));
 
       card.style.top = top + 'px';
       card.style.left = left + 'px';
@@ -1532,9 +1554,9 @@ function renderTourStep() {
 
   let card = document.querySelector('.tour-card');
   if (!card) {
-    const spot = document.createElement('div'); spot.className = 'tour-spot'; document.body.appendChild(spot);
+    const spot = document.createElement('div'); spot.className = 'tour-spot'; document.documentElement.appendChild(spot);   // برّا الـbody المكبّر (A+/A-)
     card = document.createElement('div'); card.className = 'tour-card'; card.setAttribute('role', 'dialog'); card.setAttribute('aria-modal', 'true');
-    document.body.appendChild(card);
+    document.documentElement.appendChild(card);
   }
   const total = tour.steps.length, last = tour.idx === total - 1;
   card.setAttribute('aria-label', `شرح: ${TOURS[tour.name].label}`);
