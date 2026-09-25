@@ -758,7 +758,7 @@
   /* ---------- theme toggle ---------- */
   .bottom-nav{ display:none; }
   @media (max-width: 920px){
-    body:has(#app-screen[style*="block"]) .bottom-nav{ display:grid; grid-template-columns:repeat(3, 1fr); position:fixed; left:0; right:0; bottom:0; z-index:900;
+    body:has(#app-screen[style*="block"]) .bottom-nav{ display:grid; grid-template-columns:repeat(4, 1fr); position:fixed; left:0; right:0; bottom:0; z-index:900;
       padding:6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); background:var(--surface); border-top:1px solid var(--line); box-shadow:0 -6px 22px rgba(20,27,46,.12); }
     .bottom-nav button{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-height:54px; border:none; background:none;
       border-radius:12px; font-family:var(--font-body); font-size:11.5px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:color .15s, background-color .15s; }
@@ -769,8 +769,8 @@
     .bn-badge{ position:absolute; top:5px; inset-inline-start:calc(50% + 6px); min-width:18px; height:18px; padding:0 5px; border-radius:999px; background:var(--brass-badge); color:#fff; font-size:10px; font-family:var(--font-mono); display:inline-flex; align-items:center; justify-content:center; }
     .bn-badge[hidden]{ display:none; }
     body:has(#app-screen[style*="block"]) .container{ padding-bottom:96px; }
-    body[data-mtab="myschedule"] .sidebar, body[data-mtab="favorites"] .sidebar,
-    body[data-mtab="myschedule"] .welcome-banner, body[data-mtab="favorites"] .welcome-banner{ display:none !important; }
+    body[data-mtab="myschedule"] .sidebar, body[data-mtab="favorites"] .sidebar, body[data-mtab="gpa"] .sidebar,
+    body[data-mtab="myschedule"] .welcome-banner, body[data-mtab="favorites"] .welcome-banner, body[data-mtab="gpa"] .welcome-banner{ display:none !important; }
     .main-content > .results-tabs{ display:none; }                   /* بالموبايل التنقّل صار من تحت (التبويبات الفرعية بجدولي بتضل) */
     body:has(#app-screen[style*="block"]) .whatsapp-fab{ bottom:84px; }
     body:has(#app-screen[style*="block"]) .wa-menu{ bottom:144px; }
@@ -930,6 +930,59 @@
 .editor-input:focus, #search:focus, .ms-search:focus, .ui-modal-input:focus, .wz-combo-field:focus-within{ border-color:var(--brass) !important; background:var(--surface); outline:none; }
 :root[data-theme="dark"] .editor-input, :root[data-theme="dark"] #search{ background:#1A2338; }
 .college-admin .editor-input, .bulk-panel .editor-input, .editor-section .editor-input, .gh-panel .editor-input{ background:var(--surface); }
+
+/* ---------- حساب المعدل ---------- */
+#gpa-container{ background:var(--paper); border-radius:12px; padding:20px; flex-grow:1; overflow-y:auto; min-height:0; animation:fadeInUp .3s ease; }
+.results-tab#tab-gpa.active{ color:var(--brass-deep); }
+.gpa-card{ background:var(--surface); border-radius:14px; padding:16px; margin-bottom:14px; box-shadow:0 1px 2px rgba(20,27,46,.05), 0 4px 14px rgba(20,27,46,.06); }
+.gpa-card h3{ margin:0 0 4px; font-family:var(--font-display); font-size:16px; color:var(--ink); display:flex; align-items:center; gap:8px; }
+.gpa-card > p{ margin:0 0 12px; font-size:12px; color:var(--ink-soft); line-height:1.7; }
+.gpa-summary{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
+.gpa-stat{ background:var(--paper); border-radius:12px; padding:12px; text-align:center; }
+.gpa-stat .v{ font-family:var(--font-display); font-size:26px; font-weight:800; color:var(--ink); line-height:1.2; }
+.gpa-stat .l{ font-size:11.5px; color:var(--ink-soft); font-weight:700; }
+.gpa-stat .s{ font-size:11px; color:var(--ink-soft); margin-top:2px; }
+.gpa-stat.main .v{ color:var(--brass-deep); }
+.gpa-stat.warn{ background:var(--rose-soft); }
+.gpa-stat.warn .v, .gpa-stat.warn .s{ color:var(--rose-text); }
+.gpa-bar{ position:relative; height:8px; border-radius:99px; margin:14px 4px 4px; direction:ltr; opacity:.85; }
+.gpa-bar i{ position:absolute; top:50%; width:16px; height:16px; border-radius:50%; background:var(--surface); border:3px solid var(--ink); transform:translate(-50%,-50%); transition:left .25s ease; }
+.gpa-bar-labels{ position:relative; height:16px; font-size:10.5px; color:var(--ink-soft); direction:ltr; margin:0 4px; }
+.gpa-bar-labels span{ position:absolute; top:0; transform:translateX(-50%); white-space:nowrap; }
+.gpa-bar-labels span:first-child{ transform:none; }
+.gpa-bar-labels span:last-child{ transform:translateX(-100%); }
+.gpa-rows{ display:flex; flex-direction:column; gap:8px; }
+.gpa-row{ display:grid; grid-template-columns:minmax(0,1fr) 70px 120px 70px auto; gap:8px; align-items:center; background:var(--paper); border-radius:12px; padding:8px 10px; }
+.gpa-row .editor-input{ width:100%; box-sizing:border-box; margin:0; background:var(--surface); }
+.gpa-row .gpa-name{ font-weight:700; }
+.gpa-row .gpa-del{ border:none; background:none; color:var(--ink-soft); cursor:pointer; padding:6px; border-radius:8px; }
+.gpa-row .gpa-del:hover{ color:var(--rose-text); background:var(--rose-soft); }
+.gpa-repeat{ grid-column:1 / -1; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--ink-soft); }
+.gpa-repeat label{ display:inline-flex; align-items:center; gap:5px; cursor:pointer; }
+.gpa-repeat select{ width:auto !important; padding:4px 8px; }
+.gpa-head{ display:grid; grid-template-columns:minmax(0,1fr) 70px 120px 70px auto; gap:8px; font-size:11px; font-weight:800; color:var(--ink-soft); padding:0 10px 4px; }
+.gpa-head span:last-child{ width:30px; }
+.gpa-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.gpa-actions .btn{ margin-top:0; }
+.gpa-two{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.gpa-two label, .gpa-target label{ display:block; font-size:11.5px; font-weight:700; color:var(--ink-soft); margin-bottom:4px; }
+.gpa-two .editor-input, .gpa-target .editor-input{ width:100%; box-sizing:border-box; margin:0; }
+.gpa-target{ display:grid; grid-template-columns:160px 1fr; gap:12px; align-items:end; }
+.gpa-target-out{ background:var(--paper); border-radius:12px; padding:10px 12px; font-size:13px; line-height:1.8; min-height:44px; }
+.gpa-target-out strong{ font-family:var(--font-display); font-size:16px; }
+.gpa-target-out.bad{ background:var(--rose-soft); color:var(--rose-text); }
+.gpa-target-out.good{ background:var(--teal-soft); color:var(--teal-text); }
+.gpa-empty{ text-align:center; color:var(--ink-soft); font-size:13px; padding:14px; background:var(--paper); border-radius:12px; }
+@media (max-width:640px){
+  #gpa-container{ padding:10px !important; }
+  .gpa-head{ display:none; }
+  .gpa-row{ grid-template-columns:62px minmax(0,1fr) 62px auto; }
+  .gpa-row .gpa-name{ grid-column:1 / -1; }
+  .gpa-summary{ grid-template-columns:1fr 1fr; }
+  .gpa-summary .gpa-stat.main{ grid-column:1 / -1; }
+  .gpa-two, .gpa-target{ grid-template-columns:1fr; }
+}
+@media print{ #gpa-container{ background:#fff !important; padding:0 !important; } }
 
 /* ---------- تبويبات صفحة الكلية ---------- */
 .admin-tabs{ display:flex; gap:4px; background:var(--paper); border-radius:12px; padding:4px; margin:4px 0 16px; }
@@ -1103,6 +1156,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
               <div><label>اسم الكلية</label><input type="text" id="cs-name" class="editor-input"></div>
               <div><label>حد الساعات بالفصل</label><input type="number" id="cs-limit" class="editor-input" min="1" step="1"></div>
               <label class="gh-remember cs-visible"><input type="checkbox" id="cs-visible"> ظاهرة للطلاب</label>
+              <div><label>حد الإنذار الأكاديمي (المعدل)</label><input type="number" id="cs-probation" class="editor-input" min="0" max="4" step="0.01" placeholder="2.00"></div>
               <div class="cs-wide"><label>رسالة للطلاب (بتطلع فوق الجدول — اتركها فاضية لتخفيها)</label><textarea id="cs-notice" class="editor-input" rows="2" placeholder="مثال: التسجيل بيفتح يوم الأحد الساعة 9 الصبح"></textarea></div>
               <div class="cs-wide"><label>أرقام واتساب للتواصل (رقم بكل سطر، مع رمز الدولة — فاضية = الأرقام العامة)</label><textarea id="cs-whatsapp" class="editor-input" rows="3" dir="ltr" placeholder="963995077268"></textarea></div>
             </div>
@@ -1230,10 +1284,12 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <button class="results-tab active" id="tab-results" role="tab" onclick="switchResultsTab('results')"></button>
             <button class="results-tab" id="tab-favorites" role="tab" onclick="switchResultsTab('favorites')"></button>
             <button class="results-tab" id="tab-myschedule" role="tab" onclick="switchResultsTab('myschedule')"></button>
+            <button class="results-tab" id="tab-gpa" role="tab" onclick="switchResultsTab('gpa')"></button>
           </div>
           <div id="results-container"></div>
           <div id="favorites-container" style="display:none;"></div>
           <div id="myschedule-container" style="display:none;"></div>
+          <div id="gpa-container" style="display:none;"></div>
         </div>
       </div>
     </div>
@@ -1260,6 +1316,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
   <nav id="bottom-nav" class="bottom-nav" aria-label="التنقّل الرئيسي">
     <button type="button" data-tab="results" onclick="mobileNav('results')"><span class="bn-icon" data-ic="zap"></span><span>التوليد</span></button>
     <button type="button" data-tab="myschedule" onclick="mobileNav('myschedule')"><span class="bn-icon" data-ic="edit"></span><span>جدولي</span><span class="bn-badge" id="bn-badge-myschedule"></span></button>
+    <button type="button" data-tab="gpa" onclick="mobileNav('gpa')"><span class="bn-icon" data-ic="calc"></span><span>المعدل</span></button>
     <button type="button" data-tab="favorites" onclick="mobileNav('favorites')"><span class="bn-icon" data-ic="star"></span><span>المفضّلة</span><span class="bn-badge" id="bn-badge-favorites"></span></button>
   </nav>
   <div id="gen-fab" class="gen-fab" hidden>
@@ -1409,6 +1466,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       const paths = {
         search: '<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
         plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+        calc: '<rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="16" y1="11" x2="16" y2="11.01"/><line x1="8" y1="15" x2="8" y2="15.01"/><line x1="12" y1="15" x2="12" y2="15.01"/><line x1="16" y1="15" x2="16" y2="18"/><line x1="8" y1="18" x2="12" y2="18"/>',
         palette: '<circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.15-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-5-4.5-9-10-9z"/>',
         gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
         trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
@@ -1643,6 +1701,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       document.getElementById('palette-btn').innerHTML = ic('palette');
       document.getElementById('ic-generate-btn').innerHTML = ic('zap') + ' توليد الجداول';
       document.getElementById('tab-results').innerHTML = ic('calendar') + ' نتائج التوليد';
+      document.getElementById('tab-gpa').innerHTML = ic('calc') + ' المعدل';
       updateFavoritesTabLabel();
       updateMyScheduleTabLabel();
       document.getElementById('search').insertAdjacentHTML('beforebegin', ic('search'));
@@ -2300,7 +2359,7 @@ function renderTourStep() {
       renderPrefsPanel();
       // رجوع لنفس التبويب يلي كان فاتحه الطالب قبل ما يحدّث الصفحة
       let lastTab = null; try { lastTab = localStorage.getItem(ckey('spu_last_tab')); } catch (e) {}
-      if (lastTab === 'favorites' || lastTab === 'myschedule') switchResultsTab(lastTab);
+      if (lastTab === 'favorites' || lastTab === 'myschedule' || lastTab === 'gpa') switchResultsTab(lastTab);
       else { document.body.dataset.mtab = 'results'; updateBottomNav(); }
       initGenFab();
       renderWelcome();
@@ -2446,6 +2505,7 @@ function renderTourStep() {
       document.getElementById('cs-name').value = c.name;
       document.getElementById('cs-limit').value = Number(c.creditLimit) > 0 ? c.creditLimit : 25;
       document.getElementById('cs-visible').checked = !c.hidden;
+      document.getElementById('cs-probation').value = Number(c.probation) > 0 ? c.probation : '';
       document.getElementById('cs-notice').value = c.notice || '';
       document.getElementById('cs-whatsapp').value = (Array.isArray(c.whatsapp) ? c.whatsapp : []).join('\n');
       document.getElementById('cs-delete-btn').disabled = colleges.length < 2;
@@ -2622,9 +2682,12 @@ function renderTourStep() {
       const badNum = nums.find(n => n.length < 8 || n.length > 15);
       if (badNum) { toast(`الرقم ${badNum} مو مزبوط — اكتبه مع رمز الدولة (مثال: 963995077268).`, 'error', 7000); return; }
       const hidden = !document.getElementById('cs-visible').checked;
+      const probRaw = document.getElementById('cs-probation').value.trim(), prob = parseFloat(probRaw);
+      if (probRaw && !(prob > 0 && prob <= 4)) { toast('حد الإنذار لازم يكون بين 0 و 4.', 'error'); return; }
       if (hidden && colleges.every(c => c.id === id || c.hidden) && !await uiConfirm('هيك ما رح يضل ولا كلية ظاهرة للطلاب. متأكد؟', { danger: true })) return;
       const entry = Object.assign({}, currentCollege, { name });
-      ['creditLimit', 'hidden', 'notice', 'whatsapp'].forEach(k => delete entry[k]);
+      ['creditLimit', 'hidden', 'notice', 'whatsapp', 'probation'].forEach(k => delete entry[k]);
+      if (probRaw && prob !== 2) entry.probation = prob;
       if (limit !== 25) entry.creditLimit = limit;
       if (hidden) entry.hidden = true;
       if (notice) entry.notice = notice;
@@ -4232,7 +4295,7 @@ function populateBulkScope() {
     };
 
     window.switchResultsTab = function(tab) {
-      const tabs = { results: 'results-container', favorites: 'favorites-container', myschedule: 'myschedule-container' };
+      const tabs = { results: 'results-container', favorites: 'favorites-container', myschedule: 'myschedule-container', gpa: 'gpa-container' };
       if (!tabs[tab]) tab = 'results';
       Object.keys(tabs).forEach(t => {
         document.getElementById('tab-' + t).classList.toggle('active', t === tab);
@@ -4242,6 +4305,7 @@ function populateBulkScope() {
       try { localStorage.setItem(ckey('spu_last_tab'), tab); } catch (e) {}   // نرجع لنفس التبويب بعد تحديث الصفحة
       if (tab === 'favorites') { renderFavorites(); maybeTour('favorites'); }
       else if (tab === 'myschedule') { msUI = { mode: 'view', data: null }; renderMySchedule(); }
+      else if (tab === 'gpa') renderGPA();
       else syncResultStars();
       updateBottomNav();
       if (typeof updateGenFab === 'function') updateGenFab();
@@ -4606,6 +4670,174 @@ function populateBulkScope() {
     function undoDepth() {
       try { return (JSON.parse(localStorage.getItem(undoKey()) || '[]')).length; } catch (e) { return 0; }
     }
+
+    // ==========================================
+    //                حساب المعدل
+    // ==========================================
+    // سلّم العلامات (من 4.00) — كلية فيها تغيّره بـ gradeScale بـ colleges.json
+    const DEFAULT_GRADE_SCALE = [
+      { l: 'A+', p: 4.00, min: 98 }, { l: 'A', p: 3.75, min: 95 }, { l: 'A-', p: 3.50, min: 90 },
+      { l: 'B+', p: 3.25, min: 85 }, { l: 'B', p: 3.00, min: 80 }, { l: 'B-', p: 2.75, min: 75 },
+      { l: 'C+', p: 2.50, min: 70 }, { l: 'C', p: 2.25, min: 65 }, { l: 'C-', p: 2.00, min: 60 },
+      { l: 'D+', p: 1.75, min: 55 }, { l: 'D', p: 1.50, min: 50 }, { l: 'F', p: 0.00, min: 0 },
+    ];
+    const GPA_KEY = ckey('spu_gpa_v1');
+    function gradeScale() {
+      const g = currentCollege && Array.isArray(currentCollege.gradeScale) ? currentCollege.gradeScale.filter(x => x && x.l && Number.isFinite(+x.p) && Number.isFinite(+x.min)) : [];
+      return (g.length ? g.map(x => ({ l: String(x.l), p: +x.p, min: +x.min })) : DEFAULT_GRADE_SCALE).slice().sort((a, b) => b.min - a.min);
+    }
+    function probationLimit() { const v = currentCollege && Number(currentCollege.probation); return v > 0 ? v : 2.0; }
+    function gradePoints(letter) { const g = gradeScale().find(x => x.l === letter); return g ? g.p : null; }
+    function letterForPercent(pct) { const n = parseFloat(pct); if (!Number.isFinite(n) || n < 0 || n > 100) return ''; return (gradeScale().find(x => n >= x.min) || {}).l || ''; }
+    function fmtGpa(v) { return Number.isFinite(v) ? v.toFixed(2) : '—'; }
+
+    function loadGPA() {
+      let st = null; try { st = JSON.parse(localStorage.getItem(GPA_KEY) || 'null'); } catch (e) {}
+      if (!st || typeof st !== 'object') st = {};
+      if (!Array.isArray(st.rows)) st.rows = [];
+      return st;
+    }
+    function saveGPA(st) { try { localStorage.setItem(GPA_KEY, JSON.stringify(st)); } catch (e) {} }
+    let gpaState = null;
+    function gpaRowId() { return 'g' + Math.random().toString(36).slice(2, 9); }
+
+    function computeGPA(st) {
+      let semP = 0, semH = 0, repH = 0, repP = 0, newDone = 0, rowsH = 0;
+      st.rows.forEach(r => {
+        const h = parseFloat(r.hours);
+        if (!(h > 0)) return;
+        rowsH += h;
+        const oldP = r.repeat ? gradePoints(r.oldGrade) : null;
+        if (oldP != null) { repH += h; repP += oldP * h; }
+        const p = gradePoints(r.grade);
+        if (p == null) return;
+        semP += p * h; semH += h;
+        if (r.grade !== 'F' && !(oldP != null && r.oldGrade !== 'F')) newDone += h;   // المعادة الناجحة ما بتزيد الساعات المنجزة
+      });
+      const cg = parseFloat(st.cgpa), H = parseFloat(st.done);
+      const hasPrev = Number.isFinite(cg) && cg >= 0 && cg <= 4 && H > 0;
+      const baseP = hasPrev ? cg * H - repP : 0, baseH = hasPrev ? H - repH : 0;   // العلامة الجديدة بتحل محل القديمة
+      const cumH = baseH + semH;
+      return {
+        sem: semH ? semP / semH : NaN, semH,
+        cum: cumH > 0 && (hasPrev || semH) ? (baseP + semP) / cumH : NaN,
+        hasPrev, done: (hasPrev ? H : 0) + newDone, rowsH, baseP, baseH,
+      };
+    }
+
+    function gpaTargetHTML(st, r) {
+      const t = parseFloat(st.target);
+      if (!Number.isFinite(t)) return 'اكتب المعدل التراكمي يلي بدك توصلو، وبقلّك شو لازم تجيب بهالفصل.';
+      if (t <= 0 || t > 4) return 'المعدل لازم يكون بين 0 و 4.';
+      if (!r.hasPrev) return 'عبّي معدلك التراكمي الحالي وساعاتك المنجزة فوق أولًا.';
+      if (!(r.rowsH > 0)) return 'ضيف مواد هالفصل مع ساعاتها أولًا.';
+      const need = (t * (r.baseH + r.rowsH) - r.baseP) / r.rowsH;
+      if (need > 4) return { cls: 'bad', html: `ما بتقدر توصل لـ <strong>${t.toFixed(2)}</strong> بهالفصل — حتى لو جبت +A بكل المواد بيطلع تراكميك <strong>${fmtGpa((r.baseP + 4 * r.rowsH) / (r.baseH + r.rowsH))}</strong>.` };
+      if (need <= 0) return { cls: 'good', html: `مضمون 👌 — تراكميك رح يضل فوق <strong>${t.toFixed(2)}</strong> مهما جبت بهالفصل.` };
+      const g = gradeScale().slice().reverse().find(x => x.p >= need - 1e-9);
+      return { cls: '', html: `لازم معدل فصلك يكون <strong>${need.toFixed(2)}</strong> على الأقل (${r.rowsH} ساعة) — يعني تقريبًا <strong>${esc(g ? g.l : 'A+')}</strong> أو أعلى بالمتوسط.` };
+    }
+
+    function renderGPAResults() {
+      const st = gpaState, r = computeGPA(st), lim = probationLimit();
+      const box = document.getElementById('gpa-results'); if (!box) return;
+      const warnCum = Number.isFinite(r.cum) && r.cum < lim, warnSem = Number.isFinite(r.sem) && r.sem < lim;
+      const pos = Number.isFinite(r.cum) ? r.cum : r.sem;
+      box.innerHTML = `<div class="gpa-summary">
+          <div class="gpa-stat main ${warnCum ? 'warn' : ''}"><div class="l">المعدل التراكمي الجديد</div><div class="v">${fmtGpa(r.cum)}</div><div class="s">${warnCum ? `⚠️ تحت ${lim.toFixed(2)} — إنذار أكاديمي` : (r.hasPrev ? `كان ${fmtGpa(parseFloat(st.cgpa))}` : 'عبّي معدلك السابق لتحسبو')}</div></div>
+          <div class="gpa-stat ${warnSem ? 'warn' : ''}"><div class="l">معدل هالفصل</div><div class="v">${fmtGpa(r.sem)}</div><div class="s">${r.semH ? `${r.semH} ساعة` : 'اختار علامات'}</div></div>
+          <div class="gpa-stat"><div class="l">الساعات المنجزة</div><div class="v">${r.done || '—'}</div><div class="s">بعد هالفصل</div></div>
+        </div>
+        ${Number.isFinite(pos) ? (() => { const L = lim / 4 * 100, G = 75;   // أحمر تحت الإنذار، ذهبي لحد 3.00، أخضر فوقها
+          return `<div class="gpa-bar" style="background:linear-gradient(90deg, var(--rose) 0 ${L}%, var(--brass) ${L}% ${G}%, var(--teal) ${G}% 100%)"><i style="left:${Math.max(0, Math.min(100, pos / 4 * 100))}%"></i></div>
+        <div class="gpa-bar-labels"><span style="left:0">0</span><span style="left:${L}%">${lim.toFixed(2)} إنذار</span><span style="left:${G}%">3.00</span><span style="left:100%">4.00</span></div>`; })() : ''}`;
+      const t = gpaTargetHTML(st, r), out = document.getElementById('gpa-target-out');
+      if (out) { out.className = 'gpa-target-out ' + (t.cls || ''); out.innerHTML = t.html || esc(t); }
+      saveGPA(st);
+    }
+
+    function gradeOptions(sel, placeholder) {
+      return `<option value="">${placeholder}</option>` + gradeScale().map(g => `<option value="${esc(g.l)}" ${g.l === sel ? 'selected' : ''}>${esc(g.l)} (${g.p.toFixed(2)})</option>`).join('');
+    }
+    window.renderGPA = function() {
+      if (!gpaState) gpaState = loadGPA();
+      const st = gpaState, c = document.getElementById('gpa-container');
+      const rows = st.rows.map(r => `<div class="gpa-row" data-id="${r.id}">
+          <input class="editor-input gpa-name" data-f="name" value="${esc(r.name || '')}" placeholder="اسم المادة">
+          <input class="editor-input" data-f="hours" type="number" min="0" step="0.5" inputmode="decimal" value="${esc(r.hours ?? '')}" placeholder="ساعات">
+          <select class="editor-input gpa-grade" data-f="grade">${gradeOptions(r.grade, 'العلامة')}</select>
+          <input class="editor-input" data-f="pct" type="number" min="0" max="100" inputmode="numeric" value="${esc(r.pct ?? '')}" placeholder="/100">
+          <button type="button" class="gpa-del" data-del="1" title="حذف المادة" aria-label="حذف المادة">${ic('trash')}</button>
+          <div class="gpa-repeat"><label><input type="checkbox" data-f="repeat" ${r.repeat ? 'checked' : ''}> عم أعيد هالمادة</label>
+            ${r.repeat ? `<span>علامتي القديمة:</span><select class="editor-input" data-f="oldGrade">${gradeOptions(r.oldGrade, 'اختار')}</select><span>— الجديدة بتحل محلها</span>` : ''}</div>
+        </div>`).join('');
+      c.innerHTML = `
+        <div class="gpa-card"><h3>${ic('calc')} حساب المعدل</h3><p>من 4.00 — الحساب بيتم عندك وبينحفظ بمتصفحك بس.</p><div id="gpa-results"></div></div>
+        <div class="gpa-card"><h3>معدلك قبل هالفصل</h3><p>من كشف علاماتك: المعدل التراكمي وعدد الساعات المنجزة (بدون الساعات المعادلة).</p>
+          <div class="gpa-two">
+            <div><label>المعدل التراكمي الحالي</label><input class="editor-input" id="gpa-cgpa" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.cgpa ?? '')}" placeholder="مثال: 2.85"></div>
+            <div><label>الساعات المنجزة</label><input class="editor-input" id="gpa-done" type="number" min="0" step="1" inputmode="numeric" value="${esc(st.done ?? '')}" placeholder="مثال: 64"></div>
+          </div></div>
+        <div class="gpa-card"><h3>مواد هالفصل</h3><p>اختار العلامة بالحرف، أو اكتبها من 100 وبتتحوّل لحالها.</p>
+          ${st.rows.length ? `<div class="gpa-head"><span>المادة</span><span>الساعات</span><span>العلامة</span><span>من 100</span><span></span></div><div class="gpa-rows" id="gpa-rows">${rows}</div>` : '<div class="gpa-empty">ما في مواد لسا — جيبها من «جدولي» أو ضيفها بإيدك.</div>'}
+          <div class="gpa-actions">
+            <button type="button" class="btn btn-secondary" onclick="gpaFromSchedule()">${ic('calendar')} جيب موادي من «جدولي»</button>
+            <button type="button" class="btn btn-ghost" onclick="gpaAddRow()">${ic('plus')} مادة</button>
+            ${st.rows.length ? `<button type="button" class="btn btn-ghost" onclick="gpaClear()">${ic('trash')} مسح المواد</button>` : ''}
+          </div></div>
+        <div class="gpa-card"><h3>🎯 شو لازم جيب؟</h3><p>اكتب المعدل التراكمي يلي بدك توصلو آخر هالفصل.</p>
+          <div class="gpa-target">
+            <div><label>المعدل الهدف</label><input class="editor-input" id="gpa-target" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.target ?? '')}" placeholder="مثال: 3.00"></div>
+            <div id="gpa-target-out" class="gpa-target-out"></div>
+          </div></div>`;
+      renderGPAResults();
+    };
+
+    // تحديث الحساب مع كل كتابة بدون ما نعيد رسم الحقول (حتى ما يضيع المؤشر)
+    document.addEventListener('input', e => {
+      const t = e.target; if (!gpaState || !t.closest || !t.closest('#gpa-container')) return;
+      if (t.id === 'gpa-cgpa') gpaState.cgpa = t.value;
+      else if (t.id === 'gpa-done') gpaState.done = t.value;
+      else if (t.id === 'gpa-target') gpaState.target = t.value;
+      else {
+        const rowEl = t.closest('.gpa-row'); const row = rowEl && gpaState.rows.find(r => r.id === rowEl.dataset.id);
+        if (!row || !t.dataset.f) return;
+        if (t.dataset.f === 'repeat') return;   // بيتعامل معه حدث change
+        row[t.dataset.f] = t.value;
+        if (t.dataset.f === 'pct') { const l = letterForPercent(t.value); if (l) { row.grade = l; rowEl.querySelector('[data-f="grade"]').value = l; } }
+        if (t.dataset.f === 'grade') { row.pct = ''; rowEl.querySelector('[data-f="pct"]').value = ''; }
+      }
+      renderGPAResults();
+    });
+    document.addEventListener('change', e => {
+      const t = e.target; if (!gpaState || !t.closest || !t.closest('#gpa-container')) return;
+      const rowEl = t.closest('.gpa-row'); const row = rowEl && gpaState.rows.find(r => r.id === rowEl.dataset.id);
+      if (row && t.dataset.f === 'repeat') { row.repeat = t.checked; if (!t.checked) row.oldGrade = ''; saveGPA(gpaState); renderGPA(); }
+    });
+    document.addEventListener('click', e => {
+      const b = e.target.closest && e.target.closest('#gpa-container [data-del]'); if (!b || !gpaState) return;
+      const id = b.closest('.gpa-row').dataset.id;
+      gpaState.rows = gpaState.rows.filter(r => r.id !== id); saveGPA(gpaState); renderGPA();
+    });
+    window.gpaAddRow = function() {
+      gpaState.rows.push({ id: gpaRowId(), name: '', hours: '', grade: '' }); saveGPA(gpaState); renderGPA();
+      const last = document.querySelector('#gpa-rows .gpa-row:last-child .gpa-name'); if (last) last.focus();
+    };
+    window.gpaFromSchedule = function() {
+      const ms = loadMySchedule();
+      const names = ms ? [...new Set(ms.sections.map(courseNameOf))].filter(Boolean) : [];
+      if (!names.length) { toast('«جدولي» فاضي — اعمل جدولك أول أو ضيف المواد بإيدك.', 'error'); return; }
+      const have = new Set(gpaState.rows.map(r => r.name));
+      let added = 0;
+      names.forEach(n => { if (have.has(n)) return; const h = creditsOf(n); gpaState.rows.push({ id: gpaRowId(), name: n, hours: h == null ? '' : h, grade: '' }); added++; });
+      saveGPA(gpaState); renderGPA();
+      const noHours = gpaState.rows.filter(r => !(parseFloat(r.hours) > 0)).length;
+      toast(added ? `انضافت ${added} مادة من «جدولي».${noHours ? ` ${noHours} منها بدون ساعات — عبّيها بإيدك.` : ''}` : 'كل مواد «جدولي» موجودة أصلًا.', added ? 'success' : 'error', 6000);
+    };
+    window.gpaClear = async function() {
+      if (!await uiConfirm('تمسح كل مواد هالفصل من الحاسبة؟', { okText: 'مسح', danger: true })) return;
+      gpaState.rows = []; saveGPA(gpaState); renderGPA();
+    };
 
     // ------- الإعدادات -------
     function hideClosedSchedules() { return localStorage.getItem(HIDE_CLOSED_KEY) === '1'; }
