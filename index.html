@@ -2313,6 +2313,7 @@ function renderTourStep() {
     // ==========================================
 
     window.openEditor = function(collegeView) {
+      if (tpState) (tpState.first ? saveThemePicker : cancelThemePicker)();   // لوحة الثيمات ما لازم تغطّي لوحة التحكم
       setTimeout(() => maybeTour(currentTourContext()), 50);
       document.getElementById('app-screen').style.display = 'none';
       document.getElementById('setup-screen').style.display = 'none';
