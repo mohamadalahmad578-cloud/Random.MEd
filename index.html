@@ -146,18 +146,32 @@
   .college-admin summary{ cursor:pointer; font-weight:700; font-size:13px; color:var(--ink); }
   .college-admin .gh-fields{ margin-top:10px; }
   .college-admin textarea{ width:100%; min-height:120px; margin-top:8px; }
-  .college-manage-row{ display:grid; grid-template-columns:minmax(0,1fr) 100px auto auto; align-items:end; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
-  .college-manage-row:last-child{ border-bottom:none; }
-  .college-manage-row label{ display:block; font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:4px; }
-  .college-manage-row label code{ font-weight:600; margin-inline-start:4px; }
-  .college-manage-row .editor-input{ width:100%; min-width:0; box-sizing:border-box; margin:0; }
-  .college-manage-row .btn{ margin:0; width:auto; white-space:nowrap; padding:8px 16px; font-size:12.5px; }
-  @media (max-width:560px){ .college-manage-row{ grid-template-columns:minmax(0,1fr) 90px; } }
+  #admin-college-view{ display:none; }
+  .admin-home-head h3{ font-family:var(--font-display); font-size:18px; margin:0 0 4px; color:var(--ink); }
+  .admin-home-head{ margin-bottom:14px; }
+  .college-admin-head .btn{ margin-top:0; }
+  .college-admin-title{ display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .college-status{ font-size:11px; font-weight:800; padding:2px 9px; border-radius:999px; background:var(--teal-soft); color:var(--teal-text); border:1px solid var(--teal); }
+  .college-status.off{ background:var(--rose-soft); color:var(--rose-text); border-color:var(--rose); }
+  .college-status:empty{ display:none; }
+  .college-card.is-hidden{ opacity:.75; border-inline-start-color:var(--rose); }
+  .college-settings-grid{ display:grid; grid-template-columns:minmax(0,1fr) 140px auto; gap:10px 12px; align-items:end; margin-top:10px; }
+  .college-settings-grid label{ display:block; font-size:11.5px; font-weight:700; color:var(--ink-soft); margin-bottom:4px; }
+  .college-settings-grid .editor-input{ width:100%; box-sizing:border-box; }
+  .college-settings-grid textarea.editor-input{ min-height:0; height:64px; margin-top:0; resize:vertical; }
+  .college-settings-grid #cs-whatsapp{ height:80px; }
+  .college-settings-grid #cs-notice{ direction:rtl; font-family:var(--font-body); border-style:solid; }
+  .college-settings-grid .cs-wide{ grid-column:1 / -1; }
+  .college-settings-grid .cs-visible{ margin:0 0 8px; }
+  @media (max-width:560px){ .college-settings-grid{ grid-template-columns:minmax(0,1fr) 100px; } .college-settings-grid .cs-visible{ grid-column:1 / -1; } }
+  .college-notice{ margin-bottom:14px; padding:12px 16px; border-radius:12px; background:var(--paper); border:1px solid var(--line); border-inline-start:4px solid var(--teal); color:var(--ink); font-size:13.5px; line-height:1.8; white-space:pre-line; }
+  .college-notice[hidden]{ display:none; }
   .college-admin-note{ font-size:11.5px; color:var(--ink-soft); line-height:1.7; margin:8px 0 0; }
 
   .container{ max-width:1320px; margin:26px auto; padding:0 18px 60px; }
   .screen-panel{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:28px; box-shadow:var(--shadow); animation:fadeInUp .45s ease; }
   #app-screen, #setup-screen, #editor-screen, #college-screen{ display:none; }
+  .college-grid:empty::after{ content:'ما في كليات متاحة حاليًا.'; color:var(--ink-soft); font-size:13px; }
 
   /* ---------- loading ---------- */
   #loading-screen{ text-align:center; padding:90px 20px; }
@@ -950,32 +964,52 @@
       </div>
 
       <div id="editor-main-content" style="display:none;">
-        <div class="college-admin">
-          <div class="college-admin-head">
-            <span>الكلية يلي عم تعدّلها: <strong id="admin-college-name"></strong> — <code id="admin-college-path" dir="ltr"></code></span>
-            <select id="admin-college-select" class="editor-input" style="width:auto; min-width:200px;" onchange="adminSwitchCollege(this.value)"></select>
+        <div id="admin-home">
+          <div class="admin-home-head">
+            <h3>🏫 الكليات</h3>
+            <p class="college-admin-note">اختار كلية لتدير موادها وإعداداتها لحالها. الكلية المخفية ما بتطلع للطلاب، بس بياناتها بتضل محفوظة.</p>
           </div>
-          <details>
-            <summary>📥 استيراد بيانات هالكلية (data.json كامل)</summary>
-            <p class="college-admin-note">الصق محتوى <code>data.json</code> لهالكلية (بنفس الشكل: اسم المادة ← قائمة الفئات) أو اختار الملف. رح يستبدل كل مواد هالكلية بالذاكرة، وبعدها اضغط «نشر مباشرة على GitHub».</p>
-            <input type="file" id="import-file" accept=".json,application/json" onchange="importCollegeFile(this)">
-            <textarea id="import-json" class="editor-input" placeholder='{"اسم المادة": [{"id": "...", "type": "theory", ...}]}'></textarea>
-            <button type="button" class="btn btn-teal" style="margin-top:8px;" onclick="importCollegeData()">استيراد البيانات</button>
-          </details>
-          <details>
-            <summary>🏫 إدارة الكليات (تعديل الاسم والساعات، حذف)</summary>
-            <div id="college-manage-list"></div>
-            <p class="college-admin-note">الحذف بيشيل الكلية من القائمة يلي بتطلع للطلاب بس — ملفات بياناتها بتضل على GitHub، وإذا رجعت ضفتها بنفس الرمز بترجع بياناتها.</p>
-          </details>
-          <details>
+          <div id="admin-college-grid" class="college-grid"></div>
+          <details class="college-admin" style="margin-top:16px;">
             <summary>➕ إضافة كلية جديدة</summary>
             <div class="gh-fields">
               <div><label>اسم الكلية</label><input type="text" id="new-college-name" class="editor-input" placeholder="مثال: كلية طب الأسنان"></div>
               <div><label>رمز قصير بالإنكليزي (بيطلع بالرابط)</label><input type="text" id="new-college-id" class="editor-input" placeholder="dent" dir="ltr" autocapitalize="off" spellcheck="false"></div>
               <div><label>حد الساعات بالفصل</label><input type="number" id="new-college-limit" class="editor-input" min="1" step="1" value="25"></div>
             </div>
-            <p class="college-admin-note">رح تنضاف لملف <code>colleges.json</code> على GitHub، وبياناتها بتنحفظ بـ <code dir="ltr">colleges/&lt;الرمز&gt;/data.json</code>. بعد الإضافة منحوّلك عليها لتستورد بياناتها.</p>
+            <label class="gh-remember"><input type="checkbox" id="new-college-hidden" checked> خليها مخفية عن الطلاب لحد ما تجهز بياناتها</label>
+            <p class="college-admin-note">رح تنضاف لملف <code>colleges.json</code> على GitHub، وبياناتها بتنحفظ بـ <code dir="ltr">colleges/&lt;الرمز&gt;/data.json</code>. بعد الإضافة منفتحلك صفحتها لتستورد بياناتها.</p>
             <button type="button" class="btn btn-primary" style="margin-top:8px;" onclick="addCollege()">إضافة ونشر</button>
+          </details>
+        </div>
+
+        <div id="admin-college-view">
+        <div class="college-admin">
+          <div class="college-admin-head">
+            <button type="button" class="btn btn-secondary" onclick="showAdminHome()">→ كل الكليات</button>
+            <span class="college-admin-title"><strong id="admin-college-name"></strong> <span id="admin-college-status" class="college-status"></span> <code id="admin-college-path" dir="ltr"></code></span>
+          </div>
+          <details id="college-settings" open>
+            <summary>⚙️ إعدادات الكلية</summary>
+            <div class="college-settings-grid">
+              <div><label>اسم الكلية</label><input type="text" id="cs-name" class="editor-input"></div>
+              <div><label>حد الساعات بالفصل</label><input type="number" id="cs-limit" class="editor-input" min="1" step="1"></div>
+              <label class="gh-remember cs-visible"><input type="checkbox" id="cs-visible"> ظاهرة للطلاب</label>
+              <div class="cs-wide"><label>رسالة للطلاب (بتطلع فوق الجدول — اتركها فاضية لتخفيها)</label><textarea id="cs-notice" class="editor-input" rows="2" placeholder="مثال: التسجيل بيفتح يوم الأحد الساعة 9 الصبح"></textarea></div>
+              <div class="cs-wide"><label>أرقام واتساب للتواصل (رقم بكل سطر، مع رمز الدولة — فاضية = الأرقام العامة)</label><textarea id="cs-whatsapp" class="editor-input" rows="3" dir="ltr" placeholder="963995077268"></textarea></div>
+            </div>
+            <div class="bulk-actions">
+              <button type="button" class="btn btn-teal" onclick="saveCollegeSettings()">حفظ ونشر الإعدادات</button>
+              <button type="button" class="btn btn-danger-ghost" id="cs-delete-btn" onclick="deleteCollege()">🗑 حذف الكلية من القائمة</button>
+            </div>
+            <p class="college-admin-note">الحذف بيشيل الكلية من القائمة بس — ملفات بياناتها بتضل على GitHub، وإذا رجعت ضفتها بنفس الرمز بترجع بياناتها. إذا بدك توقفها مؤقتًا، شيل «ظاهرة للطلاب» أحسن.</p>
+          </details>
+          <details>
+            <summary>📥 استيراد بيانات هالكلية (data.json كامل)</summary>
+            <p class="college-admin-note">الصق محتوى <code>data.json</code> لهالكلية (بنفس الشكل: اسم المادة ← قائمة الفئات) أو اختار الملف. رح يستبدل كل مواد هالكلية بالذاكرة، وبعدها اضغط «نشر مباشرة على GitHub».</p>
+            <input type="file" id="import-file" accept=".json,application/json" onchange="importCollegeFile(this)">
+            <textarea id="import-json" class="editor-input" placeholder='{"اسم المادة": [{"id": "...", "type": "theory", ...}]}'></textarea>
+            <button type="button" class="btn btn-teal" style="margin-top:8px;" onclick="importCollegeData()">استيراد البيانات</button>
           </details>
         </div>
         <details class="bulk-panel" open>
@@ -1026,10 +1060,12 @@
           <button class="btn btn-ghost" style="margin-top:0;" id="ic-copy-btn" onclick="copyFinalData()">نسخ يدوي لـ data.json (بديل)</button>
         <button class="btn btn-ghost" style="margin-top:0;" onclick="copyCredits()">نسخ يدوي لـ credits.json (بديل)</button>
         </div>
+        </div>
       </div>
     </div>
 
     <div id="app-screen">
+      <div id="college-notice" class="college-notice" hidden></div>
       <div id="welcome-banner" class="welcome-banner" hidden></div>
       <div class="grid-layout">
         <div class="sidebar">
@@ -1119,6 +1155,7 @@
     const PENDING_COLLEGES_MS = 5 * 60 * 1000;
     const COLLEGE_ID_RE = /^[a-z0-9-]{1,30}$/;
     const LEGACY_COLLEGE = 'med';          // بيانات الطلاب المحفوظة لهالكلية بتضل على المفاتيح القديمة بدون لاحقة
+    const DEFAULT_WHATSAPP = ['963995077268', '963956870072', '963982883157'];   // أرقام التواصل العامة
     const DEFAULT_COLLEGES = [{ id: 'med', name: 'كلية الطب البشري', data: 'data.json', credits: 'credits.json' }];
     let colleges = DEFAULT_COLLEGES;
     let currentCollege = null;
@@ -1165,11 +1202,14 @@
     }
     window.selectCollege = selectCollege;
 
+    // الكليات يلي بتطلع للطالب (المشرف بيشوف المخفية كمان)
+    function pickableColleges() { return isAdminVerified() ? colleges : colleges.filter(c => !c.hidden); }
+
     window.showCollegePicker = function() {
       const grid = document.getElementById('college-grid');
-      grid.innerHTML = colleges.map(c => `<button type="button" class="college-card ${currentCollege && currentCollege.id === c.id ? 'current' : ''}" onclick="selectCollege('${c.id}')">
+      grid.innerHTML = pickableColleges().map(c => `<button type="button" class="college-card ${currentCollege && currentCollege.id === c.id ? 'current' : ''} ${c.hidden ? 'is-hidden' : ''}" onclick="selectCollege('${c.id}')">
           <span class="college-card-name">${esc(c.name)}</span>
-          <span class="college-card-meta">${currentCollege && currentCollege.id === c.id ? 'الكلية الحالية' : 'اضغط للدخول'}</span>
+          <span class="college-card-meta">${currentCollege && currentCollege.id === c.id ? 'الكلية الحالية' : 'اضغط للدخول'}${c.hidden ? ' · مخفية عن الطلاب' : ''}</span>
         </button>`).join('');
       ['loading-screen', 'setup-screen', 'app-screen', 'editor-screen'].forEach(id => {
         const el = document.getElementById(id);
@@ -1186,12 +1226,24 @@
       document.getElementById(back).style.display = 'block';
     };
 
+    // بيطبّق إعدادات الكلية الحالية على الصفحة (الاسم، حد الساعات، رسالة الطلاب، أرقام واتساب)
+    function applyCollegeSettings() {
+      CREDIT_LIMIT = Number(currentCollege.creditLimit) > 0 ? Number(currentCollege.creditLimit) : 25;
+      renderCollegeChip();
+      renderContacts();
+      const notice = document.getElementById('college-notice');
+      const text = typeof currentCollege.notice === 'string' ? currentCollege.notice.trim() : '';
+      notice.hidden = !text;
+      notice.innerHTML = text ? `${ic('alert')} ${esc(text)}` : '';
+    }
+
     function renderCollegeChip() {
       const chip = document.getElementById('college-chip');
       if (!currentCollege) { chip.hidden = true; return; }
       chip.hidden = false;
-      chip.innerHTML = `${ic('users')} ${esc(currentCollege.name)}${colleges.length > 1 ? ' <span class="college-chip-change">· تغيير</span>' : ''}`;
-      chip.disabled = colleges.length < 2;
+      const many = pickableColleges().length > 1;
+      chip.innerHTML = `${ic('users')} ${esc(currentCollege.name)}${many ? ' <span class="college-chip-change">· تغيير</span>' : ''}`;
+      chip.disabled = !many;
       document.title = `SPU · ${currentCollege.name} · منسّق الجداول الدراسية`;
     }
     const daysOfWeek = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
@@ -1324,13 +1376,23 @@
       updateMyScheduleTabLabel();
       document.getElementById('search').insertAdjacentHTML('beforebegin', ic('search'));
       document.getElementById('ic-wa-fab').innerHTML = ic('phone');
-      document.getElementById('wa-menu').innerHTML = `<p class="wa-menu-title">تواصل معنا على واتساب</p>
-        <a href="https://wa.me/963995077268" target="_blank" rel="noopener">${ic('phone')} 963995077268+</a>
-        <a href="https://wa.me/963956870072" target="_blank" rel="noopener">${ic('phone')} 963956870072+</a>
-        <a href="https://wa.me/963982883157" target="_blank" rel="noopener">${ic('phone')} 963982883157+</a>`;
-      document.getElementById('ic-footer-contact').innerHTML = ic('phone') + ' لأي مشكلة أو استفسار، تواصل معنا على واتساب: <a href="https://wa.me/963995077268" target="_blank" rel="noopener">963995077268+</a>، <a href="https://wa.me/963956870072" target="_blank" rel="noopener">963956870072+</a>، أو <a href="https://wa.me/963982883157" target="_blank" rel="noopener">963982883157+</a>';
+      renderContacts();
     }
     paintStaticIcons();
+
+    // أرقام واتساب — كل كلية فيها تحدد أرقامها، وإلا منستخدم الأرقام العامة
+    function collegeWhatsapp() {
+      const list = currentCollege && Array.isArray(currentCollege.whatsapp) ? currentCollege.whatsapp.map(n => String(n).replace(/\D/g, '')).filter(n => n.length >= 8) : [];
+      return list.length ? list : DEFAULT_WHATSAPP;
+    }
+    function renderContacts() {
+      const nums = collegeWhatsapp();
+      document.getElementById('wa-menu').innerHTML = `<p class="wa-menu-title">تواصل معنا على واتساب</p>` +
+        nums.map(n => `<a href="https://wa.me/${n}" target="_blank" rel="noopener">${ic('phone')} ${n}+</a>`).join('');
+      const links = nums.map(n => `<a href="https://wa.me/${n}" target="_blank" rel="noopener">${n}+</a>`);
+      const joined = links.length > 1 ? links.slice(0, -1).join('، ') + '، أو ' + links[links.length - 1] : links[0];
+      document.getElementById('ic-footer-contact').innerHTML = ic('phone') + ' لأي مشكلة أو استفسار، تواصل معنا على واتساب: ' + joined;
+    }
 
     // ==========================================
     //                  تنبيهات
@@ -1893,11 +1955,12 @@ function renderTourStep() {
 
     window.onload = async function() {
       await loadColleges();
-      currentCollege = colleges.find(c => c.id === COLLEGE_ID) || null;
+      const pickable = pickableColleges();
+      currentCollege = pickable.find(c => c.id === COLLEGE_ID) || null;
       if (!currentCollege) {
         // كلية وحدة بس ← منفوت عليها مباشرة؛ غير هيك الطالب بيختار
-        if (colleges.length === 1 && colleges[0].id === LEGACY_COLLEGE && !COLLEGE_ID) currentCollege = colleges[0];
-        else if (colleges.length === 1) { selectCollege(colleges[0].id); return; }
+        if (pickable.length === 1 && pickable[0].id === LEGACY_COLLEGE && !COLLEGE_ID) currentCollege = pickable[0];
+        else if (pickable.length === 1) { selectCollege(pickable[0].id); return; }
       }
       if (!currentCollege) {
         document.getElementById('loading-screen').style.display = 'none';
@@ -1905,10 +1968,9 @@ function renderTourStep() {
         return;
       }
       try { localStorage.setItem(COLLEGE_KEY, currentCollege.id); } catch (e) {}
-      const wantAdmin = new URLSearchParams(location.search).get('admin') === '1';
+      const adminParam = new URLSearchParams(location.search).get('admin');
       try { history.replaceState(null, '', collegeUrl(currentCollege.id)); } catch (e) {}
-      CREDIT_LIMIT = Number(currentCollege.creditLimit) > 0 ? Number(currentCollege.creditLimit) : 25;
-      renderCollegeChip();
+      applyCollegeSettings();
 
       let missing = false;
       try {
@@ -1924,7 +1986,7 @@ function renderTourStep() {
         await loadCreditsFile();
         showSetupScreen(missing);
       }
-      if (wantAdmin) openEditor();
+      if (adminParam) openEditor(adminParam === '1');
     };
 
     function showSetupScreen(missing) {
@@ -2023,7 +2085,7 @@ function renderTourStep() {
     //         نظام محرر البيانات (للمشرف)
     // ==========================================
 
-    window.openEditor = function() {
+    window.openEditor = function(collegeView) {
       setTimeout(() => maybeTour(currentTourContext()), 50);
       document.getElementById('app-screen').style.display = 'none';
       document.getElementById('setup-screen').style.display = 'none';
@@ -2033,7 +2095,7 @@ function renderTourStep() {
         document.getElementById('github-settings-panel').style.display = 'none';
         document.getElementById('editor-main-content').style.display = 'block';
         populateCourseSelect();
-        renderCollegeAdmin();
+        if (collegeView === true) showAdminCollege(); else showAdminHome();
       } else {
         document.getElementById('github-settings-panel').style.display = 'block';
         document.getElementById('editor-main-content').style.display = 'none';
@@ -2062,21 +2124,53 @@ function renderTourStep() {
       renderUI();
     };
 
-    function renderCollegeAdmin() {
-      if (!currentCollege) return;
-      document.getElementById('admin-college-name').textContent = currentCollege.name;
-      document.getElementById('admin-college-path').textContent = collegeDataPath(currentCollege);
-      document.getElementById('admin-college-select').innerHTML = colleges.map(c =>
-        `<option value="${esc(c.id)}" ${c.id === currentCollege.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
-      renderCollegeManager();
+    let adminDirty = false;               // في تعديلات على مواد الكلية الحالية ما انتشرت لسا
+
+    // الصفحة الرئيسية للمشرف: كل الكليات كبطاقات
+    window.showAdminHome = function() {
+      document.getElementById('admin-college-view').style.display = 'none';
+      document.getElementById('admin-home').style.display = 'block';
+      document.getElementById('ic-editor-title').innerHTML = ic('gear') + ' لوحة التحكم';
+      document.getElementById('admin-college-grid').innerHTML = colleges.map(c => {
+        const isCur = currentCollege && currentCollege.id === c.id;
+        const count = isCur ? Object.keys(parsedCourses).length : null;
+        return `<button type="button" class="college-card ${isCur ? 'current' : ''} ${c.hidden ? 'is-hidden' : ''}" onclick="adminOpenCollege('${c.id}')">
+          <span class="college-card-name">${esc(c.name)}</span>
+          <span class="college-card-meta"><span class="college-status ${c.hidden ? 'off' : ''}">${c.hidden ? 'مخفية' : 'ظاهرة'}</span> <code dir="ltr">${esc(c.id)}</code>${count != null ? ` · ${count} مادة` : ''}${isCur && adminDirty ? ' · <strong>تعديلات ما انتشرت</strong>' : ''}</span>
+        </button>`;
+      }).join('');
+    };
+
+    // صفحة كلية وحدة: إعداداتها واستيراد بياناتها وتعديل موادها
+    function showAdminCollege() {
+      document.getElementById('admin-home').style.display = 'none';
+      document.getElementById('admin-college-view').style.display = 'block';
+      document.getElementById('ic-editor-title').innerHTML = ic('gear') + ' لوحة التحكم — ' + esc(currentCollege.name);
+      renderCollegeAdmin();
     }
 
-    window.adminSwitchCollege = async function(id) {
-      if (!currentCollege || id === currentCollege.id) return;
-      if (!await uiConfirm('رح تنتقل لكلية تانية — أي تعديل ما نشرته على هالكلية رح يضيع. متأكد؟')) { renderCollegeAdmin(); return; }
+    window.adminOpenCollege = async function(id) {
+      if (currentCollege && id === currentCollege.id) { showAdminCollege(); return; }
+      if (adminDirty && !await uiConfirm(`في تعديلات على «${currentCollege.name}» ما نشرتها — رح تضيع إذا انتقلت. متأكد؟`, { danger: true })) return;
       try { localStorage.setItem(COLLEGE_KEY, id); } catch (e) {}
       location.href = collegeUrl(id, { admin: '1' });
     };
+
+    function renderCollegeAdmin() {
+      if (!currentCollege) return;
+      const c = currentCollege;
+      document.getElementById('admin-college-name').textContent = c.name;
+      document.getElementById('admin-college-path').textContent = collegeDataPath(c);
+      const st = document.getElementById('admin-college-status');
+      st.textContent = c.hidden ? 'مخفية عن الطلاب' : 'ظاهرة للطلاب';
+      st.classList.toggle('off', !!c.hidden);
+      document.getElementById('cs-name').value = c.name;
+      document.getElementById('cs-limit').value = Number(c.creditLimit) > 0 ? c.creditLimit : 25;
+      document.getElementById('cs-visible').checked = !c.hidden;
+      document.getElementById('cs-notice').value = c.notice || '';
+      document.getElementById('cs-whatsapp').value = (Array.isArray(c.whatsapp) ? c.whatsapp : []).join('\n');
+      document.getElementById('cs-delete-btn').disabled = colleges.length < 2;
+    }
 
     // بيتأكد إنو البيانات بنفس شكل data.json: اسم المادة ← قائمة فئات
     function validateCollegeData(data) {
@@ -2108,6 +2202,7 @@ function renderTourStep() {
       parsedCourses = data;
       const problems = indexCourses();
       populateCourseSelect();
+      adminDirty = true;
       document.getElementById('import-json').value = '';
       document.getElementById('import-file').value = '';
       toast(`تم استيراد ${count} مادة${problems.length ? ` (مع ${problems.length} ملاحظة — شوف الـ Console)` : ''}. هلق اضغط «نشر مباشرة على GitHub».`, 'success', 8000);
@@ -2129,50 +2224,41 @@ function renderTourStep() {
       return true;
     }
 
-    function renderCollegeManager() {
-      const box = document.getElementById('college-manage-list');
-      if (!box) return;
-      box.innerHTML = colleges.map(c => `<div class="college-manage-row" data-id="${esc(c.id)}">
-          <div class="cm-name"><label>اسم الكلية <code dir="ltr">${esc(c.id)}</code></label><input type="text" class="editor-input cm-name-inp" value="${esc(c.name)}"></div>
-          <div class="cm-limit"><label>حد الساعات</label><input type="number" min="1" step="1" class="editor-input cm-limit-inp" value="${esc(Number(c.creditLimit) > 0 ? c.creditLimit : 25)}"></div>
-          <button type="button" class="btn btn-teal" onclick="saveCollegeRow('${esc(c.id)}')">حفظ</button>
-          <button type="button" class="btn btn-danger-ghost" onclick="deleteCollege('${esc(c.id)}')" ${colleges.length < 2 ? 'disabled title="لازم تضل كلية وحدة على الأقل"' : ''}>${ic('trash')} حذف</button>
-        </div>`).join('');
-    }
-
-    window.saveCollegeRow = async function(id) {
-      const row = document.querySelector(`.college-manage-row[data-id="${id}"]`);
-      const name = row.querySelector('.cm-name-inp').value.trim();
-      const limit = parseInt(row.querySelector('.cm-limit-inp').value, 10);
+    window.saveCollegeSettings = async function() {
+      const id = currentCollege.id;
+      const name = document.getElementById('cs-name').value.trim();
+      const limit = parseInt(document.getElementById('cs-limit').value, 10);
+      const notice = document.getElementById('cs-notice').value.trim();
+      const nums = document.getElementById('cs-whatsapp').value.split(/[\n,،]+/).map(n => n.replace(/\D/g, '')).filter(Boolean);
       if (!name) { toast('اسم الكلية ما لازم يكون فاضي.', 'error'); return; }
       if (!(limit > 0)) { toast('حد الساعات لازم يكون رقم أكبر من صفر.', 'error'); return; }
-      const next = colleges.map(c => {
-        if (c.id !== id) return c;
-        const e = Object.assign({}, c, { name });
-        if (limit !== 25) e.creditLimit = limit; else delete e.creditLimit;
-        return e;
-      });
-      if (!await publishColleges(next, `تعديل ${name} بقائمة الكليات`)) return;
-      if (currentCollege && currentCollege.id === id) {
-        currentCollege = colleges.find(c => c.id === id);
-        CREDIT_LIMIT = Number(currentCollege.creditLimit) > 0 ? Number(currentCollege.creditLimit) : 25;
-        renderCollegeChip();
-      }
+      const badNum = nums.find(n => n.length < 8 || n.length > 15);
+      if (badNum) { toast(`الرقم ${badNum} مو مزبوط — اكتبه مع رمز الدولة (مثال: 963995077268).`, 'error', 7000); return; }
+      const hidden = !document.getElementById('cs-visible').checked;
+      if (hidden && colleges.every(c => c.id === id || c.hidden) && !await uiConfirm('هيك ما رح يضل ولا كلية ظاهرة للطلاب. متأكد؟', { danger: true })) return;
+      const entry = Object.assign({}, currentCollege, { name });
+      ['creditLimit', 'hidden', 'notice', 'whatsapp'].forEach(k => delete entry[k]);
+      if (limit !== 25) entry.creditLimit = limit;
+      if (hidden) entry.hidden = true;
+      if (notice) entry.notice = notice;
+      if (nums.length) entry.whatsapp = nums;
+      if (!await publishColleges(colleges.map(c => c.id === id ? entry : c), `تعديل إعدادات ${name}`)) return;
+      currentCollege = entry;
+      applyCollegeSettings();
       renderCollegeAdmin();
-      toast(`تم حفظ «${name}». بيتحدّث عند الطلاب خلال دقيقة.`, 'success', 6000);
+      document.getElementById('ic-editor-title').innerHTML = ic('gear') + ' لوحة التحكم — ' + esc(name);
+      toast(`تم حفظ إعدادات «${name}». بتتحدّث عند الطلاب خلال دقيقة.`, 'success', 6000);
     };
 
-    window.deleteCollege = async function(id) {
-      const c = colleges.find(x => x.id === id);
+    window.deleteCollege = async function() {
+      const c = currentCollege;
       if (!c || colleges.length < 2) return;
       if (!await uiConfirm(`متأكد إنك بدك تحذف «${c.name}» من قائمة الكليات؟ الطلاب ما عاد رح يشوفوها (ملفات بياناتها بتضل على GitHub).`, { okText: 'حذف', danger: true })) return;
-      const next = colleges.filter(x => x.id !== id);
+      const next = colleges.filter(x => x.id !== c.id);
       if (!await publishColleges(next, `حذف ${c.name} من قائمة الكليات`)) return;
       toast(`تم حذف «${c.name}».`, 'success', 6000);
-      if (currentCollege && currentCollege.id === id) {
-        // كنت عم تعدّل الكلية المحذوفة ← منروح على أول كلية بالقائمة
-        setTimeout(() => { try { localStorage.setItem(COLLEGE_KEY, next[0].id); } catch (e) {} location.href = collegeUrl(next[0].id, { admin: '1' }); }, 1200);
-      } else renderCollegeAdmin();
+      // منروح على أول كلية بالقائمة ومنفتح صفحة الكليات
+      setTimeout(() => { try { localStorage.setItem(COLLEGE_KEY, next[0].id); } catch (e) {} location.href = collegeUrl(next[0].id, { admin: 'home' }); }, 1200);
     };
 
     window.addCollege = async function() {
@@ -2184,6 +2270,7 @@ function renderTourStep() {
       if (colleges.some(c => c.id === id)) { toast('في كلية بنفس الرمز.', 'error'); return; }
       const entry = { id, name };
       if (Number.isFinite(limit) && limit > 0 && limit !== 25) entry.creditLimit = limit;
+      if (document.getElementById('new-college-hidden').checked) entry.hidden = true;
       if (!await publishColleges(colleges.concat([entry]), `إضافة ${name} لقائمة الكليات`)) return;
       toast(`تمت إضافة «${name}». هلق منحوّلك عليها لتستورد بياناتها.`, 'success', 6000);
       setTimeout(() => { try { localStorage.setItem(COLLEGE_KEY, id); } catch (e) {} location.href = collegeUrl(id, { admin: '1' }); }, 1500);
@@ -2296,7 +2383,7 @@ function renderTourStep() {
         document.getElementById('github-settings-panel').style.display = 'none';
         document.getElementById('editor-main-content').style.display = 'block';
         populateCourseSelect();
-        renderCollegeAdmin();
+        showAdminHome();
       } catch (e) {
         toast('تعذّر التحقق: ' + friendlyGithubError(e), 'error', 8000);
       } finally {
@@ -2385,6 +2472,7 @@ function renderTourStep() {
           creditsMsg = ' (مع ملف الساعات)';
         } catch (e) { creditsMsg = ' — لكن فشل نشر ملف الساعات: ' + friendlyGithubError(e); }
 
+        adminDirty = false;
         toast(`تم نشر بيانات «${currentCollege.name}» على GitHub بنجاح` + creditsMsg + '. سيتحدث الموقع خلال دقيقة.', 'success', 8000);
       } catch (e) {
         toast('فشل النشر المباشر: ' + friendlyGithubError(e), 'error', 9000);
@@ -2498,6 +2586,7 @@ function renderTourStep() {
       plan.changes.forEach(x => { x.sec[x.field] = x.newSeats; x.sec.status = x.newStatus; });
       if (document.getElementById('editor-course-select').value) renderCourseEditor();
       bulkPreview();
+      adminDirty = true;
       toastAction(`${label}: تغيّرت ${plan.changes.length} فئة. لا تنسى «نشر مباشرة على GitHub».`, 'تراجع', () => {
         snapshot.forEach(s => { s.sec[s.field] = s.seats; s.sec.status = s.status; });
         if (document.getElementById('editor-course-select').value) renderCourseEditor();
@@ -2651,6 +2740,7 @@ function populateBulkScope() {
           }
         });
       });
+      adminDirty = true;
       toast('تم حفظ التعديلات لهذه المادة مؤقتًا في الذاكرة.', 'success');
     };
 
