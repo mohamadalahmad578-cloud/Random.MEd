@@ -1,14 +1,14 @@
 {
   "الأشعة والمعالجة الشعاعية (MERA-4-02)": [
     {
-      "id": "7frldyjp6",
+      "id": "j9zzoew19",
       "course": "الأشعة والمعالجة الشعاعية (MERA-4-02)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/40",
+      "seats": "34/35",
       "times": [
         {
           "day": "السبت",
@@ -19,14 +19,14 @@
       ]
     },
     {
-      "id": "f6t5l0pxr",
+      "id": "el5hfjsvg",
       "course": "الأشعة والمعالجة الشعاعية (MERA-4-02)",
       "type": "theory",
       "className": "C (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "25",
-      "seats": "25/40",
+      "seats": "25/35",
       "times": [
         {
           "day": "السبت",
@@ -37,14 +37,14 @@
       ]
     },
     {
-      "id": "4nx6fzcn4",
+      "id": "xuln5wcd1",
       "course": "الأشعة والمعالجة الشعاعية (MERA-4-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة متاحة",
+      "status": "الفئات ممتلئة",
       "capacity": "35",
       "registered": "18",
-      "seats": "18/40",
+      "seats": "18/35",
       "times": [
         {
           "day": "السبت",
@@ -57,14 +57,14 @@
   ],
   "التشريح (2) (MEAN-2-02)": [
     {
-      "id": "8xmcauuog",
+      "id": "j2ggcpo6p",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -81,14 +81,14 @@
       ]
     },
     {
-      "id": "6f0s2s9h9",
+      "id": "38u3855ex",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الإثنين",
@@ -105,14 +105,14 @@
       ]
     },
     {
-      "id": "w1zvrboqq",
+      "id": "alh1i09pm",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -129,14 +129,14 @@
       ]
     },
     {
-      "id": "s2zhdecqj",
+      "id": "eu2kt6scy",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "practical",
       "className": "C1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -147,14 +147,14 @@
       ]
     },
     {
-      "id": "qr1se7ifq",
+      "id": "kfil5vmw0",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "practical",
       "className": "C2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "19",
-      "seats": "19/40",
+      "seats": "19/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -165,14 +165,14 @@
       ]
     },
     {
-      "id": "17isitpka",
+      "id": "k4dmiqt9i",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -183,14 +183,14 @@
       ]
     },
     {
-      "id": "ofeg9rss4",
+      "id": "x17xe9tqm",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "practical",
       "className": "E2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "11",
-      "seats": "11/40",
+      "seats": "11/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -201,14 +201,14 @@
       ]
     },
     {
-      "id": "408hrbedi",
+      "id": "pyzv0tjfr",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "practical",
       "className": "F1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "16",
-      "seats": "16/40",
+      "seats": "16/20",
       "times": [
         {
           "day": "الإثنين",
@@ -219,14 +219,14 @@
       ]
     },
     {
-      "id": "jl4jeq6t4",
+      "id": "dvairn8x1",
       "course": "التشريح (2) (MEAN-2-02)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "الفئات ممتلئة",
       "capacity": "20",
       "registered": "19",
-      "seats": "19/40",
+      "seats": "19/20",
       "times": [
         {
           "day": "الأحد",
@@ -239,7 +239,7 @@
   ],
   "الصحة العامة والمهنية (MECM-1-01)": [
     {
-      "id": "t1xua9gvr",
+      "id": "814v0zc5p",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "theory",
       "className": "A (نظري)",
@@ -257,7 +257,7 @@
       ]
     },
     {
-      "id": "qd2fe3hyo",
+      "id": "5b9adgsv0",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "theory",
       "className": "B (نظري)",
@@ -275,7 +275,7 @@
       ]
     },
     {
-      "id": "xkbbsurfa",
+      "id": "qmhooso6q",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "theory",
       "className": "E (نظري)",
@@ -293,7 +293,7 @@
       ]
     },
     {
-      "id": "rhpnlj7ku",
+      "id": "m9cvg5byn",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "theory",
       "className": "F (نظري)",
@@ -311,14 +311,14 @@
       ]
     },
     {
-      "id": "y8v5ryu1m",
+      "id": "gk5lvf4bg",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -329,14 +329,14 @@
       ]
     },
     {
-      "id": "s9t5acl2j",
+      "id": "htueliuol",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -347,14 +347,14 @@
       ]
     },
     {
-      "id": "ivie3p69c",
+      "id": "qrpjlvqpb",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -365,14 +365,14 @@
       ]
     },
     {
-      "id": "4fjuyhpox",
+      "id": "98oew4ex9",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأربعاء",
@@ -383,14 +383,14 @@
       ]
     },
     {
-      "id": "e2b6hjr12",
+      "id": "bxm0k0ni7",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -401,14 +401,14 @@
       ]
     },
     {
-      "id": "2zke3aeqj",
+      "id": "w4comp0rs",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "practical",
       "className": "E2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -419,14 +419,14 @@
       ]
     },
     {
-      "id": "ou0e0rylg",
+      "id": "yse8ogic3",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "practical",
       "className": "F1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -437,14 +437,14 @@
       ]
     },
     {
-      "id": "xre9a1oyi",
+      "id": "chgcymku4",
       "course": "الصحة العامة والمهنية (MECM-1-01)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -457,14 +457,14 @@
   ],
   "الطب الشرعي وعلم السموم (MEPA-6-05)": [
     {
-      "id": "9t2cj8r73",
+      "id": "hctcogtc7",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -475,14 +475,14 @@
       ]
     },
     {
-      "id": "u0khsezwu",
+      "id": "aeq8u7ep6",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -493,14 +493,14 @@
       ]
     },
     {
-      "id": "tdh4atged",
+      "id": "je5dr8ddc",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "theory",
       "className": "F (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "30",
-      "seats": "30/40",
+      "seats": "30/35",
       "times": [
         {
           "day": "السبت",
@@ -511,14 +511,14 @@
       ]
     },
     {
-      "id": "ekfc88hy2",
+      "id": "td78ypee2",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -529,14 +529,14 @@
       ]
     },
     {
-      "id": "97qbp1f0n",
+      "id": "0onw6chco",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -547,14 +547,14 @@
       ]
     },
     {
-      "id": "28187e5e8",
+      "id": "b5u46aoin",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "practical",
       "className": "E1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "18",
-      "seats": "18/40",
+      "seats": "18/20",
       "times": [
         {
           "day": "الأحد",
@@ -565,14 +565,14 @@
       ]
     },
     {
-      "id": "u9pksxe2t",
+      "id": "f1hlx640v",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "practical",
       "className": "E2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "17",
-      "seats": "17/40",
+      "seats": "17/20",
       "times": [
         {
           "day": "الأحد",
@@ -583,14 +583,14 @@
       ]
     },
     {
-      "id": "d4pnp5egr",
+      "id": "3sde8748q",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "practical",
       "className": "F1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "13",
-      "seats": "13/40",
+      "seats": "13/20",
       "times": [
         {
           "day": "السبت",
@@ -601,14 +601,14 @@
       ]
     },
     {
-      "id": "t5vb074na",
+      "id": "hn6k22wmc",
       "course": "الطب الشرعي وعلم السموم (MEPA-6-05)",
       "type": "practical",
       "className": "F2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "12",
-      "seats": "12/40",
+      "seats": "12/20",
       "times": [
         {
           "day": "السبت",
@@ -621,14 +621,14 @@
   ],
   "الطب النفسي (MEIM-4-07)": [
     {
-      "id": "u7szc2xfk",
+      "id": "xg52c9b5a",
       "course": "الطب النفسي (MEIM-4-07)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -639,14 +639,14 @@
       ]
     },
     {
-      "id": "mdwk3g8hc",
+      "id": "gx3h7s8xx",
       "course": "الطب النفسي (MEIM-4-07)",
       "type": "theory",
       "className": "E (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "31",
-      "seats": "31/40",
+      "seats": "31/35",
       "times": [
         {
           "day": "السبت",
@@ -657,14 +657,14 @@
       ]
     },
     {
-      "id": "2z26ydb6l",
+      "id": "ceflc2wlp",
       "course": "الطب النفسي (MEIM-4-07)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة متاحة",
+      "status": "الفئات ممتلئة",
       "capacity": "35",
       "registered": "32",
-      "seats": "32/40",
+      "seats": "32/35",
       "times": [
         {
           "day": "السبت",
@@ -677,14 +677,14 @@
   ],
   "الطب الوقائي وطب الأسرة (MECM-1-03)": [
     {
-      "id": "tr42fvsnl",
+      "id": "rw81ytkr5",
       "course": "الطب الوقائي وطب الأسرة (MECM-1-03)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/40",
+      "seats": "36/36",
       "times": [
         {
           "day": "السبت",
@@ -695,14 +695,14 @@
       ]
     },
     {
-      "id": "29pg8pb52",
+      "id": "4sbmf16ro",
       "course": "الطب الوقائي وطب الأسرة (MECM-1-03)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -715,7 +715,7 @@
   ],
   "الكيمياء الحيوية الطبية (2) (MEBC-3-03)": [
     {
-      "id": "5jfrvlyl4",
+      "id": "2blbeklpb",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "theory",
       "className": "B (نظري)",
@@ -739,7 +739,7 @@
       ]
     },
     {
-      "id": "1lqq4dh58",
+      "id": "jfi7ttk5h",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "theory",
       "className": "E (نظري)",
@@ -763,7 +763,7 @@
       ]
     },
     {
-      "id": "5e1j5b12b",
+      "id": "isijpdkh7",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "theory",
       "className": "F (نظري)",
@@ -787,14 +787,14 @@
       ]
     },
     {
-      "id": "c1ghjt37c",
+      "id": "6nl1msk6q",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -805,14 +805,14 @@
       ]
     },
     {
-      "id": "09k7poee7",
+      "id": "1n3rit0w7",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "practical",
       "className": "B2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "12",
-      "seats": "12/40",
+      "seats": "12/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -823,14 +823,14 @@
       ]
     },
     {
-      "id": "v3y84o2aq",
+      "id": "qii044gp5",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "practical",
       "className": "E1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "6",
-      "seats": "6/40",
+      "seats": "6/20",
       "times": [
         {
           "day": "السبت",
@@ -841,14 +841,14 @@
       ]
     },
     {
-      "id": "nzrj1d5p6",
+      "id": "sx1i30d1l",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "practical",
       "className": "E2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "16",
-      "seats": "16/40",
+      "seats": "16/20",
       "times": [
         {
           "day": "السبت",
@@ -859,14 +859,14 @@
       ]
     },
     {
-      "id": "mr0lor4ts",
+      "id": "lfjvg39l2",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "practical",
       "className": "F1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "12",
-      "seats": "12/40",
+      "seats": "12/20",
       "times": [
         {
           "day": "السبت",
@@ -877,14 +877,14 @@
       ]
     },
     {
-      "id": "q0aab22ok",
+      "id": "qciov10o0",
       "course": "الكيمياء الحيوية الطبية (2) (MEBC-3-03)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "الفئات ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -897,7 +897,7 @@
   ],
   "الوبائيات والإحصاء الحيوي (MECM-1-02)": [
     {
-      "id": "m50t16ut0",
+      "id": "d40oqzzzn",
       "course": "الوبائيات والإحصاء الحيوي (MECM-1-02)",
       "type": "theory",
       "className": "A (نظري)",
@@ -915,7 +915,7 @@
       ]
     },
     {
-      "id": "c0skzmwfj",
+      "id": "fhy35r7uk",
       "course": "الوبائيات والإحصاء الحيوي (MECM-1-02)",
       "type": "theory",
       "className": "B (نظري)",
@@ -933,14 +933,14 @@
       ]
     },
     {
-      "id": "p8oyhbs07",
+      "id": "8s0g565g3",
       "course": "الوبائيات والإحصاء الحيوي (MECM-1-02)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -951,14 +951,14 @@
       ]
     },
     {
-      "id": "1sulnl79x",
+      "id": "u0i03qwoh",
       "course": "الوبائيات والإحصاء الحيوي (MECM-1-02)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -969,14 +969,14 @@
       ]
     },
     {
-      "id": "4nddscrg0",
+      "id": "fu60somfv",
       "course": "الوبائيات والإحصاء الحيوي (MECM-1-02)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -987,14 +987,14 @@
       ]
     },
     {
-      "id": "idxzptzh2",
+      "id": "70tug7e4m",
       "course": "الوبائيات والإحصاء الحيوي (MECM-1-02)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -1007,7 +1007,7 @@
   ],
   "علم الأدوية (2) (الخاص) (MEPH-5-05)": [
     {
-      "id": "p1qcjt35c",
+      "id": "njpsqbzoz",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "theory",
       "className": "A (نظري)",
@@ -1025,7 +1025,7 @@
       ]
     },
     {
-      "id": "aodgowv3k",
+      "id": "zcwimeh3j",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "theory",
       "className": "D (نظري)",
@@ -1043,7 +1043,7 @@
       ]
     },
     {
-      "id": "wruuh9hft",
+      "id": "bsd955b08",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "theory",
       "className": "F (نظري)",
@@ -1061,14 +1061,14 @@
       ]
     },
     {
-      "id": "c0jlu25ei",
+      "id": "5ardi19lk",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -1079,14 +1079,14 @@
       ]
     },
     {
-      "id": "6hmo8ovee",
+      "id": "7zhxzgari",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "practical",
       "className": "A2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "11",
-      "seats": "11/40",
+      "seats": "11/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -1097,14 +1097,14 @@
       ]
     },
     {
-      "id": "gc789ljf9",
+      "id": "86werkkd3",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "practical",
       "className": "D1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -1115,14 +1115,14 @@
       ]
     },
     {
-      "id": "gkcuv6gxb",
+      "id": "au2x1sbgd",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "practical",
       "className": "D2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -1133,14 +1133,14 @@
       ]
     },
     {
-      "id": "n10w352z9",
+      "id": "lg7yt5m7u",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "practical",
       "className": "F1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -1151,14 +1151,14 @@
       ]
     },
     {
-      "id": "dmtk5muy6",
+      "id": "kw8gnnia2",
       "course": "علم الأدوية (2) (الخاص) (MEPH-5-05)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -1171,7 +1171,7 @@
   ],
   "علم الأمراض (2) (الخاص) (MEPA-5-04)": [
     {
-      "id": "3ixltwpm3",
+      "id": "7gvrx5jsv",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "theory",
       "className": "D (نظري)",
@@ -1189,7 +1189,7 @@
       ]
     },
     {
-      "id": "apdg5dzz5",
+      "id": "5zy0jvt3b",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "theory",
       "className": "E (نظري)",
@@ -1207,7 +1207,7 @@
       ]
     },
     {
-      "id": "r94kw212j",
+      "id": "9t33lzsjg",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "theory",
       "className": "F (نظري)",
@@ -1225,14 +1225,14 @@
       ]
     },
     {
-      "id": "ro95qwdkz",
+      "id": "lvvpdk81r",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "practical",
       "className": "D1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -1243,14 +1243,14 @@
       ]
     },
     {
-      "id": "r9d9nkihw",
+      "id": "tq06pn793",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "practical",
       "className": "D2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "17",
-      "seats": "17/40",
+      "seats": "17/20",
       "times": [
         {
           "day": "السبت",
@@ -1261,14 +1261,14 @@
       ]
     },
     {
-      "id": "gc7mnds90",
+      "id": "n4bd4eend",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "practical",
       "className": "E1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "19",
-      "seats": "19/40",
+      "seats": "19/20",
       "times": [
         {
           "day": "الأحد",
@@ -1279,14 +1279,14 @@
       ]
     },
     {
-      "id": "uy1i5elpy",
+      "id": "2ny7uxbq7",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "practical",
       "className": "E2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "14",
-      "seats": "14/40",
+      "seats": "14/20",
       "times": [
         {
           "day": "الأحد",
@@ -1297,14 +1297,14 @@
       ]
     },
     {
-      "id": "fs89st758",
+      "id": "tjmsyncr1",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "practical",
       "className": "F1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "19",
-      "seats": "19/40",
+      "seats": "19/20",
       "times": [
         {
           "day": "السبت",
@@ -1315,14 +1315,14 @@
       ]
     },
     {
-      "id": "yl3jtscfj",
+      "id": "nn6ynl01r",
       "course": "علم الأمراض (2) (الخاص) (MEPA-5-04)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -1335,7 +1335,7 @@
   ],
   "علم المصطلحات الطبية (MEXX-2-04)": [
     {
-      "id": "c95l8c6vo",
+      "id": "6k7obuwvd",
       "course": "علم المصطلحات الطبية (MEXX-2-04)",
       "type": "theory",
       "className": "A (نظري)",
@@ -1353,7 +1353,7 @@
       ]
     },
     {
-      "id": "1bjam8bri",
+      "id": "qctgk4uhx",
       "course": "علم المصطلحات الطبية (MEXX-2-04)",
       "type": "theory",
       "className": "C (نظري)",
@@ -1371,11 +1371,11 @@
       ]
     },
     {
-      "id": "oapvzz8mc",
+      "id": "snrwpgfqa",
       "course": "علم المصطلحات الطبية (MEXX-2-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة متاحة",
+      "status": "الفئات ممتلئة",
       "capacity": "40",
       "registered": "35",
       "seats": "35/40",
@@ -1391,7 +1391,7 @@
   ],
   "علم المناعة (MEBI-3-04)": [
     {
-      "id": "ckulwlicr",
+      "id": "8xbpasv3o",
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "B (نظري)",
@@ -1402,7 +1402,7 @@
       "times": []
     },
     {
-      "id": "m86otn39z",
+      "id": "sig47kiyn",
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "C (نظري)",
@@ -1420,7 +1420,7 @@
       ]
     },
     {
-      "id": "gl7u441g8",
+      "id": "ld0st1p15",
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "D (نظري)",
@@ -1438,11 +1438,11 @@
       ]
     },
     {
-      "id": "26o0i8ao4",
+      "id": "xtg9ns12j",
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة ممتلئة",
+      "status": "الفئات ممتلئة",
       "capacity": "40",
       "registered": "40",
       "seats": "40/40",
@@ -1458,7 +1458,7 @@
   ],
   "علم النفس السلوكي (MEXX-1-05)": [
     {
-      "id": "95r0asd1s",
+      "id": "tdlahzggm",
       "course": "علم النفس السلوكي (MEXX-1-05)",
       "type": "theory",
       "className": "A (نظري)",
@@ -1476,7 +1476,7 @@
       ]
     },
     {
-      "id": "lh12ztfvf",
+      "id": "zsowxxral",
       "course": "علم النفس السلوكي (MEXX-1-05)",
       "type": "theory",
       "className": "B (نظري)",
@@ -1494,7 +1494,7 @@
       ]
     },
     {
-      "id": "o8ouzxkv9",
+      "id": "8x82ecz8r",
       "course": "علم النفس السلوكي (MEXX-1-05)",
       "type": "theory",
       "className": "C (نظري)",
@@ -1512,7 +1512,7 @@
       ]
     },
     {
-      "id": "iudtmz25y",
+      "id": "mi3dy34cx",
       "course": "علم النفس السلوكي (MEXX-1-05)",
       "type": "theory",
       "className": "D (نظري)",
@@ -1532,7 +1532,7 @@
   ],
   "منهجية البحث والطب المسند بالدليل (MEXX-1-01)": [
     {
-      "id": "1j1ad76xm",
+      "id": "3ejelccc4",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "theory",
       "className": "A (نظري)",
@@ -1550,7 +1550,7 @@
       ]
     },
     {
-      "id": "e6kkpm36n",
+      "id": "jp79xvo42",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "theory",
       "className": "B (نظري)",
@@ -1568,7 +1568,7 @@
       ]
     },
     {
-      "id": "08foodyol",
+      "id": "2z44s2wti",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "theory",
       "className": "E (نظري)",
@@ -1586,7 +1586,7 @@
       ]
     },
     {
-      "id": "nlop6t8vx",
+      "id": "0bzvf27co",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "theory",
       "className": "F (نظري)",
@@ -1604,14 +1604,14 @@
       ]
     },
     {
-      "id": "wxtdd6zyk",
+      "id": "wfq2amwpe",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -1622,14 +1622,14 @@
       ]
     },
     {
-      "id": "6g6uj9c1s",
+      "id": "fi5ru48sr",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -1640,14 +1640,14 @@
       ]
     },
     {
-      "id": "e5eypax7m",
+      "id": "iz2hp3aav",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -1658,14 +1658,14 @@
       ]
     },
     {
-      "id": "s8bgs4hck",
+      "id": "dbubx3qbb",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -1676,14 +1676,14 @@
       ]
     },
     {
-      "id": "tirvin1vv",
+      "id": "5rz0quakn",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -1694,14 +1694,14 @@
       ]
     },
     {
-      "id": "1cw1ca3sm",
+      "id": "eyyiad5z8",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "practical",
       "className": "E2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "15",
-      "seats": "15/40",
+      "seats": "15/20",
       "times": [
         {
           "day": "الإثنين",
@@ -1712,14 +1712,14 @@
       ]
     },
     {
-      "id": "36o89aivs",
+      "id": "zxuu28k1d",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "practical",
       "className": "F1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -1730,14 +1730,14 @@
       ]
     },
     {
-      "id": "ogtlb8xfn",
+      "id": "74gfks18l",
       "course": "منهجية البحث والطب المسند بالدليل (MEXX-1-01)",
       "type": "practical",
       "className": "F2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "19",
-      "seats": "19/40",
+      "seats": "19/20",
       "times": [
         {
           "day": "الأحد",
@@ -1750,7 +1750,7 @@
   ],
   "مهارات التواصل (MEXX-1-02)": [
     {
-      "id": "a2cwqslde",
+      "id": "7gap5tjbr",
       "course": "مهارات التواصل (MEXX-1-02)",
       "type": "theory",
       "className": "B (نظري)",
@@ -1768,7 +1768,7 @@
       ]
     },
     {
-      "id": "s0oab4u35",
+      "id": "kctwpsf22",
       "course": "مهارات التواصل (MEXX-1-02)",
       "type": "theory",
       "className": "C (نظري)",
@@ -1786,7 +1786,7 @@
       ]
     },
     {
-      "id": "47c2i5xe0",
+      "id": "k4pxh83bp",
       "course": "مهارات التواصل (MEXX-1-02)",
       "type": "theory",
       "className": "E (نظري)",
@@ -1806,7 +1806,7 @@
   ],
   "أخلاقيات وسلوكيات المهنة (UR-2-17)": [
     {
-      "id": "tfx6wbiuc",
+      "id": "j8szbmtpq",
       "course": "أخلاقيات وسلوكيات المهنة (UR-2-17)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -1824,7 +1824,7 @@
       ]
     },
     {
-      "id": "3wkwd8644",
+      "id": "eaea4wakj",
       "course": "أخلاقيات وسلوكيات المهنة (UR-2-17)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -1842,7 +1842,7 @@
       ]
     },
     {
-      "id": "o8xmc83g4",
+      "id": "088kefli0",
       "course": "أخلاقيات وسلوكيات المهنة (UR-2-17)",
       "type": "theory",
       "className": "ش3 (نظري)",
@@ -1860,7 +1860,7 @@
       ]
     },
     {
-      "id": "fgsimtkl9",
+      "id": "i2hr7u65l",
       "course": "أخلاقيات وسلوكيات المهنة (UR-2-17)",
       "type": "theory",
       "className": "ش4 (نظري)",
@@ -1880,14 +1880,14 @@
   ],
   "أمراض الأذن والأنف والحنجرة (MESR-4-08)": [
     {
-      "id": "ipb8kgiw3",
+      "id": "p19vr9x3m",
       "course": "أمراض الأذن والأنف والحنجرة (MESR-4-08)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الأحد",
@@ -1904,14 +1904,14 @@
       ]
     },
     {
-      "id": "8su4jstzg",
+      "id": "t76drnj3t",
       "course": "أمراض الأذن والأنف والحنجرة (MESR-4-08)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "32",
-      "seats": "32/40",
+      "seats": "32/35",
       "times": [
         {
           "day": "الأحد",
@@ -1928,14 +1928,14 @@
       ]
     },
     {
-      "id": "vp1fmt7cc",
+      "id": "f4dyxzzfs",
       "course": "أمراض الأذن والأنف والحنجرة (MESR-4-08)",
       "type": "theory",
       "className": "D (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "28",
-      "seats": "28/40",
+      "seats": "28/35",
       "times": [
         {
           "day": "السبت",
@@ -1954,14 +1954,14 @@
   ],
   "أمراض الأطفال (1) (MEPD-6-01)": [
     {
-      "id": "sd43ybxbn",
+      "id": "4udw4fe93",
       "course": "أمراض الأطفال (1) (MEPD-6-01)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "32",
-      "seats": "32/40",
+      "seats": "32/35",
       "times": [
         {
           "day": "الإثنين",
@@ -1978,14 +1978,14 @@
       ]
     },
     {
-      "id": "p8p2fbf39",
+      "id": "rdqnnc1u1",
       "course": "أمراض الأطفال (1) (MEPD-6-01)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/40",
+      "seats": "34/35",
       "times": [
         {
           "day": "الإثنين",
@@ -2002,14 +2002,14 @@
       ]
     },
     {
-      "id": "q26pyjytj",
+      "id": "j10cjaod2",
       "course": "أمراض الأطفال (1) (MEPD-6-01)",
       "type": "theory",
       "className": "C (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "33",
-      "seats": "33/40",
+      "seats": "33/35",
       "times": [
         {
           "day": "الأحد",
@@ -2026,14 +2026,14 @@
       ]
     },
     {
-      "id": "ss3ix8zxw",
+      "id": "y9zhyetww",
       "course": "أمراض الأطفال (1) (MEPD-6-01)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الأحد",
@@ -2050,14 +2050,14 @@
       ]
     },
     {
-      "id": "4b1a368iu",
+      "id": "cx7qrwwrt",
       "course": "أمراض الأطفال (1) (MEPD-6-01)",
       "type": "theory",
       "className": "E (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "28",
-      "seats": "28/40",
+      "seats": "28/35",
       "times": [
         {
           "day": "الإثنين",
@@ -2076,14 +2076,14 @@
   ],
   "أمراض الأطفال (2) (MEPD-7-02)": [
     {
-      "id": "6pu2zou0r",
+      "id": "cv9ucef8e",
       "course": "أمراض الأطفال (2) (MEPD-7-02)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "14",
-      "seats": "14/40",
+      "seats": "14/35",
       "times": [
         {
           "day": "الإثنين",
@@ -2100,14 +2100,14 @@
       ]
     },
     {
-      "id": "z4ge4nmjz",
+      "id": "ps2p0dm07",
       "course": "أمراض الأطفال (2) (MEPD-7-02)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "11",
-      "seats": "11/40",
+      "seats": "11/35",
       "times": [
         {
           "day": "السبت",
@@ -2124,14 +2124,14 @@
       ]
     },
     {
-      "id": "9cndkxz3e",
+      "id": "6062u3ckk",
       "course": "أمراض الأطفال (2) (MEPD-7-02)",
       "type": "theory",
       "className": "F (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "21",
-      "seats": "21/40",
+      "seats": "21/35",
       "times": [
         {
           "day": "الإثنين",
@@ -2151,14 +2151,14 @@
   "أمراض الأنف والأذن والحنجرة وجراحتها (MESR-8-11)": [],
   "أمراض الجلد والأمراض المنتقلة بالجنس (MEIM-6-08)": [
     {
-      "id": "lrd7l1o5k",
+      "id": "etab58nj4",
       "course": "أمراض الجلد والأمراض المنتقلة بالجنس (MEIM-6-08)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/40",
+      "seats": "34/35",
       "times": [
         {
           "day": "الأحد",
@@ -2169,14 +2169,14 @@
       ]
     },
     {
-      "id": "wl24l1rvk",
+      "id": "0vqkh5tcn",
       "course": "أمراض الجلد والأمراض المنتقلة بالجنس (MEIM-6-08)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الأحد",
@@ -2187,14 +2187,14 @@
       ]
     },
     {
-      "id": "dhwu82gzu",
+      "id": "hzzyuez72",
       "course": "أمراض الجلد والأمراض المنتقلة بالجنس (MEIM-6-08)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الإثنين",
@@ -2205,14 +2205,14 @@
       ]
     },
     {
-      "id": "0jwdsy0m9",
+      "id": "1xqf1neb0",
       "course": "أمراض الجلد والأمراض المنتقلة بالجنس (MEIM-6-08)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الإثنين",
@@ -2226,14 +2226,14 @@
   "أمراض العين وجراحتها (MESR-5-10)": [],
   "أمراض العين وجراحتها (MESR-4-06)": [
     {
-      "id": "uiuqhrhaw",
+      "id": "u98wmazpy",
       "course": "أمراض العين وجراحتها (MESR-4-06)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "16",
-      "seats": "16/40",
+      "seats": "16/35",
       "times": [
         {
           "day": "السبت",
@@ -2250,14 +2250,14 @@
       ]
     },
     {
-      "id": "b041puqkk",
+      "id": "ua43llt9p",
       "course": "أمراض العين وجراحتها (MESR-4-06)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "9",
-      "seats": "9/40",
+      "seats": "9/35",
       "times": [
         {
           "day": "السبت",
@@ -2274,14 +2274,14 @@
       ]
     },
     {
-      "id": "qq7ou7m4a",
+      "id": "mtg1tly9u",
       "course": "أمراض العين وجراحتها (MESR-4-06)",
       "type": "theory",
       "className": "D (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "15",
-      "seats": "15/40",
+      "seats": "15/35",
       "times": [
         {
           "day": "السبت",
@@ -2298,14 +2298,14 @@
       ]
     },
     {
-      "id": "w1anzw6ef",
+      "id": "jifosauq7",
       "course": "أمراض العين وجراحتها (MESR-4-06)",
       "type": "theory",
       "className": "F (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "6",
-      "seats": "6/40",
+      "seats": "6/35",
       "times": [
         {
           "day": "السبت",
@@ -2324,14 +2324,14 @@
   ],
   "أمراض النساء (MEGO-7-02)": [
     {
-      "id": "d592rqxg1",
+      "id": "fm492jr0o",
       "course": "أمراض النساء (MEGO-7-02)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الأحد",
@@ -2348,14 +2348,14 @@
       ]
     },
     {
-      "id": "hq242zyhc",
+      "id": "xqy3zrwer",
       "course": "أمراض النساء (MEGO-7-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/40",
+      "seats": "36/36",
       "times": [
         {
           "day": "السبت",
@@ -2372,14 +2372,14 @@
       ]
     },
     {
-      "id": "367d6v9b0",
+      "id": "gwtbj21t6",
       "course": "أمراض النساء (MEGO-7-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الأحد",
@@ -2398,7 +2398,7 @@
   ],
   "اساسيات الإدارة ومهاراتها (UR-2-08)": [
     {
-      "id": "jm74exxn9",
+      "id": "5zj5tnypn",
       "course": "اساسيات الإدارة ومهاراتها (UR-2-08)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -2416,7 +2416,7 @@
       ]
     },
     {
-      "id": "6lsyxwf6w",
+      "id": "r04rex3u1",
       "course": "اساسيات الإدارة ومهاراتها (UR-2-08)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -2436,7 +2436,7 @@
   ],
   "الأحياء الدقيقة (1) (MEBI-2-02)": [
     {
-      "id": "a9wkeimwn",
+      "id": "7mqixvjkp",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "theory",
       "className": "C (نظري)",
@@ -2454,7 +2454,7 @@
       ]
     },
     {
-      "id": "a3rdcen1t",
+      "id": "k57c41k87",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "theory",
       "className": "D (نظري)",
@@ -2472,7 +2472,7 @@
       ]
     },
     {
-      "id": "1gynwci3s",
+      "id": "ll4d2ft00",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "theory",
       "className": "E (نظري)",
@@ -2496,7 +2496,7 @@
       ]
     },
     {
-      "id": "w3g84cnwd",
+      "id": "gz738ymip",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "theory",
       "className": "F (نظري)",
@@ -2514,14 +2514,14 @@
       ]
     },
     {
-      "id": "6zlvrhgpy",
+      "id": "8k2bv9960",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "practical",
       "className": "C1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -2532,14 +2532,14 @@
       ]
     },
     {
-      "id": "3lv6phd05",
+      "id": "1ncqjd2ey",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "practical",
       "className": "C2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -2550,14 +2550,14 @@
       ]
     },
     {
-      "id": "t84co7ctj",
+      "id": "4ouok74ju",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "practical",
       "className": "D1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -2568,14 +2568,14 @@
       ]
     },
     {
-      "id": "2chkd9pwh",
+      "id": "f12nufzwm",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "practical",
       "className": "D2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -2586,14 +2586,14 @@
       ]
     },
     {
-      "id": "1g7cj604i",
+      "id": "13mn7gwhk",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -2604,14 +2604,14 @@
       ]
     },
     {
-      "id": "dgvkqrrmv",
+      "id": "ynaac9g5p",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "practical",
       "className": "E2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -2622,14 +2622,14 @@
       ]
     },
     {
-      "id": "yns7g0dh5",
+      "id": "u3ulog4b0",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "practical",
       "className": "F1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -2640,14 +2640,14 @@
       ]
     },
     {
-      "id": "h02enh6y1",
+      "id": "mat0x0xjv",
       "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -2660,7 +2660,7 @@
   ],
   "الأحياء الدقيقة (2) (MEBI-3-03)": [
     {
-      "id": "vr6soi1hl",
+      "id": "txwhme2jw",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "theory",
       "className": "A (نظري)",
@@ -2678,7 +2678,7 @@
       ]
     },
     {
-      "id": "jje4qok6c",
+      "id": "il8nmc7t5",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "theory",
       "className": "B (نظري)",
@@ -2696,7 +2696,7 @@
       ]
     },
     {
-      "id": "wma6d449s",
+      "id": "jhvg5mmrb",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "theory",
       "className": "C (نظري)",
@@ -2714,7 +2714,7 @@
       ]
     },
     {
-      "id": "6tx4i49z1",
+      "id": "4m10uvsld",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "theory",
       "className": "F (نظري)",
@@ -2732,14 +2732,14 @@
       ]
     },
     {
-      "id": "qyo3oh625",
+      "id": "90rtdyav9",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -2750,14 +2750,14 @@
       ]
     },
     {
-      "id": "w2noe47wi",
+      "id": "9x6pe34fk",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -2768,14 +2768,14 @@
       ]
     },
     {
-      "id": "9mr7lux20",
+      "id": "6swjxp11k",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -2786,14 +2786,14 @@
       ]
     },
     {
-      "id": "f84hgsbp9",
+      "id": "0d7zgqo8n",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -2804,14 +2804,14 @@
       ]
     },
     {
-      "id": "da8ito6s7",
+      "id": "l049kuhfa",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "practical",
       "className": "C1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -2822,14 +2822,14 @@
       ]
     },
     {
-      "id": "nsl8vysa1",
+      "id": "51wujgokv",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "practical",
       "className": "C2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "15",
-      "seats": "15/40",
+      "seats": "15/20",
       "times": [
         {
           "day": "السبت",
@@ -2840,14 +2840,14 @@
       ]
     },
     {
-      "id": "yqrb2o4ea",
+      "id": "3gsy5jj26",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "practical",
       "className": "F1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -2858,14 +2858,14 @@
       ]
     },
     {
-      "id": "6rjdn4xyp",
+      "id": "3p6nvuvm9",
       "course": "الأحياء الدقيقة (2) (MEBI-3-03)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -2879,7 +2879,7 @@
   "الأمراض الجلدية (MEIM-8-10)": [],
   "التشريح (1) -- (MEAN-1-01)": [
     {
-      "id": "755kp57nk",
+      "id": "mvgjzalby",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "theory",
       "className": "A (نظري)",
@@ -2903,7 +2903,7 @@
       ]
     },
     {
-      "id": "aageq4ajj",
+      "id": "jzcu7hw4n",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "theory",
       "className": "B (نظري)",
@@ -2927,7 +2927,7 @@
       ]
     },
     {
-      "id": "dkjgpheot",
+      "id": "dw3dkf8so",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "theory",
       "className": "C (نظري)",
@@ -2951,7 +2951,7 @@
       ]
     },
     {
-      "id": "6r5cfrgk8",
+      "id": "a8rfp2lwv",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "theory",
       "className": "D (نظري)",
@@ -2975,7 +2975,7 @@
       ]
     },
     {
-      "id": "u878e4niv",
+      "id": "r7ycmzx5b",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "practical",
       "className": "A1 (عملي)",
@@ -2993,7 +2993,7 @@
       ]
     },
     {
-      "id": "rbl50fa30",
+      "id": "mglnpvlav",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "practical",
       "className": "A2 (عملي)",
@@ -3011,7 +3011,7 @@
       ]
     },
     {
-      "id": "8rblfp52i",
+      "id": "svyhrmvg3",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "practical",
       "className": "B1 (عملي)",
@@ -3029,7 +3029,7 @@
       ]
     },
     {
-      "id": "m4aoehbj1",
+      "id": "hht197z8l",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "practical",
       "className": "B2 (عملي)",
@@ -3047,7 +3047,7 @@
       ]
     },
     {
-      "id": "za1j8p86l",
+      "id": "iyssk7gtl",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "practical",
       "className": "C1 (عملي)",
@@ -3065,7 +3065,7 @@
       ]
     },
     {
-      "id": "7u4qjlzh2",
+      "id": "shs64tfav",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "practical",
       "className": "C2 (عملي)",
@@ -3083,7 +3083,7 @@
       ]
     },
     {
-      "id": "vmlvmcxa5",
+      "id": "qcs2qloo2",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "practical",
       "className": "D1 (عملي)",
@@ -3101,7 +3101,7 @@
       ]
     },
     {
-      "id": "x5o819pub",
+      "id": "aajbstwee",
       "course": "التشريح (1) -- (MEAN-1-01)",
       "type": "practical",
       "className": "D2 (عملي)",
@@ -3121,7 +3121,7 @@
   ],
   "التشريح (3) (MEAN-3-03)": [
     {
-      "id": "hnc7js7di",
+      "id": "gzmez4w8n",
       "course": "التشريح (3) (MEAN-3-03)",
       "type": "theory",
       "className": "A (نظري)",
@@ -3145,7 +3145,7 @@
       ]
     },
     {
-      "id": "ib9o2qnmk",
+      "id": "8nzjjno06",
       "course": "التشريح (3) (MEAN-3-03)",
       "type": "theory",
       "className": "B (نظري)",
@@ -3169,14 +3169,14 @@
       ]
     },
     {
-      "id": "qjeq1kb4f",
+      "id": "ir2016kgp",
       "course": "التشريح (3) (MEAN-3-03)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -3187,14 +3187,14 @@
       ]
     },
     {
-      "id": "90tuu24c3",
+      "id": "syluzxxt5",
       "course": "التشريح (3) (MEAN-3-03)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -3205,14 +3205,14 @@
       ]
     },
     {
-      "id": "1g4wxw7vt",
+      "id": "btaarhm16",
       "course": "التشريح (3) (MEAN-3-03)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -3223,14 +3223,14 @@
       ]
     },
     {
-      "id": "ghfhywyuj",
+      "id": "zbdl22ypa",
       "course": "التشريح (3) (MEAN-3-03)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -3243,7 +3243,7 @@
   ],
   "التشريح (4) (MEAN-4-04)": [
     {
-      "id": "kuff863f0",
+      "id": "3ip81gryu",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "theory",
       "className": "B (نظري)",
@@ -3267,7 +3267,7 @@
       ]
     },
     {
-      "id": "se13a45i1",
+      "id": "vbfrnpkar",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "theory",
       "className": "C (نظري)",
@@ -3291,7 +3291,7 @@
       ]
     },
     {
-      "id": "r6eg0gzfd",
+      "id": "3caiw21l5",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "theory",
       "className": "D (نظري)",
@@ -3315,7 +3315,7 @@
       ]
     },
     {
-      "id": "pqq3b2ngk",
+      "id": "z5fsn1r8e",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "theory",
       "className": "E (نظري)",
@@ -3339,14 +3339,14 @@
       ]
     },
     {
-      "id": "8op1w7g2l",
+      "id": "o15ivf74c",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -3357,14 +3357,14 @@
       ]
     },
     {
-      "id": "38hckxafo",
+      "id": "dmfxnq6gl",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -3375,14 +3375,14 @@
       ]
     },
     {
-      "id": "295a47mkt",
+      "id": "h3a1n8s02",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "practical",
       "className": "C1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -3393,14 +3393,14 @@
       ]
     },
     {
-      "id": "9l2ojke98",
+      "id": "afkqzn5mp",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "practical",
       "className": "C2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -3411,14 +3411,14 @@
       ]
     },
     {
-      "id": "nuh7odl1x",
+      "id": "6t1rmy4m9",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "practical",
       "className": "D1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -3429,14 +3429,14 @@
       ]
     },
     {
-      "id": "dt9t78v1i",
+      "id": "wcfa0d8ra",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "practical",
       "className": "D2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -3447,14 +3447,14 @@
       ]
     },
     {
-      "id": "n89li6z7m",
+      "id": "f4k9946bp",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -3465,14 +3465,14 @@
       ]
     },
     {
-      "id": "vulshe35s",
+      "id": "pjjbldyy0",
       "course": "التشريح (4) (MEAN-4-04)",
       "type": "practical",
       "className": "E2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -3487,14 +3487,14 @@
   "الجراحة (MESR-8-09)": [],
   "الجراحة (4) (MESR-8-04)": [
     {
-      "id": "y9348dxs2",
+      "id": "jea77789i",
       "course": "الجراحة (4) (MESR-8-04)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/40",
+      "seats": "36/36",
       "times": [
         {
           "day": "السبت",
@@ -3517,14 +3517,14 @@
       ]
     },
     {
-      "id": "al90n0n8x",
+      "id": "8hpas75db",
       "course": "الجراحة (4) (MESR-8-04)",
       "type": "theory",
       "className": "C (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -3547,14 +3547,14 @@
       ]
     },
     {
-      "id": "khlo14uiu",
+      "id": "749j2txm6",
       "course": "الجراحة (4) (MESR-8-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/40",
+      "seats": "36/36",
       "times": [
         {
           "day": "السبت",
@@ -3579,14 +3579,14 @@
   ],
   "الجراحة (5) (MESR-6-05)": [
     {
-      "id": "imq30qufg",
+      "id": "jv5plcfel",
       "course": "الجراحة (5) (MESR-6-05)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "30",
-      "seats": "30/40",
+      "seats": "30/35",
       "times": [
         {
           "day": "السبت",
@@ -3603,14 +3603,14 @@
       ]
     },
     {
-      "id": "oa3ghgn3a",
+      "id": "2de00w7n6",
       "course": "الجراحة (5) (MESR-6-05)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "31",
-      "seats": "31/40",
+      "seats": "31/35",
       "times": [
         {
           "day": "السبت",
@@ -3627,14 +3627,14 @@
       ]
     },
     {
-      "id": "6599wb60y",
+      "id": "dyo71e4fz",
       "course": "الجراحة (5) (MESR-6-05)",
       "type": "theory",
       "className": "F (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "18",
-      "seats": "18/40",
+      "seats": "18/35",
       "times": [
         {
           "day": "السبت",
@@ -3655,7 +3655,7 @@
   "الطب الباطني (MEIM-8-09)": [],
   "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)": [
     {
-      "id": "gm79yfyiy",
+      "id": "hsg4jwifa",
       "course": "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)",
       "type": "theory",
       "className": "C (نظري)",
@@ -3673,7 +3673,7 @@
       ]
     },
     {
-      "id": "uavpvz3sc",
+      "id": "rhc6au6ff",
       "course": "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)",
       "type": "theory",
       "className": "D (نظري)",
@@ -3691,7 +3691,7 @@
       ]
     },
     {
-      "id": "53kynzsht",
+      "id": "u64j3nlku",
       "course": "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)",
       "type": "theory",
       "className": "E (نظري)",
@@ -3709,7 +3709,7 @@
       ]
     },
     {
-      "id": "xns84vbcu",
+      "id": "d1ja5ncl8",
       "course": "الطب الباطني (1) (الأعراض والتشخيص) (MEIM-5-01)",
       "type": "theory",
       "className": "F (نظري)",
@@ -3729,14 +3729,14 @@
   ],
   "الطب الباطني (2) (MEIM-6-02)": [
     {
-      "id": "bt82sh6ea",
+      "id": "xew6e0u4c",
       "course": "الطب الباطني (2) (MEIM-6-02)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "36",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/36",
       "times": [
         {
           "day": "الأحد",
@@ -3759,14 +3759,14 @@
       ]
     },
     {
-      "id": "pnephqyoh",
+      "id": "6krh08ixp",
       "course": "الطب الباطني (2) (MEIM-6-02)",
       "type": "theory",
       "className": "C (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "33",
-      "seats": "33/40",
+      "seats": "33/35",
       "times": [
         {
           "day": "الأحد",
@@ -3789,14 +3789,14 @@
       ]
     },
     {
-      "id": "nvyxnwoqj",
+      "id": "p516e15p6",
       "course": "الطب الباطني (2) (MEIM-6-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/40",
+      "seats": "36/36",
       "times": [
         {
           "day": "السبت",
@@ -3819,14 +3819,14 @@
       ]
     },
     {
-      "id": "jd5jnmwes",
+      "id": "wbhm1by6i",
       "course": "الطب الباطني (2) (MEIM-6-02)",
       "type": "theory",
       "className": "E (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "32",
-      "seats": "32/40",
+      "seats": "32/35",
       "times": [
         {
           "day": "السبت",
@@ -3851,14 +3851,14 @@
   ],
   "الطب الباطني (3) (MEIM-6-03)": [
     {
-      "id": "pojyken2v",
+      "id": "u5925nxai",
       "course": "الطب الباطني (3) (MEIM-6-03)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "18",
-      "seats": "18/40",
+      "seats": "18/35",
       "times": [
         {
           "day": "الأحد",
@@ -3875,14 +3875,14 @@
       ]
     },
     {
-      "id": "304t14eyo",
+      "id": "h1bhuoiub",
       "course": "الطب الباطني (3) (MEIM-6-03)",
       "type": "theory",
       "className": "C (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "21",
-      "seats": "21/40",
+      "seats": "21/35",
       "times": [
         {
           "day": "السبت",
@@ -3899,14 +3899,14 @@
       ]
     },
     {
-      "id": "yv8go43mm",
+      "id": "kwmblahf4",
       "course": "الطب الباطني (3) (MEIM-6-03)",
       "type": "theory",
       "className": "E (نظري)",
       "status": "فئة متاحة",
       "capacity": "36",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/36",
       "times": [
         {
           "day": "الأحد",
@@ -3923,14 +3923,14 @@
       ]
     },
     {
-      "id": "z4ymugyve",
+      "id": "9uyki4x3p",
       "course": "الطب الباطني (3) (MEIM-6-03)",
       "type": "theory",
       "className": "F (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "9",
-      "seats": "9/40",
+      "seats": "9/35",
       "times": [
         {
           "day": "الأحد",
@@ -3949,14 +3949,14 @@
   ],
   "الطب الباطني (4) (MEIM-6-04)": [
     {
-      "id": "nqwyf5zh8",
+      "id": "w7mk756jb",
       "course": "الطب الباطني (4) (MEIM-6-04)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "39",
       "registered": "38",
-      "seats": "38/40",
+      "seats": "38/39",
       "times": [
         {
           "day": "الإثنين",
@@ -3973,7 +3973,7 @@
       ]
     },
     {
-      "id": "rds7b4sv7",
+      "id": "dn2a6k29i",
       "course": "الطب الباطني (4) (MEIM-6-04)",
       "type": "theory",
       "className": "B (نظري)",
@@ -3997,14 +3997,14 @@
       ]
     },
     {
-      "id": "sooqx7cxn",
+      "id": "sdle2a4pb",
       "course": "الطب الباطني (4) (MEIM-6-04)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "38",
       "registered": "38",
-      "seats": "38/40",
+      "seats": "38/38",
       "times": [
         {
           "day": "السبت",
@@ -4023,14 +4023,14 @@
   ],
   "الطب الباطني (5) (MEIM-6-05)": [
     {
-      "id": "p2t575djd",
+      "id": "2hr9kn9pq",
       "course": "الطب الباطني (5) (MEIM-6-05)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "9",
-      "seats": "9/40",
+      "seats": "9/35",
       "times": [
         {
           "day": "الأحد",
@@ -4047,14 +4047,14 @@
       ]
     },
     {
-      "id": "yvh9c6qal",
+      "id": "kh2dicufb",
       "course": "الطب الباطني (5) (MEIM-6-05)",
       "type": "theory",
       "className": "B (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الإثنين",
@@ -4071,14 +4071,14 @@
       ]
     },
     {
-      "id": "l9yxhhxdj",
+      "id": "mvc5ilnou",
       "course": "الطب الباطني (5) (MEIM-6-05)",
       "type": "theory",
       "className": "D (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "26",
-      "seats": "26/40",
+      "seats": "26/35",
       "times": [
         {
           "day": "الأحد",
@@ -4097,14 +4097,14 @@
   ],
   "الطب الباطني (6) (MEIM-6-06)": [
     {
-      "id": "gs9onewka",
+      "id": "87svkiwzd",
       "course": "الطب الباطني (6) (MEIM-6-06)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -4115,14 +4115,14 @@
       ]
     },
     {
-      "id": "ll0t6qj25",
+      "id": "xre4l2mrn",
       "course": "الطب الباطني (6) (MEIM-6-06)",
       "type": "theory",
       "className": "C (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "23",
-      "seats": "23/40",
+      "seats": "23/35",
       "times": [
         {
           "day": "السبت",
@@ -4136,14 +4136,14 @@
   "الطب البديل (MEXX-5-06)": [],
   "الطوارئ والتخدير والإنعاش (MESR-4-07)": [
     {
-      "id": "yxtj3lzne",
+      "id": "n6tpla2qs",
       "course": "الطوارئ والتخدير والإنعاش (MESR-4-07)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "34",
-      "seats": "34/40",
+      "seats": "34/35",
       "times": [
         {
           "day": "السبت",
@@ -4160,14 +4160,14 @@
       ]
     },
     {
-      "id": "f85grxa5k",
+      "id": "ijj02fuz7",
       "course": "الطوارئ والتخدير والإنعاش (MESR-4-07)",
       "type": "theory",
       "className": "C (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "26",
-      "seats": "26/40",
+      "seats": "26/35",
       "times": [
         {
           "day": "السبت",
@@ -4184,14 +4184,14 @@
       ]
     },
     {
-      "id": "xuc5jynny",
+      "id": "dxa9gfruj",
       "course": "الطوارئ والتخدير والإنعاش (MESR-4-07)",
       "type": "theory",
       "className": "E (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "28",
-      "seats": "28/40",
+      "seats": "28/35",
       "times": [
         {
           "day": "السبت",
@@ -4210,7 +4210,7 @@
   ],
   "الفيزياء الطبية (MERA-1-01)": [
     {
-      "id": "vuiwb6f01",
+      "id": "8lgb1c79v",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "theory",
       "className": "A (نظري)",
@@ -4234,7 +4234,7 @@
       ]
     },
     {
-      "id": "asjevvuq9",
+      "id": "a5ibqy4fx",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "theory",
       "className": "B (نظري)",
@@ -4258,7 +4258,7 @@
       ]
     },
     {
-      "id": "fcfz7rvh7",
+      "id": "jdynsk3wn",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "theory",
       "className": "C (نظري)",
@@ -4282,7 +4282,7 @@
       ]
     },
     {
-      "id": "e4jd2k2gv",
+      "id": "vhyam73u6",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "theory",
       "className": "E (نظري)",
@@ -4306,7 +4306,7 @@
       ]
     },
     {
-      "id": "fgui8kfib",
+      "id": "j34ajrdky",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "theory",
       "className": "F (نظري)",
@@ -4330,7 +4330,7 @@
       ]
     },
     {
-      "id": "igcjvg5eu",
+      "id": "3qmwedgwg",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "A1 (عملي)",
@@ -4348,7 +4348,7 @@
       ]
     },
     {
-      "id": "nu4dpl2op",
+      "id": "equv6yj2q",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "A2 (عملي)",
@@ -4366,7 +4366,7 @@
       ]
     },
     {
-      "id": "12o291xnm",
+      "id": "bgp4shgkr",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "B1 (عملي)",
@@ -4384,7 +4384,7 @@
       ]
     },
     {
-      "id": "lbzi0ryic",
+      "id": "s14rkjqmx",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "B2 (عملي)",
@@ -4402,7 +4402,7 @@
       ]
     },
     {
-      "id": "yihinfay9",
+      "id": "9gmkz8kto",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "C1 (عملي)",
@@ -4420,7 +4420,7 @@
       ]
     },
     {
-      "id": "jdzna3k7t",
+      "id": "2q33qr5a7",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "C2 (عملي)",
@@ -4438,7 +4438,7 @@
       ]
     },
     {
-      "id": "797ht3j8j",
+      "id": "fm7ke12n9",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "E1 (عملي)",
@@ -4456,7 +4456,7 @@
       ]
     },
     {
-      "id": "l8k2aqge2",
+      "id": "rbxahzeyj",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "E2 (عملي)",
@@ -4474,7 +4474,7 @@
       ]
     },
     {
-      "id": "cqye07dxv",
+      "id": "bvkeowqay",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "F1 (عملي)",
@@ -4492,7 +4492,7 @@
       ]
     },
     {
-      "id": "uidj18w62",
+      "id": "wx1tzt6u3",
       "course": "الفيزياء الطبية (MERA-1-01)",
       "type": "practical",
       "className": "F2 (عملي)",
@@ -4512,7 +4512,7 @@
   ],
   "الفيزيولوجيا (1) (MEPH-1-01)": [
     {
-      "id": "t9ni19nl4",
+      "id": "x1w500brf",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "theory",
       "className": "E (نظري)",
@@ -4536,7 +4536,7 @@
       ]
     },
     {
-      "id": "avguv4mge",
+      "id": "40sup8mb2",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "theory",
       "className": "F (نظري)",
@@ -4560,7 +4560,7 @@
       ]
     },
     {
-      "id": "0oq5yyzre",
+      "id": "p19asssks",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "theory",
       "className": "G (نظري)",
@@ -4584,7 +4584,7 @@
       ]
     },
     {
-      "id": "i4vz7bas4",
+      "id": "96xr9eg4o",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "practical",
       "className": "E1 (عملي)",
@@ -4602,7 +4602,7 @@
       ]
     },
     {
-      "id": "crtciapp2",
+      "id": "jy7z04ulh",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "practical",
       "className": "E2 (عملي)",
@@ -4620,7 +4620,7 @@
       ]
     },
     {
-      "id": "o5x0wntdh",
+      "id": "ynvznjtfy",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "practical",
       "className": "F1 (عملي)",
@@ -4638,7 +4638,7 @@
       ]
     },
     {
-      "id": "4674zkgva",
+      "id": "gcbgtbk5z",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "practical",
       "className": "F2 (عملي)",
@@ -4656,7 +4656,7 @@
       ]
     },
     {
-      "id": "2nverd329",
+      "id": "nk8gpvvpc",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "practical",
       "className": "G1 (عملي)",
@@ -4674,7 +4674,7 @@
       ]
     },
     {
-      "id": "9u7qs5loo",
+      "id": "g1unpx2vj",
       "course": "الفيزيولوجيا (1) (MEPH-1-01)",
       "type": "practical",
       "className": "G2 (عملي)",
@@ -4694,7 +4694,7 @@
   ],
   "الفيزيولوجيا (2) (MEPH-2-02)": [
     {
-      "id": "0ob0nw6ah",
+      "id": "i30m1wyqh",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "theory",
       "className": "B (نظري)",
@@ -4718,7 +4718,7 @@
       ]
     },
     {
-      "id": "shjt8r4vp",
+      "id": "rmruqk5b0",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "theory",
       "className": "D (نظري)",
@@ -4742,7 +4742,7 @@
       ]
     },
     {
-      "id": "mow10n6ao",
+      "id": "k2a4amrfi",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "theory",
       "className": "E (نظري)",
@@ -4766,7 +4766,7 @@
       ]
     },
     {
-      "id": "qj0uc5idr",
+      "id": "j7m0eww6x",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "theory",
       "className": "F (نظري)",
@@ -4790,14 +4790,14 @@
       ]
     },
     {
-      "id": "uv80j1k1c",
+      "id": "bryz02oep",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -4808,14 +4808,14 @@
       ]
     },
     {
-      "id": "dttabdzt4",
+      "id": "nbvcykyv4",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -4826,14 +4826,14 @@
       ]
     },
     {
-      "id": "6u1e9fsv2",
+      "id": "foilg1pdx",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "practical",
       "className": "D1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -4844,14 +4844,14 @@
       ]
     },
     {
-      "id": "zewrkr0ls",
+      "id": "9v9yjlajm",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "practical",
       "className": "D2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -4862,14 +4862,14 @@
       ]
     },
     {
-      "id": "r69xcuw3z",
+      "id": "h2houw7ld",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -4880,14 +4880,14 @@
       ]
     },
     {
-      "id": "qtuqa7ffh",
+      "id": "c7ytp2z88",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "practical",
       "className": "E2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -4898,14 +4898,14 @@
       ]
     },
     {
-      "id": "2ng8ti8vt",
+      "id": "azfietucq",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "practical",
       "className": "F1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "16",
-      "seats": "16/40",
+      "seats": "16/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -4916,14 +4916,14 @@
       ]
     },
     {
-      "id": "qki1ynve4",
+      "id": "50kwhr965",
       "course": "الفيزيولوجيا (2) (MEPH-2-02)",
       "type": "practical",
       "className": "F2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "14",
-      "seats": "14/40",
+      "seats": "14/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -4936,7 +4936,7 @@
   ],
   "الفيزيولوجيا (3) (MEPH-3-03)": [
     {
-      "id": "58rowz8hp",
+      "id": "u7uqsqfg2",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "theory",
       "className": "A (نظري)",
@@ -4960,7 +4960,7 @@
       ]
     },
     {
-      "id": "k4xkhkm6v",
+      "id": "edabzcslw",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "theory",
       "className": "C (نظري)",
@@ -4984,7 +4984,7 @@
       ]
     },
     {
-      "id": "d28y1msf4",
+      "id": "ugw3sej7w",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "theory",
       "className": "D (نظري)",
@@ -5008,7 +5008,7 @@
       ]
     },
     {
-      "id": "x0k3i4ox9",
+      "id": "owj6h5vxt",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "theory",
       "className": "F (نظري)",
@@ -5032,14 +5032,14 @@
       ]
     },
     {
-      "id": "e7rgxy919",
+      "id": "2a0buzeqp",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -5050,14 +5050,14 @@
       ]
     },
     {
-      "id": "opthurs78",
+      "id": "esm5ry3uk",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -5068,14 +5068,14 @@
       ]
     },
     {
-      "id": "qssip5uem",
+      "id": "eeyydcahv",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "practical",
       "className": "C1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -5086,14 +5086,14 @@
       ]
     },
     {
-      "id": "5amd9kn7b",
+      "id": "atf0ld1ww",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "practical",
       "className": "C2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -5104,14 +5104,14 @@
       ]
     },
     {
-      "id": "5zohk44qv",
+      "id": "139999ewo",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "practical",
       "className": "D1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -5122,14 +5122,14 @@
       ]
     },
     {
-      "id": "5ttf0n8x5",
+      "id": "21ir5ewof",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "practical",
       "className": "D2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -5140,14 +5140,14 @@
       ]
     },
     {
-      "id": "yg1bp1bz1",
+      "id": "ncre9dtf0",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "practical",
       "className": "F1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -5158,14 +5158,14 @@
       ]
     },
     {
-      "id": "ehghgvdjx",
+      "id": "4qm9ma2dl",
       "course": "الفيزيولوجيا (3) (MEPH-3-03)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -5178,7 +5178,7 @@
   ],
   "الكيمياء الحيوية الطبية (1) (MEBC-2-02)": [
     {
-      "id": "yvlvym4cr",
+      "id": "zutswjklh",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "theory",
       "className": "A (نظري)",
@@ -5202,7 +5202,7 @@
       ]
     },
     {
-      "id": "hwq9lkdbn",
+      "id": "r2tsatxmg",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "theory",
       "className": "B (نظري)",
@@ -5226,7 +5226,7 @@
       ]
     },
     {
-      "id": "ikbreiprp",
+      "id": "ycxa5ve7d",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "theory",
       "className": "C (نظري)",
@@ -5244,7 +5244,7 @@
       ]
     },
     {
-      "id": "6lsmrwe4j",
+      "id": "ioafm7440",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "theory",
       "className": "E (نظري)",
@@ -5268,14 +5268,14 @@
       ]
     },
     {
-      "id": "2a0oernd4",
+      "id": "0lrxwejc1",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -5286,14 +5286,14 @@
       ]
     },
     {
-      "id": "ys050yueb",
+      "id": "xx0tz6v2g",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -5304,14 +5304,14 @@
       ]
     },
     {
-      "id": "db7jos8ej",
+      "id": "tmq9v86pn",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -5322,14 +5322,14 @@
       ]
     },
     {
-      "id": "pr8mfon7g",
+      "id": "hw3kimodn",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -5340,14 +5340,14 @@
       ]
     },
     {
-      "id": "f02vrpk0m",
+      "id": "ollgln5ky",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "practical",
       "className": "C1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -5358,14 +5358,14 @@
       ]
     },
     {
-      "id": "55cyfsysm",
+      "id": "kx8ef36vw",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "practical",
       "className": "C2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -5376,14 +5376,14 @@
       ]
     },
     {
-      "id": "dvjiy5ier",
+      "id": "ecqnp8vmh",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -5394,14 +5394,14 @@
       ]
     },
     {
-      "id": "kzo3mct58",
+      "id": "u2e50d75n",
       "course": "الكيمياء الحيوية الطبية (1) (MEBC-2-02)",
       "type": "practical",
       "className": "E2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -5414,7 +5414,7 @@
   ],
   "الكيمياء السريرية (MEBC-4-04)": [
     {
-      "id": "yl4ht7x4v",
+      "id": "kgdaegna4",
       "course": "الكيمياء السريرية (MEBC-4-04)",
       "type": "theory",
       "className": "C (نظري)",
@@ -5432,7 +5432,7 @@
       ]
     },
     {
-      "id": "2bw8wyfiu",
+      "id": "iefwb23dz",
       "course": "الكيمياء السريرية (MEBC-4-04)",
       "type": "theory",
       "className": "D (نظري)",
@@ -5450,7 +5450,7 @@
       ]
     },
     {
-      "id": "znmncc0y5",
+      "id": "uhv522ju3",
       "course": "الكيمياء السريرية (MEBC-4-04)",
       "type": "theory",
       "className": "E (نظري)",
@@ -5468,7 +5468,7 @@
       ]
     },
     {
-      "id": "iy637a7rr",
+      "id": "sj8npn189",
       "course": "الكيمياء السريرية (MEBC-4-04)",
       "type": "theory",
       "className": "F (نظري)",
@@ -5488,7 +5488,7 @@
   ],
   "الكيمياء العامة والعضوية (MEBC-1-01)": [
     {
-      "id": "ezkx0h9fj",
+      "id": "1upw88whz",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "theory",
       "className": "A (نظري)",
@@ -5506,7 +5506,7 @@
       ]
     },
     {
-      "id": "65sfmo1sy",
+      "id": "c4g7ze101",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "theory",
       "className": "C (نظري)",
@@ -5524,7 +5524,7 @@
       ]
     },
     {
-      "id": "luwj7w9kx",
+      "id": "rnca1sgou",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "theory",
       "className": "D (نظري)",
@@ -5542,7 +5542,7 @@
       ]
     },
     {
-      "id": "m846czs1m",
+      "id": "hh85tzhgp",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "theory",
       "className": "E (نظري)",
@@ -5560,7 +5560,7 @@
       ]
     },
     {
-      "id": "eqixxbc87",
+      "id": "16rqzxl9s",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "theory",
       "className": "G (نظري)",
@@ -5578,7 +5578,7 @@
       ]
     },
     {
-      "id": "qmexmkkhr",
+      "id": "65xwgp6w4",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "A1 (عملي)",
@@ -5596,7 +5596,7 @@
       ]
     },
     {
-      "id": "ms5sgakz8",
+      "id": "ivgjavzb9",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "A2 (عملي)",
@@ -5614,7 +5614,7 @@
       ]
     },
     {
-      "id": "frqgnw2gm",
+      "id": "55ngys1vf",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "C1 (عملي)",
@@ -5632,7 +5632,7 @@
       ]
     },
     {
-      "id": "syg2lw37h",
+      "id": "rzlf0yb42",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "C2 (عملي)",
@@ -5650,7 +5650,7 @@
       ]
     },
     {
-      "id": "28bksczp9",
+      "id": "lrlds3a5m",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "D1 (عملي)",
@@ -5668,7 +5668,7 @@
       ]
     },
     {
-      "id": "2zilpvvgb",
+      "id": "vddz6o8qg",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "D2 (عملي)",
@@ -5686,7 +5686,7 @@
       ]
     },
     {
-      "id": "vy47wefk9",
+      "id": "4ffe6u27q",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "E1 (عملي)",
@@ -5704,7 +5704,7 @@
       ]
     },
     {
-      "id": "3j7oke1g3",
+      "id": "vacnwqoi1",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "E2 (عملي)",
@@ -5722,7 +5722,7 @@
       ]
     },
     {
-      "id": "f9twwtdkc",
+      "id": "zuyboxext",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "G1 (عملي)",
@@ -5740,7 +5740,7 @@
       ]
     },
     {
-      "id": "eablnmf1j",
+      "id": "oja7579q6",
       "course": "الكيمياء العامة والعضوية (MEBC-1-01)",
       "type": "practical",
       "className": "G2 (عملي)",
@@ -5760,7 +5760,7 @@
   ],
   "اللغة الإنكليزية – 1 (UR-2-03)": [
     {
-      "id": "0benlutgd",
+      "id": "331ikw2m7",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش03 (نظري)",
@@ -5778,7 +5778,7 @@
       ]
     },
     {
-      "id": "e7j8iaywb",
+      "id": "9lv5pqylm",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش07 (نظري)",
@@ -5796,7 +5796,7 @@
       ]
     },
     {
-      "id": "1qzlbzyyp",
+      "id": "w28u9xd52",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش10 (نظري)",
@@ -5814,7 +5814,7 @@
       ]
     },
     {
-      "id": "tmc6owc83",
+      "id": "dw9ivhl21",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش13 (نظري)",
@@ -5832,7 +5832,7 @@
       ]
     },
     {
-      "id": "2ufy7s5kj",
+      "id": "wn02y9v0n",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش14 (نظري)",
@@ -5850,7 +5850,7 @@
       ]
     },
     {
-      "id": "h78zm1jxv",
+      "id": "nh4x6m96b",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش15 (نظري)",
@@ -5868,7 +5868,7 @@
       ]
     },
     {
-      "id": "q871lfrl9",
+      "id": "wl5in4cb5",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش17 (نظري)",
@@ -5886,7 +5886,7 @@
       ]
     },
     {
-      "id": "fsc9o096i",
+      "id": "fnaq3g8e9",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش20 (نظري)",
@@ -5904,7 +5904,7 @@
       ]
     },
     {
-      "id": "w8fvaam0t",
+      "id": "gjy6p9m31",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش21 (نظري)",
@@ -5922,7 +5922,7 @@
       ]
     },
     {
-      "id": "zq1mhyhq5",
+      "id": "mr1uzubms",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش01 (نظري)",
@@ -5940,7 +5940,7 @@
       ]
     },
     {
-      "id": "waz6gupgn",
+      "id": "0hd8ev6uh",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش02 (نظري)",
@@ -5958,7 +5958,7 @@
       ]
     },
     {
-      "id": "nm94uvai2",
+      "id": "jps2kd63o",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش04 (نظري)",
@@ -5976,7 +5976,7 @@
       ]
     },
     {
-      "id": "79u7l0asl",
+      "id": "6nd0f2fsz",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش09 (نظري)",
@@ -5994,7 +5994,7 @@
       ]
     },
     {
-      "id": "g0wnqvtct",
+      "id": "7wvui4la6",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش12 (نظري)",
@@ -6012,7 +6012,7 @@
       ]
     },
     {
-      "id": "0jirdvn1z",
+      "id": "q3guady0w",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش18 (نظري)",
@@ -6030,7 +6030,7 @@
       ]
     },
     {
-      "id": "7qijq5ifj",
+      "id": "nkdb9vce6",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش05 (نظري)",
@@ -6048,7 +6048,7 @@
       ]
     },
     {
-      "id": "gb81qtdiw",
+      "id": "12wa3ulu1",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش06 (نظري)",
@@ -6066,7 +6066,7 @@
       ]
     },
     {
-      "id": "69onovhkm",
+      "id": "fk8270lk1",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش08 (نظري)",
@@ -6084,7 +6084,7 @@
       ]
     },
     {
-      "id": "navovdhj5",
+      "id": "5kme5aryi",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش11 (نظري)",
@@ -6102,7 +6102,7 @@
       ]
     },
     {
-      "id": "m8qlur8b5",
+      "id": "7ygmmsk5k",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش16 (نظري)",
@@ -6120,7 +6120,7 @@
       ]
     },
     {
-      "id": "xu2n1vrmt",
+      "id": "jk395ldxf",
       "course": "اللغة الإنكليزية – 1 (UR-2-03)",
       "type": "theory",
       "className": "ش19 (نظري)",
@@ -6140,7 +6140,7 @@
   ],
   "اللغة الإنكليزية – 2 (UR-2-04)": [
     {
-      "id": "8whimd2qd",
+      "id": "m8adsvi7c",
       "course": "اللغة الإنكليزية – 2 (UR-2-04)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -6158,7 +6158,7 @@
       ]
     },
     {
-      "id": "09fyltmo3",
+      "id": "wx0mjp7mg",
       "course": "اللغة الإنكليزية – 2 (UR-2-04)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -6176,7 +6176,7 @@
       ]
     },
     {
-      "id": "jdsva59l4",
+      "id": "bov2kn8m3",
       "course": "اللغة الإنكليزية – 2 (UR-2-04)",
       "type": "theory",
       "className": "ش3 (نظري)",
@@ -6194,7 +6194,7 @@
       ]
     },
     {
-      "id": "hbwzswszk",
+      "id": "t5l9ztnnx",
       "course": "اللغة الإنكليزية – 2 (UR-2-04)",
       "type": "theory",
       "className": "ش4 (نظري)",
@@ -6212,7 +6212,7 @@
       ]
     },
     {
-      "id": "h8yp225sq",
+      "id": "1fptgwe9s",
       "course": "اللغة الإنكليزية – 2 (UR-2-04)",
       "type": "theory",
       "className": "ش5 (نظري)",
@@ -6230,7 +6230,7 @@
       ]
     },
     {
-      "id": "yvntsanpa",
+      "id": "egigbqtmp",
       "course": "اللغة الإنكليزية – 2 (UR-2-04)",
       "type": "theory",
       "className": "ش6 (نظري)",
@@ -6248,7 +6248,7 @@
       ]
     },
     {
-      "id": "lssb0bwi3",
+      "id": "8wnc5t0ca",
       "course": "اللغة الإنكليزية – 2 (UR-2-04)",
       "type": "theory",
       "className": "ش7 (نظري)",
@@ -6268,7 +6268,7 @@
   ],
   "اللغة الانكليزية - 3 (UR-2-10)": [
     {
-      "id": "vqym6sdhg",
+      "id": "xvg3xaoqs",
       "course": "اللغة الانكليزية - 3 (UR-2-10)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -6286,7 +6286,7 @@
       ]
     },
     {
-      "id": "pae297vc1",
+      "id": "hw6mws0f8",
       "course": "اللغة الانكليزية - 3 (UR-2-10)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -6306,7 +6306,7 @@
   ],
   "المهارات الحركية البدنية والذهنية (UR-2-16)": [
     {
-      "id": "cfoknlk3c",
+      "id": "fne8eg47h",
       "course": "المهارات الحركية البدنية والذهنية (UR-2-16)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -6324,7 +6324,7 @@
       ]
     },
     {
-      "id": "7hnwqketk",
+      "id": "daa317smb",
       "course": "المهارات الحركية البدنية والذهنية (UR-2-16)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -6342,7 +6342,7 @@
       ]
     },
     {
-      "id": "6odhr5dop",
+      "id": "bz9egnfcv",
       "course": "المهارات الحركية البدنية والذهنية (UR-2-16)",
       "type": "theory",
       "className": "ش4 (نظري)",
@@ -6360,14 +6360,14 @@
       ]
     },
     {
-      "id": "shtg1iruc",
+      "id": "obn2e90ub",
       "course": "المهارات الحركية البدنية والذهنية (UR-2-16)",
       "type": "theory",
       "className": "ش3 (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "0",
       "registered": "0",
-      "seats": "0/40",
+      "seats": "0/0",
       "times": [
         {
           "day": "الأحد",
@@ -6381,7 +6381,7 @@
   "النّظم الصحية (MECM-1-04)": [],
   "الهندسة الوراثية- مبادئ وتطبيقات (MEXX-4-05)": [
     {
-      "id": "bd556iyv4",
+      "id": "6ulk3ihxo",
       "course": "الهندسة الوراثية- مبادئ وتطبيقات (MEXX-4-05)",
       "type": "theory",
       "className": "A (نظري)",
@@ -6401,7 +6401,7 @@
   ],
   "الوراثة (MEAN-1-06)": [
     {
-      "id": "5fgfv552c",
+      "id": "8yeda087p",
       "course": "الوراثة (MEAN-1-06)",
       "type": "theory",
       "className": "A (نظري)",
@@ -6419,7 +6419,7 @@
       ]
     },
     {
-      "id": "gri1y9fwe",
+      "id": "ddjp8ijrr",
       "course": "الوراثة (MEAN-1-06)",
       "type": "theory",
       "className": "B (نظري)",
@@ -6437,7 +6437,7 @@
       ]
     },
     {
-      "id": "m32c64mnh",
+      "id": "a6hw5ov9t",
       "course": "الوراثة (MEAN-1-06)",
       "type": "theory",
       "className": "C (نظري)",
@@ -6455,7 +6455,7 @@
       ]
     },
     {
-      "id": "5465ubzry",
+      "id": "kp7xjfd77",
       "course": "الوراثة (MEAN-1-06)",
       "type": "theory",
       "className": "D (نظري)",
@@ -6473,7 +6473,7 @@
       ]
     },
     {
-      "id": "j9f60s8ap",
+      "id": "3fltghh60",
       "course": "الوراثة (MEAN-1-06)",
       "type": "theory",
       "className": "E (نظري)",
@@ -6493,7 +6493,7 @@
   ],
   "تاريخ الطب وآدابه (MEXX-1-03)": [
     {
-      "id": "a7b6e78c4",
+      "id": "m7w7e8kri",
       "course": "تاريخ الطب وآدابه (MEXX-1-03)",
       "type": "theory",
       "className": "A (نظري)",
@@ -6511,7 +6511,7 @@
       ]
     },
     {
-      "id": "5xjk1wqzy",
+      "id": "w1pfwsyo9",
       "course": "تاريخ الطب وآدابه (MEXX-1-03)",
       "type": "theory",
       "className": "B (نظري)",
@@ -6529,7 +6529,7 @@
       ]
     },
     {
-      "id": "bogscej0y",
+      "id": "8291boxw9",
       "course": "تاريخ الطب وآدابه (MEXX-1-03)",
       "type": "theory",
       "className": "D (نظري)",
@@ -6547,7 +6547,7 @@
       ]
     },
     {
-      "id": "mg932rzxx",
+      "id": "t5es59klb",
       "course": "تاريخ الطب وآدابه (MEXX-1-03)",
       "type": "theory",
       "className": "F (نظري)",
@@ -6565,7 +6565,7 @@
       ]
     },
     {
-      "id": "x5dtl57wv",
+      "id": "xe4jkaxei",
       "course": "تاريخ الطب وآدابه (MEXX-1-03)",
       "type": "theory",
       "className": "G (نظري)",
@@ -6591,14 +6591,14 @@
   ],
   "جراحة (2) (MESR-6-02)": [
     {
-      "id": "7ddevlfsn",
+      "id": "5ifjpquvi",
       "course": "جراحة (2) (MESR-6-02)",
       "type": "theory",
       "className": "A (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "36",
       "registered": "36",
-      "seats": "36/40",
+      "seats": "36/36",
       "times": [
         {
           "day": "السبت",
@@ -6615,14 +6615,14 @@
       ]
     },
     {
-      "id": "7fxif8gwj",
+      "id": "93b2dra7m",
       "course": "جراحة (2) (MESR-6-02)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الإثنين",
@@ -6639,14 +6639,14 @@
       ]
     },
     {
-      "id": "4kjmvmbpx",
+      "id": "a778ve64g",
       "course": "جراحة (2) (MESR-6-02)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "37",
       "registered": "37",
-      "seats": "37/40",
+      "seats": "37/37",
       "times": [
         {
           "day": "الأحد",
@@ -6663,14 +6663,14 @@
       ]
     },
     {
-      "id": "tnka9j14t",
+      "id": "sj259jp9y",
       "course": "جراحة (2) (MESR-6-02)",
       "type": "theory",
       "className": "F (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الأحد",
@@ -6689,7 +6689,7 @@
   ],
   "جراحة (3) (MESR-6-03)": [
     {
-      "id": "gr5s70upz",
+      "id": "djdi61eks",
       "course": "جراحة (3) (MESR-6-03)",
       "type": "theory",
       "className": "B (نظري)",
@@ -6713,14 +6713,14 @@
       ]
     },
     {
-      "id": "0b1f2z0j6",
+      "id": "f50xikxrz",
       "course": "جراحة (3) (MESR-6-03)",
       "type": "theory",
       "className": "C (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "24",
-      "seats": "24/40",
+      "seats": "24/35",
       "times": [
         {
           "day": "الإثنين",
@@ -6737,14 +6737,14 @@
       ]
     },
     {
-      "id": "uox7pjd88",
+      "id": "abyrhi5gc",
       "course": "جراحة (3) (MESR-6-03)",
       "type": "theory",
       "className": "D (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "30",
-      "seats": "30/40",
+      "seats": "30/35",
       "times": [
         {
           "day": "الأحد",
@@ -6761,14 +6761,14 @@
       ]
     },
     {
-      "id": "ouuqar432",
+      "id": "jfwoypyr7",
       "course": "جراحة (3) (MESR-6-03)",
       "type": "theory",
       "className": "E (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "24",
-      "seats": "24/40",
+      "seats": "24/35",
       "times": [
         {
           "day": "السبت",
@@ -6787,7 +6787,7 @@
   ],
   "جراحة(1) (جراحة صغرى) (MESR-5-01)": [
     {
-      "id": "wfs1n41t5",
+      "id": "4vt7z8c50",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "theory",
       "className": "A (نظري)",
@@ -6805,7 +6805,7 @@
       ]
     },
     {
-      "id": "khwfz8qnc",
+      "id": "xhyz25x3z",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "theory",
       "className": "B (نظري)",
@@ -6823,7 +6823,7 @@
       ]
     },
     {
-      "id": "l2g8nvvz0",
+      "id": "lz11jkr49",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "theory",
       "className": "C (نظري)",
@@ -6841,14 +6841,14 @@
       ]
     },
     {
-      "id": "esc3m5r47",
+      "id": "yjs3oywur",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -6859,14 +6859,14 @@
       ]
     },
     {
-      "id": "rq7bkvtse",
+      "id": "zzus8t4pw",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -6877,14 +6877,14 @@
       ]
     },
     {
-      "id": "184wl5xva",
+      "id": "x3xatzsph",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "practical",
       "className": "B1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "14",
-      "seats": "14/40",
+      "seats": "14/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -6895,14 +6895,14 @@
       ]
     },
     {
-      "id": "veoxer38h",
+      "id": "pc8e1aq6a",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "practical",
       "className": "B2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "12",
-      "seats": "12/40",
+      "seats": "12/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -6913,14 +6913,14 @@
       ]
     },
     {
-      "id": "83514x2hw",
+      "id": "lh5qx01kj",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "practical",
       "className": "C1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "19",
-      "seats": "19/40",
+      "seats": "19/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -6931,14 +6931,14 @@
       ]
     },
     {
-      "id": "mnxg3ljla",
+      "id": "w8mm9ogyi",
       "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
       "type": "practical",
       "className": "C2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -6953,14 +6953,14 @@
   "طب الأطفال (MESR-8-03)": [],
   "طب التوليد (MEGO-6-01)": [
     {
-      "id": "91x9h6xow",
+      "id": "agsodkw1w",
       "course": "طب التوليد (MEGO-6-01)",
       "type": "theory",
       "className": "A (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "23",
-      "seats": "23/40",
+      "seats": "23/35",
       "times": [
         {
           "day": "الإثنين",
@@ -6977,14 +6977,14 @@
       ]
     },
     {
-      "id": "y9ietqjmx",
+      "id": "8fa5tyub6",
       "course": "طب التوليد (MEGO-6-01)",
       "type": "theory",
       "className": "B (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/35",
       "times": [
         {
           "day": "الإثنين",
@@ -7001,14 +7001,14 @@
       ]
     },
     {
-      "id": "3cc7tv9az",
+      "id": "yk7bp7i41",
       "course": "طب التوليد (MEGO-6-01)",
       "type": "theory",
       "className": "C (نظري)",
       "status": "فئة متاحة",
       "capacity": "35",
       "registered": "31",
-      "seats": "31/40",
+      "seats": "31/35",
       "times": [
         {
           "day": "السبت",
@@ -7025,14 +7025,14 @@
       ]
     },
     {
-      "id": "8q6qz7wts",
+      "id": "vvlaeezyp",
       "course": "طب التوليد (MEGO-6-01)",
       "type": "theory",
       "className": "D (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "الإثنين",
@@ -7049,14 +7049,14 @@
       ]
     },
     {
-      "id": "0o41ufbfe",
+      "id": "m681kqfgq",
       "course": "طب التوليد (MEGO-6-01)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "35",
       "registered": "35",
-      "seats": "35/40",
+      "seats": "35/35",
       "times": [
         {
           "day": "السبت",
@@ -7076,7 +7076,7 @@
   "طب الطوارئ والتخدير والإنعاش (MESR-8-12)": [],
   "علم الأدوية (1) (العام) (MEPH-4-04)": [
     {
-      "id": "vv23ucjq8",
+      "id": "c3cwdc8zn",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "theory",
       "className": "A (نظري)",
@@ -7094,7 +7094,7 @@
       ]
     },
     {
-      "id": "v213vmeim",
+      "id": "jtupaqo3r",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "theory",
       "className": "B (نظري)",
@@ -7112,7 +7112,7 @@
       ]
     },
     {
-      "id": "7tvf4yvuk",
+      "id": "7io6sew31",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "theory",
       "className": "D (نظري)",
@@ -7130,7 +7130,7 @@
       ]
     },
     {
-      "id": "fq9kar29a",
+      "id": "v6xx91na9",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "theory",
       "className": "F (نظري)",
@@ -7148,7 +7148,7 @@
       ]
     },
     {
-      "id": "dww79tsub",
+      "id": "fhjy2y8re",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "theory",
       "className": "c (نظري)",
@@ -7166,14 +7166,14 @@
       ]
     },
     {
-      "id": "t325tpjtv",
+      "id": "msnovwroh",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "A1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "13",
-      "seats": "13/40",
+      "seats": "13/20",
       "times": [
         {
           "day": "السبت",
@@ -7184,14 +7184,14 @@
       ]
     },
     {
-      "id": "wxw43zfhd",
+      "id": "rr1c2dv0r",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "A2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "8",
-      "seats": "8/40",
+      "seats": "8/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7202,14 +7202,14 @@
       ]
     },
     {
-      "id": "gi4nu4t3m",
+      "id": "4cc4fl6fh",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "B1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "18",
-      "seats": "18/40",
+      "seats": "18/20",
       "times": [
         {
           "day": "السبت",
@@ -7220,14 +7220,14 @@
       ]
     },
     {
-      "id": "33wt4gc0z",
+      "id": "kp80ywnfi",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "B2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "4",
-      "seats": "4/40",
+      "seats": "4/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7238,14 +7238,14 @@
       ]
     },
     {
-      "id": "j6jre6nnr",
+      "id": "1cg5xztl0",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "C1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "6",
-      "seats": "6/40",
+      "seats": "6/20",
       "times": [
         {
           "day": "السبت",
@@ -7256,14 +7256,14 @@
       ]
     },
     {
-      "id": "rsfdjo39v",
+      "id": "8t1lf0mw1",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "C2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "2",
-      "seats": "2/40",
+      "seats": "2/20",
       "times": [
         {
           "day": "الأحد",
@@ -7274,14 +7274,14 @@
       ]
     },
     {
-      "id": "87oy99rwn",
+      "id": "kypf34tl3",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "C3 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "1",
-      "seats": "1/40",
+      "seats": "1/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7292,14 +7292,14 @@
       ]
     },
     {
-      "id": "jrx7jolco",
+      "id": "ai0s3pwmm",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "D1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "3",
-      "seats": "3/40",
+      "seats": "3/20",
       "times": [
         {
           "day": "الأحد",
@@ -7310,14 +7310,14 @@
       ]
     },
     {
-      "id": "0pcw3ugpm",
+      "id": "4uoii2qth",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "D2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "10",
-      "seats": "10/40",
+      "seats": "10/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7328,14 +7328,14 @@
       ]
     },
     {
-      "id": "wxmwyo75g",
+      "id": "wggnbbamh",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "F1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "13",
-      "seats": "13/40",
+      "seats": "13/20",
       "times": [
         {
           "day": "الأحد",
@@ -7346,14 +7346,14 @@
       ]
     },
     {
-      "id": "6zsijzh2w",
+      "id": "4rpadazha",
       "course": "علم الأدوية (1) (العام) (MEPH-4-04)",
       "type": "practical",
       "className": "F2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "6",
-      "seats": "6/40",
+      "seats": "6/20",
       "times": [
         {
           "day": "الأحد",
@@ -7366,7 +7366,7 @@
   ],
   "علم الأمراض (1) (العام) (MEPA-4-03)": [
     {
-      "id": "qexp7aum9",
+      "id": "rlfc56cph",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "theory",
       "className": "A (نظري)",
@@ -7384,7 +7384,7 @@
       ]
     },
     {
-      "id": "21q9uaep3",
+      "id": "711llot7r",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "theory",
       "className": "B (نظري)",
@@ -7402,7 +7402,7 @@
       ]
     },
     {
-      "id": "97cezt4ir",
+      "id": "ayhica97p",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "theory",
       "className": "C (نظري)",
@@ -7420,7 +7420,7 @@
       ]
     },
     {
-      "id": "cpuaza2k5",
+      "id": "qp13dnfrr",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "theory",
       "className": "E (نظري)",
@@ -7438,14 +7438,14 @@
       ]
     },
     {
-      "id": "63871qd52",
+      "id": "w1oust1fp",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "practical",
       "className": "A1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "8",
-      "seats": "8/40",
+      "seats": "8/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7456,14 +7456,14 @@
       ]
     },
     {
-      "id": "nksg01qdf",
+      "id": "2u0gy7vju",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "practical",
       "className": "A2 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "10",
-      "seats": "10/40",
+      "seats": "10/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7474,14 +7474,14 @@
       ]
     },
     {
-      "id": "i24f10u6f",
+      "id": "cl3yqmizz",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "practical",
       "className": "B1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7492,14 +7492,14 @@
       ]
     },
     {
-      "id": "cbt76a9hc",
+      "id": "gnh7rh1fn",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7510,14 +7510,14 @@
       ]
     },
     {
-      "id": "gnuayh0e6",
+      "id": "xvrunu6ob",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "practical",
       "className": "C1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7528,14 +7528,14 @@
       ]
     },
     {
-      "id": "u5bcwz5ln",
+      "id": "x7sbod9zi",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "practical",
       "className": "C2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7546,14 +7546,14 @@
       ]
     },
     {
-      "id": "m6d90sdyo",
+      "id": "eij584dmo",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7564,14 +7564,14 @@
       ]
     },
     {
-      "id": "5wg07zymt",
+      "id": "jehzd3s80",
       "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
       "type": "practical",
       "className": "E2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7584,7 +7584,7 @@
   ],
   "علم الأنسجة (1) (MEPA-2-01)": [
     {
-      "id": "mlbtj8fd4",
+      "id": "rrstty7ek",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "theory",
       "className": "A (نظري)",
@@ -7608,7 +7608,7 @@
       ]
     },
     {
-      "id": "srr0xtn7s",
+      "id": "xpsry3rl6",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "theory",
       "className": "B (نظري)",
@@ -7632,7 +7632,7 @@
       ]
     },
     {
-      "id": "kvfj2u4va",
+      "id": "6yol6uefq",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "theory",
       "className": "C (نظري)",
@@ -7656,7 +7656,7 @@
       ]
     },
     {
-      "id": "jngf47bhe",
+      "id": "v1g79u9mt",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "theory",
       "className": "D (نظري)",
@@ -7680,14 +7680,14 @@
       ]
     },
     {
-      "id": "hhi4oql9b",
+      "id": "gv4qgrvwh",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "practical",
       "className": "A1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7698,14 +7698,14 @@
       ]
     },
     {
-      "id": "v9jtlzbcw",
+      "id": "ymscevmua",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "practical",
       "className": "A2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7716,14 +7716,14 @@
       ]
     },
     {
-      "id": "02tym8gfj",
+      "id": "imifdo24k",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "practical",
       "className": "B1 (عملي)",
       "status": "فئة متاحة",
       "capacity": "20",
       "registered": "19",
-      "seats": "19/40",
+      "seats": "19/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7734,14 +7734,14 @@
       ]
     },
     {
-      "id": "bx7ib4sva",
+      "id": "ss1yjyjxg",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "practical",
       "className": "B2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7752,14 +7752,14 @@
       ]
     },
     {
-      "id": "wtcrbx77o",
+      "id": "5dpsz8uy9",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "practical",
       "className": "C1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7770,14 +7770,14 @@
       ]
     },
     {
-      "id": "7nz12j0l2",
+      "id": "po51poz8n",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "practical",
       "className": "C2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الثلاثاء",
@@ -7788,14 +7788,14 @@
       ]
     },
     {
-      "id": "8u3zm103l",
+      "id": "efej41ecf",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "practical",
       "className": "D1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7806,14 +7806,14 @@
       ]
     },
     {
-      "id": "nj9tbqrqd",
+      "id": "ijl7uvud1",
       "course": "علم الأنسجة (1) (MEPA-2-01)",
       "type": "practical",
       "className": "D2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الإثنين",
@@ -7826,7 +7826,7 @@
   ],
   "علم الأنسجة (2) (MEPA-3-02)": [
     {
-      "id": "1h29a3onf",
+      "id": "s5z3dq03l",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "theory",
       "className": "D (نظري)",
@@ -7850,7 +7850,7 @@
       ]
     },
     {
-      "id": "8bajerb7h",
+      "id": "4tvtmrkg4",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "theory",
       "className": "E (نظري)",
@@ -7874,7 +7874,7 @@
       ]
     },
     {
-      "id": "rez9o0d3o",
+      "id": "fjhyui4eu",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "theory",
       "className": "F (نظري)",
@@ -7898,14 +7898,14 @@
       ]
     },
     {
-      "id": "wi7b9eivk",
+      "id": "3rf4f5sj8",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "practical",
       "className": "D1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -7916,14 +7916,14 @@
       ]
     },
     {
-      "id": "ad99ox6co",
+      "id": "ls8dsxnev",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "practical",
       "className": "D2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "السبت",
@@ -7934,14 +7934,14 @@
       ]
     },
     {
-      "id": "ma140hn9r",
+      "id": "ds22u17iz",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "practical",
       "className": "E1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -7952,14 +7952,14 @@
       ]
     },
     {
-      "id": "s6r9wokd7",
+      "id": "65erkcqrt",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "practical",
       "className": "E2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -7970,14 +7970,14 @@
       ]
     },
     {
-      "id": "89jlmsdmz",
+      "id": "caremjq8b",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "practical",
       "className": "F1 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -7988,14 +7988,14 @@
       ]
     },
     {
-      "id": "f9ezp5jai",
+      "id": "stz5dtfpc",
       "course": "علم الأنسجة (2) (MEPA-3-02)",
       "type": "practical",
       "className": "F2 (عملي)",
-      "status": "فئة متاحة",
+      "status": "فئة ممتلئة",
       "capacity": "20",
       "registered": "20",
-      "seats": "20/40",
+      "seats": "20/20",
       "times": [
         {
           "day": "الأحد",
@@ -8008,7 +8008,7 @@
   ],
   "علم الاجتماع (UR-2-06)": [
     {
-      "id": "ngvtq256o",
+      "id": "laowgxca2",
       "course": "علم الاجتماع (UR-2-06)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -8026,7 +8026,7 @@
       ]
     },
     {
-      "id": "8a88g3njs",
+      "id": "dvtzdg5pu",
       "course": "علم الاجتماع (UR-2-06)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -8044,7 +8044,7 @@
       ]
     },
     {
-      "id": "d8ilu5xwj",
+      "id": "o4tqn8cz3",
       "course": "علم الاجتماع (UR-2-06)",
       "type": "theory",
       "className": "ش3 (نظري)",
@@ -8062,7 +8062,7 @@
       ]
     },
     {
-      "id": "qiwiaaw26",
+      "id": "jujcoi7ur",
       "course": "علم الاجتماع (UR-2-06)",
       "type": "theory",
       "className": "ش4 (نظري)",
@@ -8082,7 +8082,7 @@
   ],
   "علم البيئة (UR-2-09)": [
     {
-      "id": "v8ho2nrof",
+      "id": "nx4sdcekn",
       "course": "علم البيئة (UR-2-09)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -8100,7 +8100,7 @@
       ]
     },
     {
-      "id": "0cmk072c4",
+      "id": "c48061bb3",
       "course": "علم البيئة (UR-2-09)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -8118,7 +8118,7 @@
       ]
     },
     {
-      "id": "8uj0ptdzt",
+      "id": "k9mzoijy2",
       "course": "علم البيئة (UR-2-09)",
       "type": "theory",
       "className": "ش3 (نظري)",
@@ -8136,7 +8136,7 @@
       ]
     },
     {
-      "id": "zpxahw49b",
+      "id": "phhqkf6pz",
       "course": "علم البيئة (UR-2-09)",
       "type": "theory",
       "className": "ش4 (نظري)",
@@ -8154,7 +8154,7 @@
       ]
     },
     {
-      "id": "6p4870tot",
+      "id": "wgpetixph",
       "course": "علم البيئة (UR-2-09)",
       "type": "theory",
       "className": "ش5 (نظري)",
@@ -8172,7 +8172,7 @@
       ]
     },
     {
-      "id": "tm28mkwhv",
+      "id": "yrvn6us26",
       "course": "علم البيئة (UR-2-09)",
       "type": "theory",
       "className": "ش6 (نظري)",
@@ -8190,7 +8190,7 @@
       ]
     },
     {
-      "id": "dcqihl92y",
+      "id": "os7fnjsjy",
       "course": "علم البيئة (UR-2-09)",
       "type": "theory",
       "className": "ش7 (نظري)",
@@ -8208,7 +8208,7 @@
       ]
     },
     {
-      "id": "vd7hbr46j",
+      "id": "6kxx1t566",
       "course": "علم البيئة (UR-2-09)",
       "type": "theory",
       "className": "ش8 (نظري)",
@@ -8228,7 +8228,7 @@
   ],
   "علم الجنين الطبي (MEAN-1-05)": [
     {
-      "id": "kw39vjoak",
+      "id": "y3tplrvhv",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "theory",
       "className": "B (نظري)",
@@ -8246,7 +8246,7 @@
       ]
     },
     {
-      "id": "v4pdd4hll",
+      "id": "d3dn3o1qc",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "theory",
       "className": "D (نظري)",
@@ -8264,7 +8264,7 @@
       ]
     },
     {
-      "id": "wfhj9aekz",
+      "id": "5ow8ib1m7",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "theory",
       "className": "E (نظري)",
@@ -8282,7 +8282,7 @@
       ]
     },
     {
-      "id": "124txrev3",
+      "id": "6fn2ye4se",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "theory",
       "className": "F (نظري)",
@@ -8300,7 +8300,7 @@
       ]
     },
     {
-      "id": "pdgl2vyfs",
+      "id": "6sif2qvd1",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "practical",
       "className": "B1 (عملي)",
@@ -8318,7 +8318,7 @@
       ]
     },
     {
-      "id": "nv3m7a00u",
+      "id": "u1m0gkj2h",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "practical",
       "className": "B2 (عملي)",
@@ -8336,7 +8336,7 @@
       ]
     },
     {
-      "id": "pc3uzvgqx",
+      "id": "510rdacpe",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "practical",
       "className": "D1 (عملي)",
@@ -8354,7 +8354,7 @@
       ]
     },
     {
-      "id": "79ic9vp8g",
+      "id": "m21gq40gz",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "practical",
       "className": "D2 (عملي)",
@@ -8372,7 +8372,7 @@
       ]
     },
     {
-      "id": "7quor2ls5",
+      "id": "jsmevuchw",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "practical",
       "className": "E1 (عملي)",
@@ -8390,7 +8390,7 @@
       ]
     },
     {
-      "id": "3vekrs96a",
+      "id": "pihfojgb2",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "practical",
       "className": "E2 (عملي)",
@@ -8408,7 +8408,7 @@
       ]
     },
     {
-      "id": "4sy7c03vu",
+      "id": "kpgrpu06j",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "practical",
       "className": "F1 (عملي)",
@@ -8426,7 +8426,7 @@
       ]
     },
     {
-      "id": "0vg84sx2j",
+      "id": "ypck9sec2",
       "course": "علم الجنين الطبي (MEAN-1-05)",
       "type": "practical",
       "className": "F2 (عملي)",
@@ -8446,7 +8446,7 @@
   ],
   "علم الحياة والخلية (MEBI-1-01)": [
     {
-      "id": "j02g6rfr5",
+      "id": "4tjx2s22g",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "theory",
       "className": "A (نظري)",
@@ -8464,7 +8464,7 @@
       ]
     },
     {
-      "id": "b2zzhrpo8",
+      "id": "cu8an6lxd",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "theory",
       "className": "B (نظري)",
@@ -8482,7 +8482,7 @@
       ]
     },
     {
-      "id": "20v6vhbtu",
+      "id": "0wm5vohfu",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "theory",
       "className": "C (نظري)",
@@ -8500,7 +8500,7 @@
       ]
     },
     {
-      "id": "0qcyyyelt",
+      "id": "lh4vzyjce",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "theory",
       "className": "G (نظري)",
@@ -8518,7 +8518,7 @@
       ]
     },
     {
-      "id": "sxao4lnix",
+      "id": "gysfv0guc",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "practical",
       "className": "A1 (عملي)",
@@ -8536,7 +8536,7 @@
       ]
     },
     {
-      "id": "foaxa0i63",
+      "id": "gb4c189m2",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "practical",
       "className": "A2 (عملي)",
@@ -8554,7 +8554,7 @@
       ]
     },
     {
-      "id": "b933cg1yu",
+      "id": "pna40g7ru",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "practical",
       "className": "B1 (عملي)",
@@ -8572,7 +8572,7 @@
       ]
     },
     {
-      "id": "10egolco2",
+      "id": "mliw9z57g",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "practical",
       "className": "B2 (عملي)",
@@ -8590,7 +8590,7 @@
       ]
     },
     {
-      "id": "jtvt14qky",
+      "id": "jsgub5laq",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "practical",
       "className": "C1 (عملي)",
@@ -8608,7 +8608,7 @@
       ]
     },
     {
-      "id": "4zn0altij",
+      "id": "anyo6qm4y",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "practical",
       "className": "C2 (عملي)",
@@ -8626,7 +8626,7 @@
       ]
     },
     {
-      "id": "qg8sawdsa",
+      "id": "d63d6m5vt",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "practical",
       "className": "G1 (عملي)",
@@ -8644,7 +8644,7 @@
       ]
     },
     {
-      "id": "jg9joxayj",
+      "id": "vt75nmtbf",
       "course": "علم الحياة والخلية (MEBI-1-01)",
       "type": "practical",
       "className": "G2 (عملي)",
@@ -8669,7 +8669,7 @@
   "لغة أجنبية حية ثانية - فرنسية (UR-2-11)": [],
   "مدخل الى القانون (UR-2-05)": [
     {
-      "id": "u66xpz6sq",
+      "id": "kvjiv5orf",
       "course": "مدخل الى القانون (UR-2-05)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -8687,7 +8687,7 @@
       ]
     },
     {
-      "id": "u2h5ha5yc",
+      "id": "alxtq98xw",
       "course": "مدخل الى القانون (UR-2-05)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -8705,7 +8705,7 @@
       ]
     },
     {
-      "id": "0ksn3j3wk",
+      "id": "9ysppvok5",
       "course": "مدخل الى القانون (UR-2-05)",
       "type": "theory",
       "className": "ش4 (نظري)",
@@ -8723,7 +8723,7 @@
       ]
     },
     {
-      "id": "7oep6icyt",
+      "id": "x3ay6ef7k",
       "course": "مدخل الى القانون (UR-2-05)",
       "type": "theory",
       "className": "ش5 (نظري)",
@@ -8741,7 +8741,7 @@
       ]
     },
     {
-      "id": "p4qpbcxmr",
+      "id": "cmtw880wt",
       "course": "مدخل الى القانون (UR-2-05)",
       "type": "theory",
       "className": "ش7 (نظري)",
@@ -8759,7 +8759,7 @@
       ]
     },
     {
-      "id": "7wucegwke",
+      "id": "2fh9eya8l",
       "course": "مدخل الى القانون (UR-2-05)",
       "type": "theory",
       "className": "ش3 (نظري)",
@@ -8777,7 +8777,7 @@
       ]
     },
     {
-      "id": "viyor9l96",
+      "id": "sgzgdlghx",
       "course": "مدخل الى القانون (UR-2-05)",
       "type": "theory",
       "className": "ش6 (نظري)",
@@ -8795,7 +8795,7 @@
       ]
     },
     {
-      "id": "pj5nzsoqg",
+      "id": "dg3cq7unw",
       "course": "مدخل الى القانون (UR-2-05)",
       "type": "theory",
       "className": "ش8 (نظري)",
@@ -8815,7 +8815,7 @@
   ],
   "مهارات التفكير والبحث العلمي (UR-2-07)": [
     {
-      "id": "lo1c98ysj",
+      "id": "6xnm7rktl",
       "course": "مهارات التفكير والبحث العلمي (UR-2-07)",
       "type": "theory",
       "className": "ش1 (نظري)",
@@ -8833,7 +8833,7 @@
       ]
     },
     {
-      "id": "2127mu5ly",
+      "id": "d618a179w",
       "course": "مهارات التفكير والبحث العلمي (UR-2-07)",
       "type": "theory",
       "className": "ش2 (نظري)",
@@ -8851,7 +8851,7 @@
       ]
     },
     {
-      "id": "sxb2yaju4",
+      "id": "183k2w6go",
       "course": "مهارات التفكير والبحث العلمي (UR-2-07)",
       "type": "theory",
       "className": "ش4 (نظري)",
@@ -8869,7 +8869,7 @@
       ]
     },
     {
-      "id": "fhitrzn5y",
+      "id": "rikq7xrxm",
       "course": "مهارات التفكير والبحث العلمي (UR-2-07)",
       "type": "theory",
       "className": "ش3 (نظري)",
@@ -8889,7 +8889,7 @@
   ],
   "مهارات الحاسوب (UR-2-02)": [
     {
-      "id": "9p1mdv6oy",
+      "id": "msou2ard1",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش01 (نظري)",
@@ -8907,7 +8907,7 @@
       ]
     },
     {
-      "id": "zof2wwl1b",
+      "id": "bt3uj7dfi",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش02 (نظري)",
@@ -8925,7 +8925,7 @@
       ]
     },
     {
-      "id": "tpazr9858",
+      "id": "vnctqogeo",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش03 (نظري)",
@@ -8943,7 +8943,7 @@
       ]
     },
     {
-      "id": "1nuacakm1",
+      "id": "bwdfe53w8",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش04 (نظري)",
@@ -8961,7 +8961,7 @@
       ]
     },
     {
-      "id": "kowk9qde4",
+      "id": "51k9n30g0",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش05 (نظري)",
@@ -8979,7 +8979,7 @@
       ]
     },
     {
-      "id": "00jqyt7hw",
+      "id": "gae0lz47b",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش06 (نظري)",
@@ -8997,7 +8997,7 @@
       ]
     },
     {
-      "id": "bbbzvc157",
+      "id": "1zdc0073b",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش07 (نظري)",
@@ -9015,7 +9015,7 @@
       ]
     },
     {
-      "id": "uxej9irfb",
+      "id": "vwddablq9",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش08 (نظري)",
@@ -9033,7 +9033,7 @@
       ]
     },
     {
-      "id": "iysao8oiw",
+      "id": "7luimpiaj",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش09 (نظري)",
@@ -9051,7 +9051,7 @@
       ]
     },
     {
-      "id": "r1okhbxum",
+      "id": "sb2p3uwl6",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش10 (نظري)",
@@ -9069,7 +9069,7 @@
       ]
     },
     {
-      "id": "3qfyjzyal",
+      "id": "edv31kp7r",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش11 (نظري)",
@@ -9087,7 +9087,7 @@
       ]
     },
     {
-      "id": "l3khkvvd5",
+      "id": "7oqfsw1iq",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش12 (نظري)",
@@ -9105,7 +9105,7 @@
       ]
     },
     {
-      "id": "c1osu4yjf",
+      "id": "n7p3smf7x",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش13 (نظري)",
@@ -9123,7 +9123,7 @@
       ]
     },
     {
-      "id": "wruqs956s",
+      "id": "0n8tie3i8",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش14 (نظري)",
@@ -9141,7 +9141,7 @@
       ]
     },
     {
-      "id": "2z1q8roj9",
+      "id": "afrnh0hzf",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "theory",
       "className": "ش15 (نظري)",
@@ -9159,7 +9159,7 @@
       ]
     },
     {
-      "id": "37xut4ehx",
+      "id": "6gbg89cwm",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف01 (عملي)",
@@ -9177,7 +9177,7 @@
       ]
     },
     {
-      "id": "upgyi35i5",
+      "id": "w5q3fuqjz",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف02 (عملي)",
@@ -9195,7 +9195,7 @@
       ]
     },
     {
-      "id": "te0tvlbnf",
+      "id": "ztjywyp38",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف03 (عملي)",
@@ -9213,7 +9213,7 @@
       ]
     },
     {
-      "id": "xocshhft6",
+      "id": "alvydwtpi",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف04 (عملي)",
@@ -9231,7 +9231,7 @@
       ]
     },
     {
-      "id": "bg3hnpar7",
+      "id": "zppt3gcgn",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف05 (عملي)",
@@ -9249,7 +9249,7 @@
       ]
     },
     {
-      "id": "52lkoggcz",
+      "id": "ssahux3qw",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف06 (عملي)",
@@ -9267,7 +9267,7 @@
       ]
     },
     {
-      "id": "og7yds0k",
+      "id": "dz0g7759z",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف07 (عملي)",
@@ -9285,7 +9285,7 @@
       ]
     },
     {
-      "id": "vqtf5082v",
+      "id": "8z8iwqbjp",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف08 (عملي)",
@@ -9303,7 +9303,7 @@
       ]
     },
     {
-      "id": "0vubkt95m",
+      "id": "7afa0c94l",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف09 (عملي)",
@@ -9321,7 +9321,7 @@
       ]
     },
     {
-      "id": "wj1bv6p7j",
+      "id": "2r174ys5u",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف10 (عملي)",
@@ -9339,7 +9339,7 @@
       ]
     },
     {
-      "id": "x5j6b7fnk",
+      "id": "y6a8fm9t8",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف11 (عملي)",
@@ -9357,7 +9357,7 @@
       ]
     },
     {
-      "id": "hzv7q67j4",
+      "id": "rh3yq4016",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف12 (عملي)",
@@ -9375,7 +9375,7 @@
       ]
     },
     {
-      "id": "4icnl4mxj",
+      "id": "co5pul9vr",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف13 (عملي)",
@@ -9393,7 +9393,7 @@
       ]
     },
     {
-      "id": "0oa33ie0e",
+      "id": "6r8x4ulok",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف14 (عملي)",
@@ -9411,7 +9411,7 @@
       ]
     },
     {
-      "id": "akpxlsx8p",
+      "id": "zl4dzb5fe",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف15 (عملي)",
@@ -9429,7 +9429,7 @@
       ]
     },
     {
-      "id": "shosybgt0",
+      "id": "y2nsey573",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف16 (عملي)",
@@ -9447,7 +9447,7 @@
       ]
     },
     {
-      "id": "za841g8sl",
+      "id": "lcjxs6rua",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف17 (عملي)",
@@ -9465,7 +9465,7 @@
       ]
     },
     {
-      "id": "t3tqhf3oj",
+      "id": "zbhzm4g9b",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف18 (عملي)",
@@ -9483,7 +9483,7 @@
       ]
     },
     {
-      "id": "4gpfpp1yy",
+      "id": "7um6k0hnk",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف19 (عملي)",
@@ -9501,7 +9501,7 @@
       ]
     },
     {
-      "id": "kx2bm3xum",
+      "id": "euwnk8o3i",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف20 (عملي)",
@@ -9519,7 +9519,7 @@
       ]
     },
     {
-      "id": "iypv3shop",
+      "id": "fmdya1ydk",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف21 (عملي)",
@@ -9537,7 +9537,7 @@
       ]
     },
     {
-      "id": "rmgha294c",
+      "id": "njbjwyk1y",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف22 (عملي)",
@@ -9555,7 +9555,7 @@
       ]
     },
     {
-      "id": "0j6070tec",
+      "id": "m6dmn0q01",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف23 (عملي)",
@@ -9573,7 +9573,7 @@
       ]
     },
     {
-      "id": "0m125esv1",
+      "id": "5e1z0zm0m",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف24 (عملي)",
@@ -9591,7 +9591,7 @@
       ]
     },
     {
-      "id": "54mzuxyzz",
+      "id": "nyck874qc",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف25 (عملي)",
@@ -9609,7 +9609,7 @@
       ]
     },
     {
-      "id": "utde2kzr8",
+      "id": "wld1ch5a0",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف26 (عملي)",
@@ -9627,7 +9627,7 @@
       ]
     },
     {
-      "id": "m7a0y973g",
+      "id": "p88yk1jzq",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف27 (عملي)",
@@ -9645,7 +9645,7 @@
       ]
     },
     {
-      "id": "487y3ja7o",
+      "id": "udodceftg",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف28 (عملي)",
@@ -9663,7 +9663,7 @@
       ]
     },
     {
-      "id": "m8uuznhmn",
+      "id": "qk9dpe3b5",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف29 (عملي)",
@@ -9681,7 +9681,7 @@
       ]
     },
     {
-      "id": "jjica4kad",
+      "id": "ypycdqnvn",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف30 (عملي)",
@@ -9699,7 +9699,7 @@
       ]
     },
     {
-      "id": "36ucsa52u",
+      "id": "sh21djav2",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف31 (عملي)",
@@ -9717,7 +9717,7 @@
       ]
     },
     {
-      "id": "tdefgxz9a",
+      "id": "edwloffvy",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف32 (عملي)",
@@ -9735,7 +9735,7 @@
       ]
     },
     {
-      "id": "e0u4ma1sc",
+      "id": "q3aekqthd",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف33 (عملي)",
@@ -9753,7 +9753,7 @@
       ]
     },
     {
-      "id": "nycfm639x",
+      "id": "ookapxyh7",
       "course": "مهارات الحاسوب (UR-2-02)",
       "type": "practical",
       "className": "ف34 (عملي)",
@@ -9773,7 +9773,7 @@
   ],
   "مهارات اللغة العربية (UR-2-01)": [
     {
-      "id": "2wyykon7k",
+      "id": "vqoxr5tq3",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش01 (نظري)",
@@ -9791,7 +9791,7 @@
       ]
     },
     {
-      "id": "054wzvqs5",
+      "id": "qnw53e649",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش04 (نظري)",
@@ -9809,7 +9809,7 @@
       ]
     },
     {
-      "id": "95j6fqyyn",
+      "id": "3pzd6mdgm",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش08 (نظري)",
@@ -9827,7 +9827,7 @@
       ]
     },
     {
-      "id": "tcfitwhrm",
+      "id": "6o8ewpbaa",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش09 (نظري)",
@@ -9845,7 +9845,7 @@
       ]
     },
     {
-      "id": "b8uwk1k2d",
+      "id": "0qd0l784k",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش11 (نظري)",
@@ -9863,7 +9863,7 @@
       ]
     },
     {
-      "id": "jo9fcwr3k",
+      "id": "157nqnxni",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش02 (نظري)",
@@ -9881,7 +9881,7 @@
       ]
     },
     {
-      "id": "kpj0skb8e",
+      "id": "sobhzoa0t",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش03 (نظري)",
@@ -9899,7 +9899,7 @@
       ]
     },
     {
-      "id": "x4lr9ni30",
+      "id": "9qptxd1y4",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش05 (نظري)",
@@ -9917,7 +9917,7 @@
       ]
     },
     {
-      "id": "dxpy6pxpy",
+      "id": "bpxev2wem",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش06 (نظري)",
@@ -9935,7 +9935,7 @@
       ]
     },
     {
-      "id": "gmyphw079",
+      "id": "xkbdfw6s8",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش07 (نظري)",
@@ -9953,7 +9953,7 @@
       ]
     },
     {
-      "id": "48gwve40h",
+      "id": "0iwn2397h",
       "course": "مهارات اللغة العربية (UR-2-01)",
       "type": "theory",
       "className": "ش10 (نظري)",
