@@ -993,6 +993,57 @@
 }
 @media print{ #gpa-container{ background:#fff !important; padding:0 !important; } }
 
+/* زر لوحة التحكم بيطلع بس على جهاز المشرف */
+body:not(.admin-device) .admin-only{ display:none !important; }
+
+/* ---------- إضافات حاسبة المعدل ---------- */
+.gpa-muted{ font-size:12.5px; color:var(--ink-soft); margin:0; }
+.gpa-impact{ grid-column:1 / -1; font-size:11.5px; color:var(--ink-soft); }
+.gpa-impact:empty{ display:none; }
+.gpa-impact b{ color:var(--ink); }
+.gpa-scen{ display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:8px; }
+.gpa-scen-item{ background:var(--paper); border-radius:12px; padding:10px 6px; text-align:center; display:flex; flex-direction:column; gap:2px; }
+.gpa-scen-item b{ font-size:12px; color:var(--ink-soft); }
+.gpa-scen-item span{ font-size:11px; color:var(--ink-soft); }
+.gpa-scen-item strong{ font-family:var(--font-display); font-size:22px; color:var(--brass-deep); }
+.gpa-scen-item small{ font-size:10.5px; color:var(--ink-soft); }
+.gpa-scen-item.warn{ background:var(--rose-soft); } .gpa-scen-item.warn strong{ color:var(--rose-text); }
+.gpa-plan{ background:var(--paper); border-radius:12px; padding:12px 14px; margin-bottom:10px; font-size:13px; line-height:1.8; }
+.gpa-plan:last-child{ margin-bottom:0; }
+.gpa-plan b{ display:block; font-size:14px; margin-bottom:2px; }
+.gpa-plan p{ margin:0; } .gpa-plan ul{ margin:4px 0 0; padding-inline-start:20px; }
+.gpa-plan.warn{ background:var(--rose-soft); } .gpa-plan.good{ background:var(--teal-soft); }
+.gpa-plan .bad{ color:var(--rose-text); } .gpa-plan .good{ color:var(--teal-text); }
+.gpa-inline{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:8px 0; font-size:12.5px; font-weight:700; color:var(--ink-soft); }
+.gpa-inline .editor-input{ width:120px; margin:0; background:var(--surface); }
+.gpa-chart{ width:100%; height:auto; display:block; direction:ltr; }
+.gpa-chart .gl{ stroke:var(--line); stroke-width:1; } .gpa-chart .lim{ stroke:var(--rose); stroke-width:1.5; stroke-dasharray:5 5; }
+.gpa-chart .ax, .gpa-chart .xl{ fill:var(--ink-soft); font-size:11px; text-anchor:middle; font-family:var(--font-body); } .gpa-chart .ax{ text-anchor:end; }
+.gpa-chart .bar{ fill:var(--teal); opacity:.35; } .gpa-chart .bv{ fill:var(--teal-text); font-size:12px; text-anchor:middle; font-weight:800; }
+.gpa-chart .cv{ fill:var(--brass-deep); font-size:12px; text-anchor:middle; font-weight:800; }
+.gpa-chart .cl{ fill:none; stroke:var(--brass); stroke-width:3; stroke-linejoin:round; } .gpa-chart .cd{ fill:var(--surface); stroke:var(--brass); stroke-width:3; }
+.gpa-legend{ display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--ink-soft); margin:4px 0 10px; }
+.gpa-legend i{ display:inline-block; width:14px; height:8px; border-radius:3px; vertical-align:middle; margin-inline-end:4px; }
+.gpa-legend .lb{ background:var(--teal); opacity:.45; } .gpa-legend .lc{ background:var(--brass); height:3px; } .gpa-legend .ll{ border-top:2px dashed var(--rose); height:0; }
+.gpa-hist{ display:flex; flex-direction:column; gap:6px; }
+.gpa-hist-row{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:var(--paper); border-radius:10px; padding:8px 12px; font-size:12.5px; }
+.gpa-hist-row .nm{ font-weight:800; flex:1; min-width:120px; } .gpa-hist-row .muted{ color:var(--ink-soft); }
+.gpa-hist-row .acts{ display:flex; gap:4px; }
+.gpa-ic{ border:none; background:var(--surface); color:var(--ink-soft); width:30px; height:30px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:14px; }
+.gpa-ic:hover{ color:var(--ink); } .gpa-ic.del:hover{ color:var(--rose-text); background:var(--rose-soft); }
+.gpa-plans{ display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px; }
+.gpa-plan-card{ background:var(--paper); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:3px; font-size:12.5px; color:var(--ink-soft); }
+.gpa-plan-card b{ color:var(--ink); font-size:14px; } .gpa-plan-card strong{ color:var(--brass-deep); font-size:15px; } .gpa-plan-card em{ font-style:normal; color:var(--rose-text); }
+.gpa-share{ position:fixed; left:-9999px; top:0; width:540px; padding:34px; border-radius:28px; color:#fff; font-family:var(--font-body); background:radial-gradient(120% 70% at 50% -10%, rgba(217,168,78,.35), transparent 60%), linear-gradient(170deg,#141B2E,#070A14); display:none; }
+.gpa-share.on{ display:block; }
+.gpa-share .gs-top{ display:flex; align-items:center; gap:12px; } .gpa-share .gs-top img{ height:44px; } .gpa-share .gs-top b{ font-size:22px; } .gpa-share .gs-top span{ margin-inline-start:auto; color:#C7D2E0; font-size:15px; }
+.gpa-share .gs-main{ text-align:center; margin:30px 0 20px; } .gpa-share .gs-main small{ color:#C7D2E0; font-size:18px; display:block; }
+.gpa-share .gs-main strong{ display:block; font-family:var(--font-display); font-size:110px; line-height:1.1; color:#F2D9A6; } .gpa-share .gs-main em{ font-style:normal; font-size:20px; color:#F2D9A6; }
+.gpa-share .gs-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; } .gpa-share .gs-row div{ background:rgba(255,255,255,.07); border-radius:16px; padding:14px; text-align:center; }
+.gpa-share .gs-row small{ display:block; color:#C7D2E0; font-size:14px; } .gpa-share .gs-row b{ font-size:34px; }
+.gpa-share .gs-foot{ text-align:center; color:#8B97AD; font-size:13px; margin-top:20px; }
+@container main (max-width: 600px){ .gpa-scen{ grid-template-columns:repeat(3, minmax(0,1fr)); } }
+
 /* ---------- تبويبات صفحة الكلية ---------- */
 .admin-tabs{ display:flex; gap:4px; background:var(--paper); border-radius:12px; padding:4px; margin:4px 0 16px; }
 .admin-tabs button{ flex:1; border:none; background:transparent; color:var(--ink-soft); font:inherit; font-size:13.5px; font-weight:800; padding:10px; border-radius:9px; cursor:pointer; }
@@ -1092,7 +1143,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
         </div>
       </div>
       <div class="header-tools">
-        <button type="button" class="hdr-btn" id="hdr-admin-btn" onclick="openEditor()" title="لوحة التحكم" aria-label="لوحة التحكم"></button>
+        <button type="button" class="hdr-btn admin-only" id="hdr-admin-btn" onclick="openEditor()" title="لوحة التحكم" aria-label="لوحة التحكم"></button>
         <button type="button" class="hdr-btn help-btn" id="help-btn" onclick="startTour(true)" title="شرح الشاشة يلي أنت فيها" aria-label="شرح هالشاشة">؟</button>
         <button type="button" class="hdr-btn" id="intent-btn" onclick="openIntent()" title="شو حابب تعمل؟" aria-label="شو حابب تعمل؟"></button>
         <button type="button" class="hdr-btn" id="palette-btn" onclick="openThemePicker()" title="شكل الموقع وألوانه" aria-label="اختيار ثيم الألوان"></button>
@@ -1124,7 +1175,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       <p id="setup-msg">يرجى لصق نسخة محفوظة من البيانات هنا للدخول المؤقت، أو التأكد من وجود ملف <code>data.json</code> بجانب هذا الملف.</p>
       <div class="actions" style="margin-bottom:12px;">
         <button type="button" class="btn btn-secondary" onclick="showCollegePicker()">تغيير الكلية</button>
-        <button type="button" class="btn btn-ghost" onclick="openEditor()">دخول المشرف</button>
+        <button type="button" class="btn btn-ghost admin-only" onclick="openEditor()">دخول المشرف</button>
       </div>
       <textarea id="db-input" placeholder='{"اسم المادة": [{"id": "...", "type": "theory"...}]}'></textarea>
       <button class="btn btn-primary" id="ic-setup-btn" onclick="saveAndStart()">الدخول المؤقت للنظام</button>
@@ -1188,6 +1239,8 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
               <div><label>حد الساعات بالفصل</label><input type="number" id="cs-limit" class="editor-input" min="1" step="1"></div>
               <label class="gh-remember cs-visible"><input type="checkbox" id="cs-visible"> ظاهرة للطلاب</label>
               <div><label>حد الإنذار الأكاديمي (المعدل)</label><input type="number" id="cs-probation" class="editor-input" min="0" max="4" step="0.01" placeholder="2.00"></div>
+              <div><label>ساعات التخرج</label><input type="number" id="cs-grad" class="editor-input" min="1" step="1" placeholder="مثال: 240"></div>
+              <div class="cs-wide"><label>التقديرات (سطر لكل تقدير: الحد الأدنى ثم الاسم — فاضية = ما بتطلع)</label><textarea id="cs-honors" class="editor-input" rows="3" dir="rtl" placeholder="3.50 امتياز&#10;3.00 جيد جدًا&#10;2.50 جيد"></textarea></div>
               <div class="cs-wide"><label>رسالة للطلاب (بتطلع فوق الجدول — اتركها فاضية لتخفيها)</label><textarea id="cs-notice" class="editor-input" rows="2" placeholder="مثال: التسجيل بيفتح يوم الأحد الساعة 9 الصبح"></textarea></div>
               <div class="cs-wide"><label>أرقام واتساب للتواصل (رقم بكل سطر، مع رمز الدولة — فاضية = الأرقام العامة)</label><textarea id="cs-whatsapp" class="editor-input" rows="3" dir="ltr" placeholder="963995077268"></textarea></div>
             </div>
@@ -1607,6 +1660,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('theme-switching')));
     }
     applyPalette(savedPalette() || DEFAULT_PALETTE);
+    document.addEventListener('DOMContentLoaded', () => { try { applyAdminVisibility(); } catch (e) {} });
 
     // ---- «شو حابب تعمل؟»: بتوجّه الطالب مباشرة للمكان الصح ----
     const INTENT_OFF_KEY = 'spu_intent_off', INTENT_SESSION_KEY = 'spu_intent_seen';
@@ -1940,7 +1994,9 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
         { sel: '#gpa-cgpa', title: 'معدلك قبل هالفصل', text: 'اكتب معدلك التراكمي وساعاتك المنجزة من كشف العلامات (بدون الساعات المعادلة). بدونهن بينحسب معدل الفصل بس.' },
         { sel: '[onclick="gpaFromSchedule()"]', title: 'جيب موادك', text: 'بيعبّي مواد «جدولي» مع ساعاتها لحالها. أو ضيف مادة بإيدك من «+ مادة».' },
         { sel: '#gpa-rows .gpa-row', title: 'علامة كل مادة', text: 'اختار العلامة بالحرف، أو اكتبها من 100 وبتتحوّل لحالها (مثلًا 96 ← A). إذا عم تعيد المادة، علّم «عم أعيد» واختار علامتك القديمة — الجديدة بتحل محلها.' },
+        { sel: '#gpa-scen-box', title: 'لو جبت…', text: 'شو بيصير معدلك إذا جبت نفس العلامة بكل مواد هالفصل — من A لـ C.' },
         { sel: '#gpa-target', title: 'شو لازم جيب؟', text: 'اكتب المعدل يلي بدك توصلو، وبيقلّك المعدل المطلوب بهالفصل — أو إذا مو ممكن، أو مضمون.' },
+        { sel: '#gpa-history-box', title: 'سجل الفصول', text: 'لما تخلص فصل اكبس «حفظ هالفصل بالسجل». التراكمي بينحسب من السجل لحاله، والرسم بيبين تطوّر معدلك. وتحت: الطلعة من الإنذار، التخرج، ومقارنة خطط «جدولي».' },
       ]},
       favorites: { label: 'المفضّلة', steps: [
         { sel: '#favorites-container', title: 'مفضّلتك', text: 'كل جدول ميّزته بنجمة محفوظ هون بشكل دائم على هالجهاز، حتى لو ولّدت جداول جديدة أو بلّشت من جديد.' },
@@ -2418,7 +2474,8 @@ function renderTourStep() {
         return;
       }
       try { localStorage.setItem(COLLEGE_KEY, currentCollege.id); } catch (e) {}
-      const adminParam = new URLSearchParams(location.search).get('admin');
+      const qp = new URLSearchParams(location.search);
+      const adminParam = qp.has('admin') ? (qp.get('admin') || 'home') : null;
       try { history.replaceState(null, '', collegeUrl(currentCollege.id)); } catch (e) {}
       applyCollegeSettings();
 
@@ -2464,6 +2521,16 @@ function renderTourStep() {
       if (!editorOpen && shouldAskIntent()) openIntent(() => setTimeout(() => startTour(currentTourContext(), false), 300));
       else if (!editorOpen) startTour('main', false);   // أول زيارة بس
     }
+
+    // مدخل المشرف المخفي: 5 كبسات على الشعار خلال 3 ثواني
+    (function () {
+      let taps = [];
+      document.addEventListener('click', e => {
+        if (!e.target.closest || !e.target.closest('.logo-mark')) return;
+        const now = Date.now(); taps = taps.filter(x => now - x < 3000); taps.push(now);
+        if (taps.length >= 5) { taps = []; openEditor(); }
+      });
+    })();
 
     function bootApp() {
       appBooted = true;
@@ -2636,6 +2703,8 @@ function renderTourStep() {
       document.getElementById('cs-limit').value = Number(c.creditLimit) > 0 ? c.creditLimit : 25;
       document.getElementById('cs-visible').checked = !c.hidden;
       document.getElementById('cs-probation').value = Number(c.probation) > 0 ? c.probation : '';
+      document.getElementById('cs-grad').value = Number(c.gradHours) > 0 ? c.gradHours : '';
+      document.getElementById('cs-honors').value = (Array.isArray(c.honors) ? c.honors : []).map(h => `${Number(h.min).toFixed(2)} ${h.label}`).join('\n');
       document.getElementById('cs-notice').value = c.notice || '';
       document.getElementById('cs-whatsapp').value = (Array.isArray(c.whatsapp) ? c.whatsapp : []).join('\n');
       document.getElementById('cs-delete-btn').disabled = colleges.length < 2;
@@ -2814,9 +2883,20 @@ function renderTourStep() {
       const hidden = !document.getElementById('cs-visible').checked;
       const probRaw = document.getElementById('cs-probation').value.trim(), prob = parseFloat(probRaw);
       if (probRaw && !(prob > 0 && prob <= 4)) { toast('حد الإنذار لازم يكون بين 0 و 4.', 'error'); return; }
+      const gradRaw = document.getElementById('cs-grad').value.trim(), grad = parseInt(gradRaw, 10);
+      if (gradRaw && !(grad > 0)) { toast('ساعات التخرج لازم تكون رقم أكبر من صفر.', 'error'); return; }
+      const honors = [];
+      for (const line of document.getElementById('cs-honors').value.split('\n').map(x => x.trim()).filter(Boolean)) {
+        const m = line.match(/^([0-4](?:[.,]\d+)?)\s+(.+)$/) || line.match(/^(.+?)\s+([0-4](?:[.,]\d+)?)$/);
+        const num = m ? parseFloat((/^[0-4]/.test(m[1]) ? m[1] : m[2]).replace(',', '.')) : NaN, label = m ? (/^[0-4]/.test(m[1]) ? m[2] : m[1]).trim() : '';
+        if (!(num >= 0 && num <= 4) || !label) { toast(`سطر التقدير «${line}» مو مزبوط — اكتبه متل: 3.50 امتياز`, 'error', 7000); return; }
+        honors.push({ min: num, label });
+      }
       if (hidden && colleges.every(c => c.id === id || c.hidden) && !await uiConfirm('هيك ما رح يضل ولا كلية ظاهرة للطلاب. متأكد؟', { danger: true })) return;
       const entry = Object.assign({}, currentCollege, { name });
-      ['creditLimit', 'hidden', 'notice', 'whatsapp', 'probation'].forEach(k => delete entry[k]);
+      ['creditLimit', 'hidden', 'notice', 'whatsapp', 'probation', 'gradHours', 'honors'].forEach(k => delete entry[k]);
+      if (gradRaw) entry.gradHours = grad;
+      if (honors.length) entry.honors = honors.sort((a, b) => b.min - a.min);
       if (probRaw && prob !== 2) entry.probation = prob;
       if (limit !== 25) entry.creditLimit = limit;
       if (hidden) entry.hidden = true;
@@ -2880,6 +2960,10 @@ function renderTourStep() {
     }
     // الجلسة المحفوظة بتتجدد مع كل زيارة، فما بتنتهي طول ما عم تستخدم الموقع
     if (localStorage.getItem('spu_admin_verified') === 'true' && isAdminVerified()) touchAdmin();
+    // جهاز المشرف: بعد أول دخول ناجح منتذكّره حتى يضل زر لوحة التحكم ظاهر عنده بس
+    const ADMIN_DEVICE_KEY = 'spu_admin_device';
+    function isAdminDevice() { try { return localStorage.getItem(ADMIN_DEVICE_KEY) === '1' || localStorage.getItem('spu_admin_verified') === 'true' || sessionStorage.getItem('spu_admin_verified') === 'true'; } catch (e) { return false; } }   // المشرفين يلي داخلين من قبل هالتحديث كمان
+    function applyAdminVisibility() { document.body.classList.toggle('admin-device', isAdminDevice()); }
     function lockAdmin(expired) {
       sessionStorage.removeItem('spu_admin_verified'); sessionStorage.removeItem('spu_gh_token'); sessionStorage.removeItem('spu_admin_at');
       localStorage.removeItem('spu_admin_verified'); localStorage.removeItem('spu_gh_token'); localStorage.removeItem('spu_admin_at');
@@ -2889,7 +2973,12 @@ function renderTourStep() {
         toast('انتهت جلسة المشرف لأسباب أمنية — أعد التحقق للمتابعة.', 'error', 6000);
       }
     }
-    window.msLockAdminNow = function() { lockAdmin(false); toast('تم قفل جلسة المشرف ومسح المفتاح من هذا الجهاز.', 'success'); };
+    window.msLockAdminNow = function() {
+      lockAdmin(false);
+      try { localStorage.removeItem(ADMIN_DEVICE_KEY); } catch (e) {}
+      applyAdminVisibility(); closeEditor();
+      toast('تم قفل جلسة المشرف — وزر لوحة التحكم انخفى من هالجهاز. للرجوع: افتح الموقع بـ ?admin أو اكبس على الشعار 5 مرات.', 'success', 8000);
+    };
 
     function getGithubConfig() {
       try {
@@ -2959,6 +3048,8 @@ function renderTourStep() {
           localStorage.removeItem('spu_admin_verified');
         }
 
+        try { localStorage.setItem(ADMIN_DEVICE_KEY, '1'); } catch (e) {}
+        applyAdminVisibility();
         toast('تم التحقق بنجاح — أهلًا بك كمشرف.', 'success');
         document.getElementById('github-settings-panel').style.display = 'none';
         document.getElementById('editor-main-content').style.display = 'block';
@@ -2979,6 +3070,7 @@ function renderTourStep() {
 
     window.forgetGithubCredentials = function() {
       localStorage.removeItem('spu_gh_config');
+      try { localStorage.removeItem(ADMIN_DEVICE_KEY); } catch (e) {}
       lockAdmin(false);
       document.getElementById('gh-owner').value = '';
       document.getElementById('gh-repo').value = '';
@@ -4825,64 +4917,175 @@ function populateBulkScope() {
       let st = null; try { st = JSON.parse(localStorage.getItem(GPA_KEY) || 'null'); } catch (e) {}
       if (!st || typeof st !== 'object') st = {};
       if (!Array.isArray(st.rows)) st.rows = [];
+      if (!Array.isArray(st.history)) st.history = [];
       return st;
     }
     function saveGPA(st) { try { localStorage.setItem(GPA_KEY, JSON.stringify(st)); } catch (e) {} }
     let gpaState = null;
     function gpaRowId() { return 'g' + Math.random().toString(36).slice(2, 9); }
 
-    function computeGPA(st) {
-      let semP = 0, semH = 0, repH = 0, repP = 0, newDone = 0, rowsH = 0;
-      st.rows.forEach(r => {
-        const h = parseFloat(r.hours);
-        if (!(h > 0)) return;
+    // ---- الحساب ----
+    // بيطبّق فصل (قائمة مواد) على مجموع النقاط والساعات — والمادة المعادة علامتها الجديدة بتحل محل القديمة
+    function applySemester(acc, rows, gradeOverride) {
+      let { P, H, done } = acc, semP = 0, semH = 0, repP = 0, repH = 0, rowsH = 0;
+      (rows || []).forEach(r => {
+        const h = parseFloat(r.hours); if (!(h > 0)) return;
         rowsH += h;
         const oldP = r.repeat ? gradePoints(r.oldGrade) : null;
-        if (oldP != null) { repH += h; repP += oldP * h; }
-        const p = gradePoints(r.grade);
+        if (oldP != null) { repP += oldP * h; repH += h; }
+        const g = gradeOverride || r.grade, p = gradePoints(g);
         if (p == null) return;
         semP += p * h; semH += h;
-        if (r.grade !== 'F' && !(oldP != null && r.oldGrade !== 'F')) newDone += h;   // المعادة الناجحة ما بتزيد الساعات المنجزة
+        if (g !== 'F' && !(oldP != null && r.oldGrade !== 'F')) done += h;   // المعادة الناجحة ما بتزيد الساعات المنجزة
       });
-      const cg = parseFloat(st.cgpa), H = parseFloat(st.done);
-      const hasPrev = Number.isFinite(cg) && cg >= 0 && cg <= 4 && H > 0;
-      const baseP = hasPrev ? cg * H - repP : 0, baseH = hasPrev ? H - repH : 0;   // العلامة الجديدة بتحل محل القديمة
-      const cumH = baseH + semH;
-      return {
-        sem: semH ? semP / semH : NaN, semH,
-        cum: cumH > 0 && (hasPrev || semH) ? (baseP + semP) / cumH : NaN,
-        hasPrev, done: (hasPrev ? H : 0) + newDone, rowsH, baseP, baseH,
-      };
+      const baseP = P - repP, baseH = H - repH;
+      return { P: baseP + semP, H: baseH + semH, done, semP, semH, rowsH, baseP, baseH };
     }
+    function manualBase(st) {
+      const cg = parseFloat(st.cgpa), H = parseFloat(st.done);
+      const ok = Number.isFinite(cg) && cg >= 0 && cg <= 4 && H > 0;
+      return ok ? { P: cg * H, H, done: H, ok } : { P: 0, H: 0, done: 0, ok };
+    }
+    // الحالة قبل الفصل الحالي: المعدل اليدوي + كل فصول السجل بالترتيب
+    function baseBeforeCurrent(st) {
+      const m = manualBase(st); let acc = { P: m.P, H: m.H, done: m.done };
+      const series = [];
+      st.history.forEach(h => { const r = applySemester(acc, h.rows); acc = { P: r.P, H: r.H, done: r.done }; series.push({ name: h.name, sem: r.semH ? r.semP / r.semH : NaN, cum: r.H > 0 ? r.P / r.H : NaN, hours: r.semH }); });
+      return { acc, series, hasPrev: m.ok || st.history.length > 0 };
+    }
+    function computeGPA(st) {
+      const b = baseBeforeCurrent(st);
+      const r = applySemester(b.acc, st.rows);
+      return { sem: r.semH ? r.semP / r.semH : NaN, semH: r.semH, cum: r.H > 0 && (b.hasPrev || r.semH) ? r.P / r.H : NaN, P1: r.P, H1: r.H,
+        hasPrev: b.hasPrev, done: r.done, rowsH: r.rowsH, baseP: r.baseP, baseH: r.baseH, series: b.series, acc: b.acc };
+    }
+    function honorsFor(v) {
+      const L = currentCollege && Array.isArray(currentCollege.honors) ? currentCollege.honors.filter(x => x && x.label && Number.isFinite(+x.min)).slice().sort((a, b) => b.min - a.min) : [];
+      if (!L.length || !Number.isFinite(v)) return '';
+      const h = L.find(x => v >= +x.min - 1e-9); return h ? h.label : '';
+    }
+    function gradHours() { const v = currentCollege && Number(currentCollege.gradHours); return v > 0 ? v : 0; }
+    function letterAtLeast(v) { const g = gradeScale().slice().reverse().find(x => x.p >= v - 1e-9); return g ? g.l : null; }
 
     function gpaTargetHTML(st, r) {
       const t = parseFloat(st.target);
       if (!Number.isFinite(t)) return 'اكتب المعدل التراكمي يلي بدك توصلو، وبقلّك شو لازم تجيب بهالفصل.';
       if (t <= 0 || t > 4) return 'المعدل لازم يكون بين 0 و 4.';
-      if (!r.hasPrev) return 'عبّي معدلك التراكمي الحالي وساعاتك المنجزة فوق أولًا.';
+      if (!r.hasPrev) return 'عبّي معدلك التراكمي الحالي وساعاتك المنجزة (أو سجّل فصولك) أولًا.';
       if (!(r.rowsH > 0)) return 'ضيف مواد هالفصل مع ساعاتها أولًا.';
       const need = (t * (r.baseH + r.rowsH) - r.baseP) / r.rowsH;
       if (need > 4) return { cls: 'bad', html: `ما بتقدر توصل لـ <strong>${t.toFixed(2)}</strong> بهالفصل — حتى لو جبت +A بكل المواد بيطلع تراكميك <strong>${fmtGpa((r.baseP + 4 * r.rowsH) / (r.baseH + r.rowsH))}</strong>.` };
       if (need <= 0) return { cls: 'good', html: `مضمون 👌 — تراكميك رح يضل فوق <strong>${t.toFixed(2)}</strong> مهما جبت بهالفصل.` };
-      const g = gradeScale().slice().reverse().find(x => x.p >= need - 1e-9);
-      return { cls: '', html: `لازم معدل فصلك يكون <strong>${need.toFixed(2)}</strong> على الأقل (${r.rowsH} ساعة) — يعني تقريبًا <strong>${esc(g ? g.l : 'A+')}</strong> أو أعلى بالمتوسط.` };
+      return { cls: '', html: `لازم معدل فصلك يكون <strong>${need.toFixed(2)}</strong> على الأقل (${r.rowsH} ساعة) — يعني تقريبًا <strong>${esc(letterAtLeast(need) || 'A+')}</strong> أو أعلى بالمتوسط.` };
+    }
+
+    // «لو جبت…»: كل مواد الفصل بنفس العلامة
+    const GPA_SCENARIOS = ['A', 'B+', 'B', 'C+', 'C'];
+    function scenariosHTML(st, r) {
+      if (!(r.rowsH > 0)) return '<p class="gpa-muted">ضيف مواد هالفصل مع ساعاتها لتشوف السيناريوهات.</p>';
+      const b = baseBeforeCurrent(st);
+      return `<div class="gpa-scen">${GPA_SCENARIOS.map(g => { const x = applySemester(b.acc, st.rows, g); const cum = x.H > 0 && (b.hasPrev || x.semH) ? x.P / x.H : NaN; const warn = Number.isFinite(cum) && cum < probationLimit();
+        return `<div class="gpa-scen-item ${warn ? 'warn' : ''}"><b>كلهن ${esc(g)}</b><span>الفصل ${fmtGpa(x.semH ? x.semP / x.semH : NaN)}</span><strong>${fmtGpa(cum)}</strong><small>${b.hasPrev ? 'التراكمي' : 'معدل الفصل'}${honorsFor(cum) ? ' · ' + esc(honorsFor(cum)) : ''}</small></div>`; }).join('')}</div>`;
+    }
+
+    // الطلعة من الإنذار والتخرج
+    function planningHTML(st, r) {
+      const lim = probationLimit(), parts = [];
+      if (r.hasPrev && Number.isFinite(r.cum) && r.cum < lim) {
+        const need = g => Math.ceil((lim * r.H1 - r.P1) / (g - lim));
+        const opts = [4, 3.5, 3].filter(g => g > lim).map(g => `<li><strong>${need(g)}</strong> ساعة بمعدل <strong>${g.toFixed(2)}</strong> (${esc(letterAtLeast(g) || '')})</li>`).join('');
+        parts.push(`<div class="gpa-plan warn"><b>🚨 الطلعة من الإنذار (${lim.toFixed(2)})</b><p>بعد هالفصل تراكميك ${fmtGpa(r.cum)}. لترجع فوق الحد بتحتاج بالفصول الجاية تقريبًا:</p><ul>${opts}</ul></div>`);
+      }
+      const G = gradHours();
+      if (G && r.hasPrev) {
+        const rem = Math.max(0, G - r.done);
+        if (rem <= 0) parts.push(`<div class="gpa-plan good"><b>🎓 خلصت ساعات التخرج (${G})</b><p>معدل تخرجك المتوقع: <strong>${fmtGpa(r.cum)}</strong>${honorsFor(r.cum) ? ' — ' + esc(honorsFor(r.cum)) : ''}.</p></div>`);
+        else {
+          const maxCum = (r.P1 + 4 * rem) / (r.H1 + rem), t = parseFloat(st.gradTarget);
+          let need = '';
+          if (Number.isFinite(t) && t > 0 && t <= 4) {
+            const n = (t * (r.H1 + rem) - r.P1) / rem;
+            need = n > 4 ? `<p class="bad">ما بتقدر تتخرج بـ ${t.toFixed(2)} — أعلى شي ممكن <strong>${fmtGpa(maxCum)}</strong>.</p>`
+              : n <= 0 ? `<p class="good">مضمون تتخرج فوق ${t.toFixed(2)} 👌</p>`
+              : `<p>لتتخرج بـ <strong>${t.toFixed(2)}</strong>${honorsFor(t) ? ` (${esc(honorsFor(t))})` : ''} لازم متوسطك بالـ ${rem} ساعة الباقية يكون <strong>${n.toFixed(2)}</strong> (${esc(letterAtLeast(n) || '')}).</p>`;
+          }
+          parts.push(`<div class="gpa-plan"><b>🎓 التخرج</b><p>منجز <strong>${r.done}</strong> من <strong>${G}</strong> ساعة — باقيلك <strong>${rem}</strong>. أعلى معدل تخرج ممكن: <strong>${fmtGpa(maxCum)}</strong>.</p>
+            <div class="gpa-inline"><label for="gpa-grad-target">بدي اتخرج بمعدل</label><input class="editor-input" id="gpa-grad-target" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.gradTarget ?? '')}" placeholder="3.00"></div>${need}</div>`);
+        }
+      }
+      return parts.join('');
+    }
+
+    // رسم المعدل عبر الفصول: أعمدة لمعدل كل فصل وخط للتراكمي
+    function historyChartSVG(series, lim) {
+      const pts = series.filter(x => Number.isFinite(x.cum) || Number.isFinite(x.sem));
+      if (pts.length < 1) return '';
+      const W = 600, Hh = 220, L = 34, R = 12, T = 16, B = 44, n = pts.length, cw = (W - L - R) / n;
+      const y = v => T + (1 - v / 4) * (Hh - T - B);
+      let g = '';
+      [1, 2, 3, 4].forEach(v => { g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${L - 6}" y="${y(v) + 4}" class="ax">${v}</text>`; });
+      g += `<line x1="${L}" x2="${W - R}" y1="${y(lim)}" y2="${y(lim)}" class="lim"/>`;
+      pts.forEach((p, i) => { const x = L + cw * i + cw * .22, w = cw * .56;
+        if (Number.isFinite(p.sem)) g += `<rect x="${x}" y="${y(p.sem)}" width="${w}" height="${y(0) - y(p.sem)}" rx="6" class="bar"><title>${esc(p.name)}: ${p.sem.toFixed(2)}</title></rect><text x="${x + w / 2}" y="${y(0) - 8}" class="bv">${p.sem.toFixed(2)}</text>`;
+        g += `<text x="${x + w / 2}" y="${Hh - 22}" class="xl">${esc(p.name.length > 12 ? p.name.slice(0, 11) + '…' : p.name)}</text>`; });
+      const line = pts.map((p, i) => Number.isFinite(p.cum) ? `${L + cw * i + cw / 2},${y(p.cum)}` : null).filter(Boolean);
+      if (line.length > 1) g += `<polyline points="${line.join(' ')}" class="cl"/>`;
+      pts.forEach((p, i) => { if (Number.isFinite(p.cum)) g += `<circle cx="${L + cw * i + cw / 2}" cy="${y(p.cum)}" r="5" class="cd"><title>التراكمي بعد ${esc(p.name)}: ${p.cum.toFixed(2)}</title></circle><text x="${L + cw * i + cw / 2}" y="${y(p.cum) - 10}" class="cv">${p.cum.toFixed(2)}</text>`; });
+      return `<svg class="gpa-chart" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="المعدل عبر الفصول">${g}</svg>
+        <div class="gpa-legend"><span><i class="lb"></i> معدل الفصل</span><span><i class="lc"></i> التراكمي</span><span><i class="ll"></i> حد الإنذار</span></div>`;
+    }
+    function historyHTML(st, r) {
+      const series = r.series.slice();
+      if (r.semH) series.push({ name: 'هالفصل', sem: r.sem, cum: r.cum });
+      const list = st.history.map((h, i) => { const x = r.series[i] || {};
+        return `<div class="gpa-hist-row"><span class="nm">${esc(h.name)}</span><span>الفصل <b>${fmtGpa(x.sem)}</b></span><span>التراكمي <b>${fmtGpa(x.cum)}</b></span><span class="muted">${x.hours || 0} س</span>
+          <span class="acts"><button type="button" class="gpa-ic" data-hist-edit="${i}" title="رجّعه للتعديل">↩</button><button type="button" class="gpa-ic" data-hist-rename="${i}" title="إعادة تسمية">✎</button><button type="button" class="gpa-ic del" data-hist-del="${i}" title="حذف">${ic('trash')}</button></span></div>`; }).join('');
+      return `${series.length ? historyChartSVG(series, probationLimit()) : ''}
+        ${list ? `<div class="gpa-hist">${list}</div>` : '<p class="gpa-muted">لسا ما سجّلت ولا فصل. لما تخلص فصل، عبّي علاماته واكبس «حفظ هالفصل بالسجل» — وبعدها التراكمي بينحسب لحاله.</p>'}`;
+    }
+
+    // مقارنة خطط «جدولي»: العلامات من المواد يلي عبّيتها، والباقي بالافتراض
+    function plansHTML(st) {
+      let d; try { d = loadDrafts(); } catch (e) { return ''; }
+      const plans = d.list.map(pl => { const data = pl.id === d.active ? loadMySchedule() : d.store[pl.id]; return { name: pl.name, secs: (data && data.sections) || [] }; }).filter(x => x.secs.length);
+      if (!plans.length) return '<p class="gpa-muted">ما في خطط بـ «جدولي» لسا.</p>';
+      const assume = st.planAssume || 'B', b = baseBeforeCurrent(st);
+      const byName = Object.fromEntries(st.rows.map(r => [r.name, r]));
+      const rowsFor = secs => [...new Set(secs.map(courseNameOf))].map(c => { const r = byName[c]; const h = r && parseFloat(r.hours) > 0 ? r.hours : creditsOf(c); return { name: c, hours: h == null ? '' : h, grade: r && r.grade ? r.grade : assume, repeat: r && r.repeat, oldGrade: r && r.oldGrade }; });
+      return `<div class="gpa-inline"><label for="gpa-plan-assume">العلامة المفترضة للمواد يلي ما عبّيتها</label><select class="editor-input" id="gpa-plan-assume">${gradeScale().map(g => `<option value="${esc(g.l)}" ${g.l === assume ? 'selected' : ''}>${esc(g.l)} (${g.p.toFixed(2)})</option>`).join('')}</select></div>
+        <div class="gpa-plans">${plans.map(pl => { const rows = rowsFor(pl.secs); const x = applySemester(b.acc, rows); const miss = rows.filter(r => !(parseFloat(r.hours) > 0)).length; const cum = x.H > 0 && (b.hasPrev || x.semH) ? x.P / x.H : NaN;
+          return `<div class="gpa-plan-card"><b>${esc(pl.name)}</b><span>${rows.length} مواد · ${x.rowsH} ساعة${miss ? ` <em>(${miss} بدون ساعات)</em>` : ''}</span><span>الفصل <strong>${fmtGpa(x.semH ? x.semP / x.semH : NaN)}</strong></span><span>${b.hasPrev ? 'التراكمي' : 'المعدل'} <strong>${fmtGpa(cum)}</strong></span></div>`; }).join('')}</div>`;
     }
 
     function renderGPAResults() {
       const st = gpaState, r = computeGPA(st), lim = probationLimit();
       const box = document.getElementById('gpa-results'); if (!box) return;
       const warnCum = Number.isFinite(r.cum) && r.cum < lim, warnSem = Number.isFinite(r.sem) && r.sem < lim;
-      const pos = Number.isFinite(r.cum) ? r.cum : r.sem;
+      const pos = Number.isFinite(r.cum) ? r.cum : r.sem, hon = honorsFor(r.cum);
+      const prevCum = r.hasPrev && r.acc.H > 0 ? r.acc.P / r.acc.H : NaN;
       box.innerHTML = `<div class="gpa-summary">
-          <div class="gpa-stat main ${warnCum ? 'warn' : ''}"><div class="l">المعدل التراكمي الجديد</div><div class="v">${fmtGpa(r.cum)}</div><div class="s">${warnCum ? `⚠️ تحت ${lim.toFixed(2)} — إنذار أكاديمي` : (r.hasPrev ? `كان ${fmtGpa(parseFloat(st.cgpa))}` : 'عبّي معدلك السابق لتحسبو')}</div></div>
+          <div class="gpa-stat main ${warnCum ? 'warn' : ''}"><div class="l">المعدل التراكمي الجديد</div><div class="v">${fmtGpa(r.cum)}</div><div class="s">${warnCum ? `⚠️ تحت ${lim.toFixed(2)} — إنذار أكاديمي` : (hon ? `🏅 ${esc(hon)}` : (r.hasPrev ? `كان ${fmtGpa(prevCum)}` : 'عبّي معدلك السابق لتحسبو'))}</div></div>
           <div class="gpa-stat ${warnSem ? 'warn' : ''}"><div class="l">معدل هالفصل</div><div class="v">${fmtGpa(r.sem)}</div><div class="s">${r.semH ? `${r.semH} ساعة` : 'اختار علامات'}</div></div>
-          <div class="gpa-stat"><div class="l">الساعات المنجزة</div><div class="v">${r.done || '—'}</div><div class="s">بعد هالفصل</div></div>
+          <div class="gpa-stat"><div class="l">الساعات المنجزة</div><div class="v">${r.done || '—'}</div><div class="s">${gradHours() ? `من ${gradHours()}` : 'بعد هالفصل'}</div></div>
         </div>
-        ${Number.isFinite(pos) ? (() => { const L = lim / 4 * 100, G = 75;   // أحمر تحت الإنذار، ذهبي لحد 3.00، أخضر فوقها
+        ${Number.isFinite(pos) ? (() => { const L = lim / 4 * 100, G = 75;
           return `<div class="gpa-bar" style="background:linear-gradient(90deg, var(--rose) 0 ${L}%, var(--brass) ${L}% ${G}%, var(--teal) ${G}% 100%)"><i style="left:${Math.max(0, Math.min(100, pos / 4 * 100))}%"></i></div>
         <div class="gpa-bar-labels"><span style="left:0">0</span><span style="left:${L}%">${lim.toFixed(2)} إنذار</span><span style="left:${G}%">3.00</span><span style="left:100%">4.00</span></div>`; })() : ''}`;
       const t = gpaTargetHTML(st, r), out = document.getElementById('gpa-target-out');
       if (out) { out.className = 'gpa-target-out ' + (t.cls || ''); out.innerHTML = t.html || esc(t); }
+      const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+      set('gpa-scen-box', scenariosHTML(st, r));
+      set('gpa-plan-box', planningHTML(st, r));
+      document.getElementById('gpa-plan-card').hidden = !planningHTML(st, r);
+      set('gpa-history-box', historyHTML(st, r));
+      set('gpa-plans-box', plansHTML(st));
+      // أثر كل مادة على التراكمي
+      const denom = r.baseH + r.rowsH; let maxW = 0, maxId = null;
+      st.rows.forEach(row => { const h = parseFloat(row.hours); if (h > 0 && h > maxW) { maxW = h; maxId = row.id; } });
+      st.rows.forEach(row => { const el = document.querySelector(`#gpa-rows .gpa-row[data-id="${row.id}"] .gpa-impact`); if (!el) return; const h = parseFloat(row.hours);
+        if (!(h > 0) || !(denom > 0)) { el.textContent = ''; return; }
+        const w = h / denom * 100, step = .25 * h / denom;
+        el.innerHTML = `${row.id === maxId && st.rows.filter(x => parseFloat(x.hours) > 0).length > 1 ? '⭐ الأكثر تأثيرًا · ' : ''}وزنها <b>${w.toFixed(1)}%</b> من ${r.hasPrev ? 'تراكميك' : 'معدل الفصل'} · كل درجة أعلى (+0.25) = <b>+${step.toFixed(3)}</b>`; });
       saveGPA(st);
     }
 
@@ -4900,26 +5103,33 @@ function populateBulkScope() {
           <button type="button" class="gpa-del" data-del="1" title="حذف المادة" aria-label="حذف المادة">${ic('trash')}</button>
           <div class="gpa-repeat"><label><input type="checkbox" data-f="repeat" ${r.repeat ? 'checked' : ''}> عم أعيد هالمادة</label>
             ${r.repeat ? `<span>علامتي القديمة:</span><select class="editor-input" data-f="oldGrade">${gradeOptions(r.oldGrade, 'اختار')}</select><span>— الجديدة بتحل محلها</span>` : ''}</div>
+          <div class="gpa-impact"></div>
         </div>`).join('');
       c.innerHTML = `
-        <div class="gpa-card"><h3>${ic('calc')} حساب المعدل</h3><p>من 4.00 — الحساب بيتم عندك وبينحفظ بمتصفحك بس.</p><div id="gpa-results"></div></div>
-        <div class="gpa-card"><h3>معدلك قبل هالفصل</h3><p>من كشف علاماتك: المعدل التراكمي وعدد الساعات المنجزة (بدون الساعات المعادلة).</p>
+        <div class="gpa-card"><h3>${ic('calc')} حساب المعدل</h3><p>من 4.00 — الحساب بيتم عندك وبينحفظ بمتصفحك بس.</p><div id="gpa-results"></div>
+          <div class="gpa-actions"><button type="button" class="btn btn-ghost" onclick="gpaShareImage()">${ic('image')} صورة للمشاركة</button></div></div>
+        <div class="gpa-card"><h3>معدلك ${st.history.length ? 'قبل أول فصل بالسجل' : 'قبل هالفصل'}</h3><p>${st.history.length ? 'اختياري: إذا في فصول قبل ما تبلش السجل، اكتب معدلها وساعاتها هون.' : 'من كشف علاماتك: المعدل التراكمي وعدد الساعات المنجزة (بدون الساعات المعادلة).'}</p>
           <div class="gpa-two">
-            <div><label>المعدل التراكمي الحالي</label><input class="editor-input" id="gpa-cgpa" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.cgpa ?? '')}" placeholder="مثال: 2.85"></div>
+            <div><label>المعدل التراكمي</label><input class="editor-input" id="gpa-cgpa" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.cgpa ?? '')}" placeholder="مثال: 2.85"></div>
             <div><label>الساعات المنجزة</label><input class="editor-input" id="gpa-done" type="number" min="0" step="1" inputmode="numeric" value="${esc(st.done ?? '')}" placeholder="مثال: 64"></div>
           </div></div>
-        <div class="gpa-card"><h3>مواد هالفصل</h3><p>اختار العلامة بالحرف، أو اكتبها من 100 وبتتحوّل لحالها.</p>
+        <div class="gpa-card"><h3>مواد هالفصل</h3><p>اختار العلامة بالحرف، أو اكتبها من 100 وبتتحوّل لحالها. تحت كل مادة بيبين قديش بتأثر على معدلك.</p>
           ${st.rows.length ? `<div class="gpa-head"><span>المادة</span><span>الساعات</span><span>العلامة</span><span>من 100</span><span></span></div><div class="gpa-rows" id="gpa-rows">${rows}</div>` : '<div class="gpa-empty">ما في مواد لسا — جيبها من «جدولي» أو ضيفها بإيدك.</div>'}
           <div class="gpa-actions">
             <button type="button" class="btn btn-secondary" onclick="gpaFromSchedule()">${ic('calendar')} جيب موادي من «جدولي»</button>
             <button type="button" class="btn btn-ghost" onclick="gpaAddRow()">${ic('plus')} مادة</button>
-            ${st.rows.length ? `<button type="button" class="btn btn-ghost" onclick="gpaClear()">${ic('trash')} مسح المواد</button>` : ''}
+            ${st.rows.length ? `<button type="button" class="btn btn-teal" onclick="gpaSaveSemester()">💾 حفظ هالفصل بالسجل</button><button type="button" class="btn btn-ghost" onclick="gpaClear()">${ic('trash')} مسح المواد</button>` : ''}
           </div></div>
+        <div class="gpa-card"><h3>🔮 لو جبت…</h3><p>شو بيصير معدلك إذا جبت نفس العلامة بكل مواد هالفصل.</p><div id="gpa-scen-box"></div></div>
         <div class="gpa-card"><h3>🎯 شو لازم جيب؟</h3><p>اكتب المعدل التراكمي يلي بدك توصلو آخر هالفصل.</p>
           <div class="gpa-target">
             <div><label>المعدل الهدف</label><input class="editor-input" id="gpa-target" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.target ?? '')}" placeholder="مثال: 3.00"></div>
             <div id="gpa-target-out" class="gpa-target-out"></div>
-          </div></div>`;
+          </div></div>
+        <div class="gpa-card" id="gpa-plan-card"><h3>🧭 الخطة الجاية</h3><div id="gpa-plan-box"></div></div>
+        <div class="gpa-card"><h3>📈 سجل الفصول</h3><p>كل فصل بتحفظه بيدخل بحساب التراكمي لحاله، وبتشوف تطوّر معدلك.</p><div id="gpa-history-box"></div></div>
+        <div class="gpa-card"><h3>🗂️ مقارنة خطط «جدولي»</h3><p>المعدل المتوقع لكل خطة — المواد يلي عبّيت علامتها فوق بتنحسب بعلامتها.</p><div id="gpa-plans-box"></div></div>
+        <div id="gpa-share" class="gpa-share" aria-hidden="true"></div>`;
       renderGPAResults();
     };
 
@@ -4929,6 +5139,8 @@ function populateBulkScope() {
       if (t.id === 'gpa-cgpa') gpaState.cgpa = t.value;
       else if (t.id === 'gpa-done') gpaState.done = t.value;
       else if (t.id === 'gpa-target') gpaState.target = t.value;
+      else if (t.id === 'gpa-grad-target') { gpaState.gradTarget = t.value; const pos = t.selectionStart; renderGPAResults(); const n = document.getElementById('gpa-grad-target'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (er) {} } return; }
+      else if (t.id === 'gpa-plan-assume') gpaState.planAssume = t.value;
       else {
         const rowEl = t.closest('.gpa-row'); const row = rowEl && gpaState.rows.find(r => r.id === rowEl.dataset.id);
         if (!row || !t.dataset.f) return;
@@ -4943,11 +5155,21 @@ function populateBulkScope() {
       const t = e.target; if (!gpaState || !t.closest || !t.closest('#gpa-container')) return;
       const rowEl = t.closest('.gpa-row'); const row = rowEl && gpaState.rows.find(r => r.id === rowEl.dataset.id);
       if (row && t.dataset.f === 'repeat') { row.repeat = t.checked; if (!t.checked) row.oldGrade = ''; saveGPA(gpaState); renderGPA(); }
+      if (t.id === 'gpa-plan-assume') { gpaState.planAssume = t.value; renderGPAResults(); }
     });
-    document.addEventListener('click', e => {
-      const b = e.target.closest && e.target.closest('#gpa-container [data-del]'); if (!b || !gpaState) return;
-      const id = b.closest('.gpa-row').dataset.id;
-      gpaState.rows = gpaState.rows.filter(r => r.id !== id); saveGPA(gpaState); renderGPA();
+    document.addEventListener('click', async e => {
+      if (!gpaState || !e.target.closest) return;
+      const b = e.target.closest('#gpa-container [data-del]');
+      if (b) { const id = b.closest('.gpa-row').dataset.id; gpaState.rows = gpaState.rows.filter(r => r.id !== id); saveGPA(gpaState); renderGPA(); return; }
+      const h = e.target.closest('#gpa-container [data-hist-del], #gpa-container [data-hist-rename], #gpa-container [data-hist-edit]'); if (!h) return;
+      const i = +(h.dataset.histDel ?? h.dataset.histRename ?? h.dataset.histEdit), sem = gpaState.history[i]; if (!sem) return;
+      if (h.dataset.histDel != null) { if (!await uiConfirm(`تحذف «${sem.name}» من السجل؟`, { okText: 'حذف', danger: true })) return; gpaState.history.splice(i, 1); }
+      else if (h.dataset.histRename != null) { const n = ((await uiPrompt('اسم الفصل:', sem.name)) || '').trim(); if (!n) return; sem.name = n; }
+      else {
+        if (gpaState.rows.length && !await uiConfirm(`رح تنرجع مواد «${sem.name}» لخانة «مواد هالفصل» وتنشال من السجل — والمواد يلي هلق هونيك رح تنمسح. متأكد؟`)) return;
+        gpaState.rows = sem.rows.map(r => Object.assign({ id: gpaRowId() }, r)); gpaState.history.splice(i, 1);
+      }
+      saveGPA(gpaState); renderGPA();
     });
     window.gpaAddRow = function() {
       gpaState.rows.push({ id: gpaRowId(), name: '', hours: '', grade: '' }); saveGPA(gpaState); renderGPA();
@@ -4967,6 +5189,35 @@ function populateBulkScope() {
     window.gpaClear = async function() {
       if (!await uiConfirm('تمسح كل مواد هالفصل من الحاسبة؟', { okText: 'مسح', danger: true })) return;
       gpaState.rows = []; saveGPA(gpaState); renderGPA();
+    };
+    window.gpaSaveSemester = async function() {
+      const graded = gpaState.rows.filter(r => parseFloat(r.hours) > 0 && gradePoints(r.grade) != null);
+      if (!graded.length) { toast('عبّي ساعات وعلامات المواد أول.', 'error'); return; }
+      const missing = gpaState.rows.length - graded.length;
+      if (missing && !await uiConfirm(`في ${missing} مادة بدون ساعات أو علامة — ما رح تنحفظ. نكمّل؟`)) return;
+      const name = ((await uiPrompt('اسم الفصل (مثلًا: الفصل الأول 2026):', `الفصل ${gpaState.history.length + 1}`)) || '').trim();
+      if (!name) return;
+      gpaState.history.push({ id: gpaRowId(), name, rows: graded.map(r => ({ name: r.name, hours: r.hours, grade: r.grade, repeat: !!r.repeat, oldGrade: r.oldGrade || '' })) });
+      gpaState.rows = []; gpaState.target = '';
+      saveGPA(gpaState); renderGPA();
+      toast(`انحفظ «${name}» بالسجل — والتراكمي صار ينحسب منه لحاله.`, 'success', 6000);
+    };
+    window.gpaShareImage = async function() {
+      if (typeof html2canvas === 'undefined') { toast('تعذّر تحميل أداة تصدير الصور — تأكد من اتصالك بالإنترنت.', 'error'); return; }
+      const r = computeGPA(gpaState); if (!Number.isFinite(r.cum) && !Number.isFinite(r.sem)) { toast('عبّي معدلك أو علامات هالفصل أول.', 'error'); return; }
+      const box = document.getElementById('gpa-share'), hon = honorsFor(r.cum);
+      const logo = document.querySelector('.logo-mark'), date = new Date().toLocaleDateString('ar-SY', { year: 'numeric', month: 'long' });
+      box.innerHTML = `<div class="gs-top">${logo ? `<img src="${logo.src}">` : ''}<b>Random MEd</b><span>${esc(currentCollege ? currentCollege.name : '')}</span></div>
+        <div class="gs-main"><small>المعدل التراكمي</small><strong>${fmtGpa(r.cum)}</strong>${hon ? `<em>🏅 ${esc(hon)}</em>` : ''}</div>
+        <div class="gs-row"><div><small>معدل الفصل</small><b>${fmtGpa(r.sem)}</b></div><div><small>الساعات المنجزة</small><b>${r.done || '—'}</b></div></div>
+        <div class="gs-foot">${esc(date)} · من 4.00</div>`;
+      box.classList.add('on');
+      try {
+        const canvas = await html2canvas(box, { backgroundColor: null, scale: 2, useCORS: true });
+        const a = document.createElement('a'); a.download = 'معدلي.png'; a.href = canvas.toDataURL('image/png'); a.click();
+        toast('تم تحميل الصورة.', 'success');
+      } catch (e) { toast('تعذّر إنشاء الصورة: ' + e.message, 'error'); }
+      finally { box.classList.remove('on'); }
     };
 
     // ------- الإعدادات -------
