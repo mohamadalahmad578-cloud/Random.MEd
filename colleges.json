@@ -3,6 +3,7 @@
     "id": "med",
     "name": "كلية الطب البشري",
     "data": "data.json",
-    "credits": "credits.json"
+    "credits": "credits.json",
+    "uni": "spu"
   }
 ]
