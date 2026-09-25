@@ -930,6 +930,42 @@
 .editor-input:focus, #search:focus, .ms-search:focus, .ui-modal-input:focus, .wz-combo-field:focus-within{ border-color:var(--brass) !important; background:var(--surface); outline:none; }
 :root[data-theme="dark"] .editor-input, :root[data-theme="dark"] #search{ background:#1A2338; }
 .college-admin .editor-input, .bulk-panel .editor-input, .editor-section .editor-input, .gh-panel .editor-input{ background:var(--surface); }
+
+/* ---------- اختيار الثيم ---------- */
+.theme-picker{ position:fixed; z-index:1001; top:calc(var(--header-h, 0px) + 12px); bottom:12px; inset-inline-end:12px; width:380px; max-width:calc(100vw - 24px);
+  display:flex; flex-direction:column; gap:12px; background:var(--surface); color:var(--ink); border-radius:18px; padding:16px; box-shadow:0 24px 60px rgba(10,15,28,.35); animation:fadeInUp .2s ease; }
+.theme-picker[hidden]{ display:none; }
+.tp-head{ display:flex; flex-direction:column; gap:10px; }
+.tp-head h3{ margin:0; font-family:var(--font-display); font-size:18px; }
+.tp-head p{ margin:4px 0 0; font-size:12px; color:var(--ink-soft); line-height:1.7; }
+.tp-mode{ display:flex; gap:4px; background:var(--paper); border-radius:12px; padding:4px; }
+.tp-mode button{ flex:1; border:none; background:transparent; color:var(--ink-soft); font:inherit; font-size:12.5px; font-weight:700; padding:8px; border-radius:9px; cursor:pointer; }
+.tp-mode button.on{ background:var(--surface); color:var(--ink); box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.tp-font{ display:none; align-items:center; }
+.tp-font span{ flex:2; text-align:center; font-size:12px; font-weight:700; color:var(--ink-soft); }
+.tp-font button{ background:var(--surface); color:var(--ink); }
+.tp-grid{ flex:1; overflow-y:auto; display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:2px; align-content:start; }
+.tp-card{ display:flex; flex-direction:column; gap:8px; text-align:start; padding:10px; border-radius:14px; border:none; background:var(--paper); color:var(--ink); font:inherit; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease; }
+.tp-card:hover{ transform:translateY(-1px); }
+.tp-card.on{ box-shadow:0 0 0 2.5px var(--brass); }
+.tp-swatch{ height:46px; border-radius:10px; overflow:hidden; display:grid; grid-template-rows:14px 1fr; }
+.tp-swatch-hdr{ display:block; }
+.tp-swatch-body{ display:flex; align-items:center; gap:6px; padding:0 8px; }
+.tp-swatch-body i{ display:block; height:10px; border-radius:99px; }
+.tp-name{ font-size:12.5px; font-weight:800; line-height:1.4; }
+.tp-desc{ font-size:10.5px; color:var(--ink-soft); line-height:1.5; margin-top:-4px; }
+.tp-badge{ font-size:9.5px; font-weight:800; padding:1px 7px; border-radius:99px; background:var(--brass); color:#fff; margin-inline-start:4px; vertical-align:middle; }
+.tp-actions{ display:flex; gap:8px; }
+.tp-actions .btn{ margin-top:0; flex:1; padding:11px; }
+body.tp-first .theme-picker #tp-cancel{ display:none; }
+@media (max-width:640px){
+  .theme-picker{ top:auto; bottom:0; inset-inline:0; width:auto; max-width:none; max-height:62vh; border-radius:18px 18px 0 0; padding:14px 14px calc(14px + env(safe-area-inset-bottom, 0px)); }
+  .tp-grid{ grid-template-columns:1fr 1fr; }
+  .tp-head p{ display:none; }
+  .tp-font{ display:flex; }
+  .header .font-controls{ display:none; }
+}
+@media print{ .theme-picker{ display:none !important; } }
 </style>
 </head>
 <body>
@@ -950,6 +986,7 @@
       <div class="header-tools">
         <button type="button" class="hdr-btn" id="hdr-admin-btn" onclick="openEditor()" title="لوحة التحكم" aria-label="لوحة التحكم"></button>
         <button type="button" class="hdr-btn help-btn" id="help-btn" onclick="startTour(true)" title="شرح الشاشة يلي أنت فيها" aria-label="شرح هالشاشة">؟</button>
+        <button type="button" class="hdr-btn" id="palette-btn" onclick="openThemePicker()" title="شكل الموقع وألوانه" aria-label="اختيار ثيم الألوان"></button>
         <button type="button" class="hdr-btn theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع الليلي/النهاري" aria-label="تبديل المظهر"></button>
         <div class="font-controls">
           <button type="button" class="hdr-btn font-btn small" onclick="decreaseFontSize()" title="تصغير حجم الخط" aria-label="تصغير الخط">A-</button>
@@ -1181,6 +1218,28 @@
   <div id="gen-fab" class="gen-fab" hidden>
     <button type="button" onclick="runGenerator()"><span class="gen-fab-icon"></span><span>توليد الجداول</span><span class="gen-fab-count" id="gen-fab-count"></span></button>
   </div>
+  <div id="theme-picker" class="theme-picker" hidden role="dialog" aria-modal="false" aria-labelledby="tp-title">
+    <div class="tp-head">
+      <div>
+        <h3 id="tp-title">اختار شكل الموقع</h3>
+        <p id="tp-sub">كبسة على أي ثيم بتشوف التغيير فورًا على الصفحة. بتقدر تغيّره بعدين من زر 🎨 فوق.</p>
+      </div>
+      <div class="tp-mode" role="radiogroup" aria-label="نهاري أو ليلي">
+        <button type="button" data-mode="light" onclick="tpSetMode('light')">☀️ نهاري</button>
+        <button type="button" data-mode="dark" onclick="tpSetMode('dark')">🌙 ليلي</button>
+      </div>
+      <div class="tp-mode tp-font" aria-label="حجم الخط">
+        <button type="button" onclick="decreaseFontSize()" aria-label="تصغير الخط">A-</button>
+        <span>حجم الخط</span>
+        <button type="button" onclick="increaseFontSize()" aria-label="تكبير الخط">A+</button>
+      </div>
+    </div>
+    <div id="tp-grid" class="tp-grid"></div>
+    <div class="tp-actions">
+      <button type="button" class="btn btn-primary" onclick="saveThemePicker()">حفظ الثيم</button>
+      <button type="button" class="btn btn-ghost" id="tp-cancel" onclick="cancelThemePicker()">إلغاء</button>
+    </div>
+  </div>
   <div id="toast-wrap" role="status" aria-live="polite"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1303,6 +1362,7 @@
       const paths = {
         search: '<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
         plus: '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+        palette: '<circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.15-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-5-4.5-9-10-9z"/>',
         gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
         trash: '<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
         download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
@@ -1331,6 +1391,120 @@
     // ==========================================
     //                  المظهر
     // ==========================================
+    // ==========================================
+    //   ثيمات الألوان — الطالب بيختار وبينحفظ اختياره (spu_palette)
+    // ==========================================
+    const PALETTE_KEY = 'spu_palette';
+    const DEFAULT_PALETTE = 'classic-plus';
+    // مولّد CSS لثيم كامل (نهاري + ليلي) من مجموعة ألوان
+    function paletteCSS(o) {
+      let css = `
+  :root{ --ink:${o.ink}; --ink-soft:${o.inkSoft}; --paper:${o.paper}; --surface:#FFFFFF; --line:${o.line}; --brass:${o.acc}; --brass-badge:${o.accDeep}; --brass-deep:${o.accDeep}; --ink-fixed:${o.inkFixed || o.hdr1}; }
+  :root[data-theme="dark"]{ --ink:#E6E8EE; --ink-soft:#9AA3B5; --paper:${o.dPaper}; --surface:${o.dSurface}; --line:${o.dLine}; --brass:${o.dAcc}; --brass-deep:${o.dAcc}; }
+  .header{ background:linear-gradient(160deg,${o.hdr1},${o.hdr2}) !important; }
+  .btn-primary, .gen-fab button{ background:${o.acc} !important; box-shadow:0 4px 14px ${o.accA}.3) !important; }
+  :root[data-theme="dark"] .btn-primary, :root[data-theme="dark"] .gen-fab button{ background:${o.dBtn || o.acc} !important; color:${o.dBtnText || '#fff'} !important; }
+  .type-badge.theory{ background:${o.accDeep} !important; }
+  .college-chip{ background:${o.chip} !important; }
+  .selected-summary{ background:${o.accA}.08) !important; }
+  :root[data-theme="dark"] .selected-summary{ background:${o.accA}.14) !important; }
+  :root[data-theme="dark"] #search, :root[data-theme="dark"] .editor-input{ background:${o.dInput} !important; }`;
+      if (o.status) css += `
+  :root{ --teal:${o.status.ok}; --teal-text:${o.status.ok}; --teal-soft:${o.status.okSoft}; --rose:${o.status.bad}; --rose-text:${o.status.bad}; --rose-soft:${o.status.badSoft}; }
+  :root[data-theme="dark"]{ --teal-soft:${o.status.dOkSoft}; --rose-soft:${o.status.dBadSoft}; --teal-text:${o.status.dOk}; --rose-text:${o.status.dBad}; }`;
+      if (o.lightHeader) css += `
+  .header{ background:#FFFFFF !important; color:var(--ink) !important; box-shadow:0 1px 0 rgba(0,0,0,.04), 0 6px 20px rgba(0,0,0,.05); }
+  .header .header-sub{ color:var(--ink-soft) !important; }
+  .header .hdr-btn{ background:var(--paper) !important; color:var(--ink) !important; }
+  .header .college-chip{ color:var(--brass-deep) !important; background:${o.accA}.12) !important; }
+  .header .college-chip .college-chip-change{ color:var(--ink-soft) !important; }
+  .header .data-freshness{ background:var(--paper) !important; color:var(--ink-soft) !important; }
+  .header .data-freshness strong{ color:var(--ink) !important; }
+  :root[data-theme="dark"] .header{ background:var(--surface) !important; box-shadow:0 1px 0 rgba(255,255,255,.04); }`;
+      if (o.chipText) css += `\n  .college-chip .college-chip-change{ color:${o.chipText} !important; }`;
+      if (o.dHdr1) css += `\n  :root[data-theme="dark"] .header{ background:linear-gradient(160deg,${o.dHdr1},${o.dHdr2}) !important; }`;
+      return css;
+    }
+    const GREEN_STATUS = { ok:'#047857', okSoft:'#D1FAE5', bad:'#B91C1C', badSoft:'#FEE2E2', dOk:'#34D399', dBad:'#F87171', dOkSoft:'#064E3B', dBadSoft:'#450A0A' };
+    // sw = [لون الهيدر، اللون الأساسي، الخلفية]
+    const PALETTES = [
+      { id:'classic-plus', name:'الكلاسيكي المحسّن', desc:'كحلي وذهبي بلون أوضح', sw:['#141B2E','#8A5E12','#EEF0F2'], css:`
+  :root{ --brass:#8A5E12; --brass-badge:#6B470A; --brass-deep:#6B470A; }
+  :root[data-theme="dark"]{ --brass:#D9A84E; --brass-deep:#E6BA66; }
+  .btn-primary, .gen-fab button{ background:#8A5E12 !important; }
+  :root[data-theme="dark"] .btn-primary, :root[data-theme="dark"] .gen-fab button{ background:#C8963C !important; color:#1A1204 !important; }
+  .type-badge.theory{ background:#6B470A !important; }` },
+      { id:'classic', name:'الكلاسيكي الأصلي', desc:'الشكل القديم للموقع', sw:['#141B2E','#A9761E','#EEF0F2'], css:'' },
+      { id:'indigo', name:'نيلي بنفسجي', desc:'عصري وهادي', sw:['#1E1B4B','#4F46E5','#F4F4F8'], css: paletteCSS({ink:'#1E1B4B',inkSoft:'#4B5563',paper:'#F4F4F8',line:'#E4E4EC',acc:'#4F46E5',accDeep:'#4338CA',accA:'rgba(79,70,229,',hdr1:'#1E1B4B',hdr2:'#110F2E',chip:'rgba(129,140,248,.3)',dPaper:'#0C0B16',dSurface:'#15142A',dLine:'#26244A',dAcc:'#818CF8',dBtn:'#6366F1',dInput:'#1D1B38'}) },
+      { id:'indigo-light', name:'نيلي بهيدر فاتح', desc:'خفيف ونظيف', sw:['#FFFFFF','#4F46E5','#F4F4F8'], css: paletteCSS({ink:'#1E1B4B',inkSoft:'#4B5563',paper:'#F4F4F8',line:'#E4E4EC',acc:'#4F46E5',accDeep:'#4338CA',accA:'rgba(79,70,229,',inkFixed:'#1E1B4B',hdr1:'#FFFFFF',hdr2:'#FFFFFF',chip:'rgba(79,70,229,.1)',dPaper:'#0C0B16',dSurface:'#15142A',dLine:'#26244A',dAcc:'#818CF8',dBtn:'#6366F1',dInput:'#1D1B38',lightHeader:true}) },
+      { id:'blue', name:'كحلي وأزرق', desc:'حديث وواضح', sw:['#0F172A','#2563EB','#F1F5F9'], css: paletteCSS({ink:'#0F172A',inkSoft:'#475569',paper:'#F1F5F9',line:'#E2E8F0',acc:'#2563EB',accDeep:'#1D4ED8',accA:'rgba(37,99,235,',hdr1:'#0F172A',hdr2:'#020617',chip:'rgba(59,130,246,.3)',dPaper:'#0B1120',dSurface:'#111827',dLine:'#1F2937',dAcc:'#60A5FA',dBtn:'#3B82F6',dInput:'#1E293B',status:GREEN_STATUS}) },
+      { id:'petrol', name:'أزرق بترولي وفيروزي', desc:'بحري ونظيف', sw:['#0C3547','#0E7490','#EFF4F6'], css: paletteCSS({ink:'#0C2A36',inkSoft:'#4A5B66',paper:'#EFF4F6',line:'#DCE6EA',acc:'#0E7490',accDeep:'#155E75',accA:'rgba(14,116,144,',hdr1:'#0C3547',hdr2:'#06202C',chip:'rgba(34,211,238,.25)',dPaper:'#061117',dSurface:'#0C1C24',dLine:'#18303B',dAcc:'#22D3EE',dBtn:'#0891B2',dInput:'#10242D'}) },
+      { id:'medical', name:'أخضر طبي ورمادي', desc:'إحساس طبي', sw:['#134E4A','#0F766E','#F3F4F6'], css: paletteCSS({ink:'#1F2937',inkSoft:'#4B5563',paper:'#F3F4F6',line:'#E5E7EB',acc:'#0F766E',accDeep:'#115E59',accA:'rgba(15,118,110,',hdr1:'#134E4A',hdr2:'#0B2F2C',dHdr1:'#0F2F2C',dHdr2:'#06110F',chip:'rgba(45,212,191,.25)',dPaper:'#0A0F0E',dSurface:'#111817',dLine:'#1F2A28',dAcc:'#2DD4BF',dBtn:'#0F766E',dInput:'#18211F',status:{ ok:'#15803D', okSoft:'#DCFCE7', bad:'#B91C1C', badSoft:'#FEE2E2', dOk:'#4ADE80', dBad:'#F87171', dOkSoft:'#14532D', dBadSoft:'#450A0A' }}) },
+      { id:'royal', name:'بنفسجي ملكي مع ذهبي', desc:'فخم ورسمي', sw:['#2E1065','#6D28D9','#F5F2F7'], css: paletteCSS({ink:'#241532',inkSoft:'#5B5266',paper:'#F5F2F7',line:'#E6E0EC',acc:'#6D28D9',accDeep:'#5B21B6',accA:'rgba(109,40,217,',hdr1:'#2E1065',hdr2:'#1A0940',chip:'rgba(217,168,78,.35)',chipText:'#F2D9A6',dPaper:'#0E0914',dSurface:'#1A1224',dLine:'#2E2240',dAcc:'#C4A1FF',dBtn:'#D9A84E',dBtnText:'#1A1204',dInput:'#221832'}) },
+      { id:'plum', name:'بنفسجي خوخي مع ذهبي', desc:'فخم وأنعم', sw:['#4A1F57','#7E3A8F','#F7F3F8'], css: paletteCSS({ink:'#2A1B33',inkSoft:'#5E5268',paper:'#F7F3F8',line:'#EBE1EE',acc:'#7E3A8F',accDeep:'#652C74',accA:'rgba(126,58,143,',hdr1:'#4A1F57',hdr2:'#2C1034',chip:'rgba(217,168,78,.35)',chipText:'#F2D9A6',dPaper:'#110A14',dSurface:'#1D1322',dLine:'#33253A',dAcc:'#D8A7E6',dBtn:'#D9A84E',dBtnText:'#1A1204',dInput:'#25192B'}) },
+      { id:'pink', name:'وردي ناعم مع خوخي', desc:'نسائي وأنيق', sw:['#5A2140','#C2417A','#FBF3F5'], css: paletteCSS({ink:'#3B1F2B',inkSoft:'#6B5560',paper:'#FBF3F5',line:'#F1E1E6',acc:'#C2417A',accDeep:'#9D2F60',accA:'rgba(194,65,122,',hdr1:'#5A2140',hdr2:'#3A1229',chip:'rgba(249,168,212,.3)',chipText:'#FBCFE8',dPaper:'#140A0F',dSurface:'#21121A',dLine:'#3A2330',dAcc:'#F49AC1',dBtn:'#DB5C93',dInput:'#2A1822'}) },
+      { id:'lavender', name:'لافندر ليلكي', desc:'نسائي هادي', sw:['#FFFFFF','#8B5CF6','#F7F5FC'], css: paletteCSS({ink:'#2E2640',inkSoft:'#6A6380',paper:'#F7F5FC',line:'#E9E4F5',acc:'#8B5CF6',accDeep:'#7C3AED',accA:'rgba(139,92,246,',inkFixed:'#3B2F5C',hdr1:'#FFFFFF',hdr2:'#FFFFFF',chip:'rgba(139,92,246,.12)',dPaper:'#0F0C17',dSurface:'#1A1626',dLine:'#2E2842',dAcc:'#C4B5FD',dBtn:'#8B5CF6',dInput:'#231E33',lightHeader:true}) },
+      { id:'charcoal', name:'رمادي فحمي مع برتقالي', desc:'جريء ولافت', sw:['#18181B','#EA580C','#F4F4F5'], css: paletteCSS({ink:'#18181B',inkSoft:'#52525B',paper:'#F4F4F5',line:'#E4E4E7',acc:'#EA580C',accDeep:'#C2410C',accA:'rgba(234,88,12,',hdr1:'#18181B',hdr2:'#09090B',chip:'rgba(249,115,22,.3)',dPaper:'#09090B',dSurface:'#18181B',dLine:'#27272A',dAcc:'#FB923C',dBtn:'#EA580C',dInput:'#232326'}) },
+    ];
+    function paletteById(id) { return PALETTES.find(p => p.id === id) || PALETTES.find(p => p.id === DEFAULT_PALETTE); }
+    function savedPalette() { try { return localStorage.getItem(PALETTE_KEY); } catch (e) { return null; } }
+    function applyPalette(id) {
+      let el = document.getElementById('palette-style');
+      if (!el) { el = document.createElement('style'); el.id = 'palette-style'; document.head.appendChild(el); }
+      const root = document.documentElement;
+      root.classList.add('theme-switching');
+      el.textContent = paletteById(id).css;
+      root.dataset.palette = paletteById(id).id;
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('theme-switching')));
+    }
+    applyPalette(savedPalette() || DEFAULT_PALETTE);
+
+    // ---- نافذة اختيار الثيم: كل كبسة بتطبّق فورًا، و«إلغاء» بيرجّع القديم ----
+    let tpState = null;
+    window.openThemePicker = function(first) {
+      const cur = savedPalette() || DEFAULT_PALETTE;
+      tpState = { first: first === true, origPalette: cur, origMode: document.documentElement.getAttribute('data-theme') || 'light', pick: cur };
+      document.body.classList.toggle('tp-first', tpState.first);
+      document.getElementById('tp-title').textContent = tpState.first ? 'أهلًا! اختار شكل الموقع يلي بيريحك' : 'اختار شكل الموقع';
+      renderThemePicker();
+      document.getElementById('theme-picker').hidden = false;
+    };
+    function renderThemePicker() {
+      document.getElementById('tp-grid').innerHTML = PALETTES.map(p => `<button type="button" class="tp-card ${p.id === tpState.pick ? 'on' : ''}" onclick="tpPick('${p.id}')" aria-pressed="${p.id === tpState.pick}">
+          <span class="tp-swatch" style="background:${p.sw[2]}"><span class="tp-swatch-hdr" style="background:${p.sw[0]};${p.sw[0] === '#FFFFFF' ? 'box-shadow:inset 0 -1px 0 rgba(0,0,0,.08)' : ''}"></span>
+            <span class="tp-swatch-body"><i style="width:38%;background:${p.sw[1]}"></i><i style="width:22%;background:#146B5D;opacity:.8"></i><i style="width:16%;background:#A63A33;opacity:.8"></i></span></span>
+          <span class="tp-name">${esc(p.name)}${p.id === DEFAULT_PALETTE ? '<span class="tp-badge">الافتراضي</span>' : ''}</span>
+          <span class="tp-desc">${esc(p.desc)}</span>
+        </button>`).join('');
+      const mode = document.documentElement.getAttribute('data-theme') || 'light';
+      document.querySelectorAll('.tp-mode button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+    }
+    window.tpPick = function(id) { tpState.pick = id; applyPalette(id); renderThemePicker(); };
+    window.tpSetMode = function(mode) {
+      const root = document.documentElement;
+      root.classList.add('theme-switching');
+      applyTheme(mode);
+      requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('theme-switching')));
+      renderThemePicker();
+    };
+    function closeThemePicker() {
+      document.getElementById('theme-picker').hidden = true;
+      document.body.classList.remove('tp-first');
+      const done = tpState && tpState.onClose; tpState = null;
+      if (done) done();
+    }
+    window.saveThemePicker = function() {
+      try { localStorage.setItem(PALETTE_KEY, tpState.pick); } catch (e) {}
+      toast(`تم حفظ الثيم «${paletteById(tpState.pick).name}». فيك تغيّره بأي وقت من زر 🎨.`, 'success');
+      closeThemePicker();
+    };
+    window.cancelThemePicker = function() {
+      applyPalette(tpState.origPalette);
+      if ((document.documentElement.getAttribute('data-theme') || 'light') !== tpState.origMode) applyTheme(tpState.origMode);
+      closeThemePicker();
+    };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && tpState && !tpState.first) cancelThemePicker(); });
+
     function applyTheme(theme){
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('spu_theme', theme);
@@ -1419,6 +1593,7 @@
       document.getElementById('ic-addfriend-btn').innerHTML = ic('plus') + ' إضافة صديق';
       document.getElementById('ic-refresh-btn').innerHTML = ic('refresh') + ' تحديث';
       document.getElementById('hdr-admin-btn').innerHTML = ic('gear');
+      document.getElementById('palette-btn').innerHTML = ic('palette');
       document.getElementById('ic-generate-btn').innerHTML = ic('zap') + ' توليد الجداول';
       document.getElementById('tab-results').innerHTML = ic('calendar') + ' نتائج التوليد';
       updateFavoritesTabLabel();
@@ -2082,7 +2257,10 @@ function renderTourStep() {
       else { document.body.dataset.mtab = 'results'; updateBottomNav(); }
       initGenFab();
       renderWelcome();
-      setTimeout(() => startTour('main', false), 800);   // أول زيارة بس
+      if (!savedPalette()) {
+        // أول زيارة: منطلب من الطالب يختار ثيم، وبعدها بتبلش الجولة
+        setTimeout(() => { openThemePicker(true); tpState.onClose = () => setTimeout(() => startTour('main', false), 400); }, 500);
+      } else setTimeout(() => startTour('main', false), 800);   // أول زيارة بس
       if (hadAnyChecked) toast('تم استرجاع اختياراتك المحفوظة من زيارتك السابقة.', 'success');
     }
 
