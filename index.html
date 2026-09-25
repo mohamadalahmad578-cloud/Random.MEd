@@ -931,6 +931,31 @@
 :root[data-theme="dark"] .editor-input, :root[data-theme="dark"] #search{ background:#1A2338; }
 .college-admin .editor-input, .bulk-panel .editor-input, .editor-section .editor-input, .gh-panel .editor-input{ background:var(--surface); }
 
+/* ---------- تبويبات صفحة الكلية ---------- */
+.admin-tabs{ display:flex; gap:4px; background:var(--paper); border-radius:12px; padding:4px; margin:4px 0 16px; }
+.admin-tabs button{ flex:1; border:none; background:transparent; color:var(--ink-soft); font:inherit; font-size:13.5px; font-weight:800; padding:10px; border-radius:9px; cursor:pointer; }
+.admin-tabs button.on{ background:var(--surface); color:var(--ink); box-shadow:0 1px 4px rgba(0,0,0,.12); }
+#admin-tab-bulk[hidden], #admin-tab-course[hidden]{ display:none; }
+.import-title{ font-family:var(--font-display); font-size:15px; }
+.import-mode{ margin-top:10px; display:inline-flex; }
+#import-preview{ margin-bottom:10px; }
+#import-preview ul{ margin:4px 0 8px; padding-inline-start:18px; }
+#import-preview .ip-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+#import-preview .ip-stat{ font-size:11.5px; font-weight:800; padding:3px 10px; border-radius:99px; background:var(--paper); }
+#import-preview .ip-stat.add{ background:var(--teal-soft); color:var(--teal-text); }
+#import-preview .ip-stat.del{ background:var(--rose-soft); color:var(--rose-text); }
+#import-preview .ip-warn{ color:var(--rose-text); font-weight:700; }
+#import-publish-btn{ margin-top:0; }
+.course-pick-row{ display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+.course-pick{ flex:1; min-width:220px; }
+.course-pick select{ width:100%; margin:0; }
+.course-pick-row .btn{ margin-top:0; padding:9px 14px; }
+.editor-section-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.editor-section-head .sec-type{ font-size:11px; font-weight:800; padding:2px 9px; border-radius:99px; background:var(--paper); color:var(--ink-soft); }
+.editor-section-head .btn-danger-ghost{ margin-inline-start:auto; }
+.add-section-row{ display:flex; gap:8px; flex-wrap:wrap; margin:4px 0 16px; }
+.add-section-row .btn{ margin-top:0; }
+
 /* ---------- اختيار الثيم ---------- */
 .theme-picker{ position:fixed; z-index:1001; top:calc(var(--header-h, 0px) + 12px); bottom:12px; inset-inline-end:12px; width:380px; max-width:calc(100vw - 24px);
   display:flex; flex-direction:column; gap:12px; background:var(--surface); color:var(--ink); border-radius:18px; padding:16px; box-shadow:0 24px 60px rgba(10,15,28,.35); animation:fadeInUp .2s ease; }
@@ -1072,7 +1097,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <button type="button" class="btn btn-secondary" onclick="showAdminHome()">→ كل الكليات</button>
             <span class="college-admin-title"><strong id="admin-college-name"></strong> <span id="admin-college-status" class="college-status"></span> <code id="admin-college-path" dir="ltr"></code></span>
           </div>
-          <details id="college-settings" open>
+          <details id="college-settings">
             <summary>⚙️ إعدادات الكلية</summary>
             <div class="college-settings-grid">
               <div><label>اسم الكلية</label><input type="text" id="cs-name" class="editor-input"></div>
@@ -1087,25 +1112,36 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             </div>
             <p class="college-admin-note">الحذف بيشيل الكلية من القائمة بس — ملفات بياناتها بتضل على GitHub، وإذا رجعت ضفتها بنفس الرمز بترجع بياناتها. إذا بدك توقفها مؤقتًا، شيل «ظاهرة للطلاب» أحسن.</p>
           </details>
-          <details>
-            <summary>📥 استيراد بيانات هالكلية (data.json كامل)</summary>
-            <p class="college-admin-note">الصق محتوى <code>data.json</code> لهالكلية (بنفس الشكل: اسم المادة ← قائمة الفئات) أو اختار الملف. رح يستبدل كل مواد هالكلية بالذاكرة، وبعدها اضغط «نشر مباشرة على GitHub».</p>
-            <input type="file" id="import-file" accept=".json,application/json" onchange="importCollegeFile(this)">
-            <textarea id="import-json" class="editor-input" placeholder='{"اسم المادة": [{"id": "...", "type": "theory", ...}]}'></textarea>
-            <button type="button" class="btn btn-teal" style="margin-top:8px;" onclick="importCollegeData()">استيراد البيانات</button>
-          </details>
         </div>
-        <details class="bulk-panel" open>
-          <summary>⚙️ أدوات جماعية — رفع السعة وتصحيح الحالات</summary>
-          <p class="bulk-note">الرفع بيزيد <strong>السعة بس</strong> (الرقم التاني) وما بيلمس عدد المسجلين: مثلًا <bdi>25/37</bdi> مع رفع 3 ← <bdi>25/40</bdi>. وبعد الرفع بتتصحح حالة كل فئة لحالها: فيها مقاعد ← «فئة متاحة»، ما فيها ← «فئة ممتلئة».</p>
-          <div class="bulk-grid">
-            <div class="bulk-field"><label>نوع الفئات</label>
-              <div class="bulk-seg" role="radiogroup">
-                <label><input type="radio" name="bulk-type" value="all" checked onchange="bulkPreview()"> الكل</label>
-                <label><input type="radio" name="bulk-type" value="theory" onchange="bulkPreview()"> النظري</label>
-                <label><input type="radio" name="bulk-type" value="practical" onchange="bulkPreview()"> العملي</label>
-              </div></div>
-            <div class="bulk-field"><label for="bulk-scope">المواد</label>
+        <div class="admin-tabs" role="tablist">
+          <button type="button" role="tab" data-tab="course" class="on" onclick="adminTab('course')">✏️ تعديل مادة مادة</button>
+          <button type="button" role="tab" data-tab="bulk" onclick="adminTab('bulk')">📋 تعديل شامل</button>
+        </div>
+
+        <div id="admin-tab-bulk" hidden>
+          <div class="college-admin">
+            <strong class="import-title">📋 الصق بيانات الكلية كاملة وانشرها</strong>
+            <p class="college-admin-note">الصق محتوى <code>data.json</code> (بنفس الشكل: اسم المادة ← قائمة الفئات) أو اختار الملف. قبل النشر بتشوف ملخص بالتغييرات والمشاكل.</p>
+            <input type="file" id="import-file" accept=".json,application/json" onchange="importCollegeFile(this)">
+            <textarea id="import-json" class="editor-input" oninput="importPreviewSoon()" placeholder='{"اسم المادة": [{"id": "...", "type": "theory", ...}]}'></textarea>
+            <div class="bulk-seg import-mode" role="radiogroup" aria-label="طريقة الاستيراد">
+              <label><input type="radio" name="import-mode" value="replace" checked onchange="importPreview()"> استبدال كل المواد</label>
+              <label><input type="radio" name="import-mode" value="merge" onchange="importPreview()"> دمج (إضافة وتحديث بس)</label>
+            </div>
+            <div id="import-preview" class="bulk-preview" aria-live="polite">الصق البيانات لتشوف الملخص هون.</div>
+            <button type="button" class="btn btn-primary" id="import-publish-btn" onclick="importAndPublish()" disabled>نشر على GitHub</button>
+          </div>
+          <details class="bulk-panel">
+            <summary>⚙️ أدوات جماعية — رفع السعة وتصحيح الحالات</summary>
+            <p class="bulk-note">الرفع بيزيد <strong>السعة بس</strong> (الرقم التاني) وما بيلمس عدد المسجلين: مثلًا <bdi>25/37</bdi> مع رفع 3 ← <bdi>25/40</bdi>. وبعد الرفع بتتصحح حالة كل فئة لحالها: فيها مقاعد ← «فئة متاحة»، ما فيها ← «فئة ممتلئة».</p>
+            <div class="bulk-grid">
+              <div class="bulk-field"><label>نوع الفئات</label>
+                <div class="bulk-seg" role="radiogroup">
+                  <label><input type="radio" name="bulk-type" value="all" checked onchange="bulkPreview()"> الكل</label>
+                  <label><input type="radio" name="bulk-type" value="theory" onchange="bulkPreview()"> النظري</label>
+                  <label><input type="radio" name="bulk-type" value="practical" onchange="bulkPreview()"> العملي</label>
+                </div></div>
+              <div class="bulk-field"><label for="bulk-scope">المواد</label>
   <select id="bulk-scope" class="editor-input" onchange="onBulkScopeChange()"><option value="">كل المواد</option></select></div>
 <div id="bulk-exceptions-wrap" style="grid-column: 1 / -1; display: block; margin-top: 4px;">
   <label style="font-size:11.5px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:6px;">
@@ -1114,26 +1150,35 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
   <div id="bulk-exceptions-list" style="display:flex; flex-wrap:wrap; gap:6px; max-height:120px; overflow-y:auto; padding:6px; background:var(--surface); border:1px solid var(--line); border-radius:10px;">
   </div>
 </div>
-            <div class="bulk-field"><label for="bulk-mode">العملية</label>
-              <select id="bulk-mode" class="editor-input" onchange="bulkPreview()">
-                <option value="add">زيادة السعة بمقدار</option>
-                <option value="set">تعيين السعة إلى</option>
-              </select></div>
-            <div class="bulk-field"><label for="bulk-amount">الرقم</label>
-              <input id="bulk-amount" type="number" min="1" step="1" value="3" class="editor-input" oninput="bulkPreview()"></div>
-          </div>
-          <label class="bulk-check"><input type="checkbox" id="bulk-include-closed" onchange="bulkPreview()"> صحّح كمان الفئات «المغلقة» إداريًا (افتراضيًا ما منلمسها)</label>
-          <div class="bulk-preview" id="bulk-preview" aria-live="polite"></div>
-          <div class="bulk-actions">
-            <button type="button" class="btn btn-teal" id="bulk-apply-btn" onclick="bulkApply()">⬆️ طبّق الرفع</button>
-            <button type="button" class="btn btn-secondary" onclick="bulkFixStatuses()">✔️ صحّح حالات كل الفئات بدون رفع</button>
-          </div>
-        </details>
+              <div class="bulk-field"><label for="bulk-mode">العملية</label>
+                <select id="bulk-mode" class="editor-input" onchange="bulkPreview()">
+                  <option value="add">زيادة السعة بمقدار</option>
+                  <option value="set">تعيين السعة إلى</option>
+                </select></div>
+              <div class="bulk-field"><label for="bulk-amount">الرقم</label>
+                <input id="bulk-amount" type="number" min="1" step="1" value="3" class="editor-input" oninput="bulkPreview()"></div>
+            </div>
+            <label class="bulk-check"><input type="checkbox" id="bulk-include-closed" onchange="bulkPreview()"> صحّح كمان الفئات «المغلقة» إداريًا (افتراضيًا ما منلمسها)</label>
+            <div class="bulk-preview" id="bulk-preview" aria-live="polite"></div>
+            <div class="bulk-actions">
+              <button type="button" class="btn btn-teal" id="bulk-apply-btn" onclick="bulkApply()">⬆️ طبّق الرفع</button>
+              <button type="button" class="btn btn-secondary" onclick="bulkFixStatuses()">✔️ صحّح حالات كل الفئات بدون رفع</button>
+            </div>
+          </details>
 
-        <label class="field-label">اختر المادة لتعديلها:</label>
-        <select id="editor-course-select" class="editor-input" onchange="renderCourseEditor()">
-          <option value="">-- اختر المادة --</option>
-        </select>
+        </div>
+
+        <div id="admin-tab-course">
+        <div class="course-pick-row">
+          <div class="course-pick">
+            <label class="field-label">اختر المادة لتعديلها:</label>
+            <select id="editor-course-select" class="editor-input" onchange="renderCourseEditor()">
+              <option value="">-- اختر المادة --</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="adminAddCourse()">➕ مادة جديدة</button>
+          <button type="button" class="btn btn-danger-ghost" id="del-course-btn" onclick="adminDeleteCourse()" disabled>🗑 حذف المادة</button>
+        </div>
 
         <div id="editor-sections-container"></div>
 
@@ -1142,6 +1187,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
           <button class="btn btn-primary" style="margin-top:0;" id="ic-publish-btn" onclick="publishToGithub()">2. نشر مباشرة على GitHub</button>
           <button class="btn btn-ghost" style="margin-top:0;" id="ic-copy-btn" onclick="copyFinalData()">نسخ يدوي لـ data.json (بديل)</button>
         <button class="btn btn-ghost" style="margin-top:0;" onclick="copyCredits()">نسخ يدوي لـ credits.json (بديل)</button>
+        </div>
         </div>
         </div>
       </div>
@@ -2339,6 +2385,7 @@ function renderTourStep() {
         select.innerHTML += `<option value="${esc(cName)}">${esc(cName)}</option>`;
       });
       document.getElementById('editor-sections-container').innerHTML = '';
+      const del = document.getElementById('del-course-btn'); if (del) del.disabled = true;
     }
 
     window.closeEditor = function() {
@@ -2375,6 +2422,9 @@ function renderTourStep() {
       document.getElementById('admin-college-view').style.display = 'block';
       document.getElementById('ic-editor-title').innerHTML = ic('gear') + ' لوحة التحكم — ' + esc(currentCollege.name);
       renderCollegeAdmin();
+      let tab = 'course'; try { tab = sessionStorage.getItem('spu_admin_tab') || (Object.keys(parsedCourses).length ? 'course' : 'bulk'); } catch (e) {}
+      if (!Object.keys(parsedCourses).length) tab = 'bulk';   // كلية بدون مواد ← منبلش بلصق البيانات
+      adminTab(tab);
     }
 
     window.adminOpenCollege = async function(id) {
@@ -2400,6 +2450,131 @@ function renderTourStep() {
       document.getElementById('cs-delete-btn').disabled = colleges.length < 2;
     }
 
+    window.adminTab = function(name) {
+      document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+      document.getElementById('admin-tab-course').hidden = name !== 'course';
+      document.getElementById('admin-tab-bulk').hidden = name !== 'bulk';
+      try { sessionStorage.setItem('spu_admin_tab', name); } catch (e) {}
+    };
+
+    // ---- تعديل مادة مادة: إضافة/حذف مواد وفئات ----
+    function newSectionId() { return Math.random().toString(36).slice(2, 11); }
+    window.adminAddCourse = async function() {
+      const name = ((await uiPrompt('اسم المادة الجديدة (متل ما بتطلع للطلاب، مع الرمز إذا في):', '')) || '').trim();
+      if (!name) return;
+      if (parsedCourses[name]) { toast('في مادة بنفس الاسم.', 'error'); return; }
+      parsedCourses[name] = [];
+      indexCourses(); adminDirty = true;
+      populateCourseSelect();
+      document.getElementById('editor-course-select').value = name;
+      renderCourseEditor();
+      toast('انضافت المادة — ضيف فئاتها تحت وبعدين انشر.', 'success');
+    };
+    window.adminDeleteCourse = async function() {
+      const c = document.getElementById('editor-course-select').value;
+      if (!c) return;
+      if (!await uiConfirm(`متأكد إنك بدك تحذف «${c}» مع كل فئاتها (${parsedCourses[c].length})؟`, { okText: 'حذف', danger: true })) return;
+      delete parsedCourses[c]; delete courseCredits[c];
+      indexCourses(); adminDirty = true;
+      populateCourseSelect();
+      toast('انحذفت المادة. لا تنسى تنشر.', 'success');
+    };
+    window.adminAddSection = function(type) {
+      const c = document.getElementById('editor-course-select').value;
+      if (!c) return;
+      saveEditorChanges(true);
+      const count = parsedCourses[c].filter(x => x.type === type).length;
+      parsedCourses[c].push({ id: newSectionId(), course: c, type, className: `${String.fromCharCode(65 + count)} (${type === 'practical' ? 'عملي' : 'نظري'})`, status: 'فئة متاحة', seats: '0/40', times: [] });
+      indexCourses(); adminDirty = true;
+      renderCourseEditor();
+      const blocks = document.querySelectorAll('#editor-sections-container .editor-section');
+      if (blocks.length) blocks[blocks.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    window.adminDeleteSection = async function(idx) {
+      const c = document.getElementById('editor-course-select').value;
+      const sec = parsedCourses[c] && parsedCourses[c][idx];
+      if (!sec) return;
+      if (!await uiConfirm(`تحذف الفئة «${sec.className}»؟`, { okText: 'حذف', danger: true })) return;
+      saveEditorChanges(true);
+      parsedCourses[c].splice(idx, 1);
+      indexCourses(); adminDirty = true;
+      renderCourseEditor();
+    };
+
+    // ---- تعديل شامل: لصق كل البيانات مع ملخص قبل النشر ----
+    // نسخة منظّفة من البيانات بدون ما نلمس بيانات الكلية الحالية
+    function normalizedCopy(data) {
+      const saved = parsedCourses, savedMap = COURSE_OF_ID;
+      parsedCourses = JSON.parse(JSON.stringify(data));
+      const problems = indexCourses();
+      const out = parsedCourses;
+      parsedCourses = saved; COURSE_OF_ID = savedMap;
+      return { data: out, problems };
+    }
+    function importPlan() {
+      const raw = document.getElementById('import-json').value.trim();
+      if (!raw) return { empty: true };
+      let data;
+      try { data = JSON.parse(raw); } catch (e) { return { error: 'صيغة JSON غلط — تأكد إنك نسخت الملف كامل.' }; }
+      const err = validateCollegeData(data);
+      if (err) return { error: err };
+      const { data: incoming, problems } = normalizedCopy(data);
+      const merge = (document.querySelector('input[name="import-mode"]:checked') || {}).value === 'merge';
+      const next = merge ? Object.assign({}, parsedCourses, incoming) : incoming;
+      const cur = Object.keys(parsedCourses), nxt = Object.keys(next);
+      const added = nxt.filter(k => !parsedCourses[k]);
+      const removed = cur.filter(k => !next[k]);
+      const changed = nxt.filter(k => parsedCourses[k] && JSON.stringify(parsedCourses[k]) !== JSON.stringify(next[k]));
+      const sections = nxt.reduce((n, k) => n + next[k].length, 0);
+      const noTimes = nxt.reduce((n, k) => n + next[k].filter(x => !x.times.length).length, 0);
+      return { next, merge, added, removed, changed, problems, sections, noTimes, courses: nxt.length };
+    }
+    let importTimer = null;
+    window.importPreviewSoon = function() { clearTimeout(importTimer); importTimer = setTimeout(importPreview, 300); };
+    window.importPreview = function() {
+      const box = document.getElementById('import-preview');
+      const btn = document.getElementById('import-publish-btn');
+      const plan = importPlan();
+      btn.disabled = !plan.next;
+      if (plan.empty) { box.innerHTML = 'الصق البيانات لتشوف الملخص هون.'; return plan; }
+      if (plan.error) { box.innerHTML = `<span class="ip-warn">⚠️ ${esc(plan.error)}</span>`; return plan; }
+      const list = (arr) => arr.length ? `<ul>${arr.slice(0, 8).map(n => `<li>${esc(n)}</li>`).join('')}${arr.length > 8 ? `<li>و${arr.length - 8} غيرها…</li>` : ''}</ul>` : '';
+      const curCount = Object.keys(parsedCourses).length;
+      box.innerHTML = `<div class="ip-row">
+          <span class="ip-stat">${plan.courses} مادة · ${plan.sections} فئة بعد ${plan.merge ? 'الدمج' : 'الاستبدال'}</span>
+          <span class="ip-stat add">+${plan.added.length} جديدة</span>
+          <span class="ip-stat">${plan.changed.length} تغيّرت</span>
+          <span class="ip-stat del">−${plan.removed.length} رح تنحذف</span>
+        </div>
+        ${curCount && plan.removed.length > curCount / 2 ? `<p class="ip-warn">⚠️ أكتر من نص المواد الحالية رح تنحذف — متأكد إنها بيانات «${esc(currentCollege.name)}»؟</p>` : ''}
+        ${plan.added.length ? `<strong>مواد جديدة:</strong>${list(plan.added)}` : ''}
+        ${plan.removed.length ? `<strong>مواد رح تنحذف:</strong>${list(plan.removed)}` : ''}
+        ${plan.changed.length ? `<strong>مواد تغيّرت:</strong>${list(plan.changed)}` : ''}
+        ${plan.noTimes ? `<p class="ip-warn">⚠️ ${plan.noTimes} فئة بدون أوقات — ما رح تدخل بالجداول.</p>` : ''}
+        ${plan.problems.length ? `<p class="ip-warn">⚠️ ${plan.problems.length} ملاحظة بالبيانات:</p>${list(plan.problems)}` : ''}
+        ${!plan.added.length && !plan.removed.length && !plan.changed.length ? '<p>ما في أي تغيير عن البيانات الحالية.</p>' : ''}`;
+      return plan;
+    };
+    window.importAndPublish = async function() {
+      const plan = importPreview();
+      if (!plan.next) return;
+      const msg = `رح ${plan.merge ? 'تدمج' : 'تستبدل'} بيانات «${currentCollege.name}» وتنشرها للطلاب:\n+${plan.added.length} جديدة · ${plan.changed.length} تغيّرت · −${plan.removed.length} رح تنحذف\n\nمتأكد؟`;
+      if (!await uiConfirm(msg, { okText: 'نشر', danger: plan.removed.length > 0 })) return;
+      const backup = parsedCourses;
+      parsedCourses = plan.next;
+      indexCourses(); adminDirty = true;
+      const ok = await publishToGithub();
+      if (ok) {
+        document.getElementById('import-json').value = '';
+        document.getElementById('import-file').value = '';
+        importPreview();
+      } else {
+        // النشر فشل: منرجّع البيانات القديمة حتى ما يضل شي نص منشور بالذاكرة
+        parsedCourses = backup; indexCourses();
+      }
+      populateCourseSelect();
+    };
+
     // بيتأكد إنو البيانات بنفس شكل data.json: اسم المادة ← قائمة فئات
     function validateCollegeData(data) {
       if (!data || typeof data !== 'object' || Array.isArray(data)) return 'لازم يكون الملف كائن JSON: اسم المادة ← قائمة الفئات.';
@@ -2414,28 +2589,11 @@ function renderTourStep() {
       const file = input.files && input.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = () => { document.getElementById('import-json').value = reader.result; };
+      reader.onload = () => { document.getElementById('import-json').value = reader.result; importPreview(); };
       reader.onerror = () => toast('تعذّرت قراءة الملف.', 'error');
       reader.readAsText(file, 'utf-8');
     };
 
-    window.importCollegeData = async function() {
-      let data;
-      try { data = JSON.parse(document.getElementById('import-json').value.trim()); }
-      catch (e) { toast('تعذّر قراءة البيانات — تأكد من صيغة JSON.', 'error'); return; }
-      const err = validateCollegeData(data);
-      if (err) { toast(err, 'error', 7000); return; }
-      const count = Object.keys(data).length;
-      if (!await uiConfirm(`رح تستبدل كل مواد «${currentCollege.name}» بـ ${count} مادة من الملف. متأكد؟`)) return;
-      parsedCourses = data;
-      const problems = indexCourses();
-      populateCourseSelect();
-      adminDirty = true;
-      document.getElementById('import-json').value = '';
-      document.getElementById('import-file').value = '';
-      toast(`تم استيراد ${count} مادة${problems.length ? ` (مع ${problems.length} ملاحظة — شوف الـ Console)` : ''}. هلق اضغط «نشر مباشرة على GitHub».`, 'success', 8000);
-      if (problems.length) console.warn('ملاحظات الاستيراد:', problems);
-    };
 
     // بينشر قائمة الكليات الجديدة على GitHub وبيحفظها بالجلسة لحد ما يتحدّث الموقع
     async function publishColleges(next, message) {
@@ -2682,7 +2840,7 @@ function renderTourStep() {
         toast('لم يتم إعداد الربط مع GitHub بعد — عبّئ إعدادات النشر أولاً.', 'error');
         document.getElementById('github-settings-panel').style.display = 'block';
         fillGithubSettingsForm();
-        return;
+        return false;
       }
       const btn = document.getElementById('ic-publish-btn');
       const originalHTML = btn.innerHTML;
@@ -2702,8 +2860,10 @@ function renderTourStep() {
 
         adminDirty = false;
         toast(`تم نشر بيانات «${currentCollege.name}» على GitHub بنجاح` + creditsMsg + '. سيتحدث الموقع خلال دقيقة.', 'success', 8000);
+        return true;
       } catch (e) {
         toast('فشل النشر المباشر: ' + friendlyGithubError(e), 'error', 9000);
+        return false;
       } finally {
         btn.disabled = false;
         btn.innerHTML = originalHTML;
@@ -2868,6 +3028,7 @@ function populateBulkScope() {
 
     window.renderCourseEditor = function() {
       let cName = document.getElementById('editor-course-select').value;
+      document.getElementById('del-course-btn').disabled = !cName;
       if (!cName) { document.getElementById('editor-sections-container').innerHTML = ''; return; }
 
       const curCredits = creditsOf(cName);
@@ -2881,6 +3042,8 @@ function populateBulkScope() {
         html += `<div class="editor-section" id="edit-sec-${sIdx}">
           <div class="editor-section-head">
             <strong>معرف الفئة:</strong> <span class="id-tag">${esc(sec.id)}</span>
+            <span class="sec-type">${sec.type === 'practical' ? 'عملي' : 'نظري'}</span>
+            <button type="button" class="btn btn-danger-ghost" onclick="adminDeleteSection(${sIdx})">${ic('trash')} حذف الفئة</button>
           </div>
           <div class="editor-fields">
             <div><label>اسم الفئة</label><input type="text" class="editor-input inp-classname" value="${esc(sec.className)}"></div>
@@ -2912,6 +3075,10 @@ function populateBulkScope() {
           <button class="btn btn-secondary" style="margin-top:10px;" onclick="addNewTimeRow(this)">${ic('plus')} إضافة وقت جديد</button>
         </div>`;
       });
+      html += `<div class="add-section-row">
+          <button type="button" class="btn btn-secondary" onclick="adminAddSection('theory')">${ic('plus')} فئة نظري</button>
+          <button type="button" class="btn btn-secondary" onclick="adminAddSection('practical')">${ic('plus')} فئة عملي</button>
+        </div>`;
       document.getElementById('editor-sections-container').innerHTML = html;
     };
 
@@ -2930,7 +3097,7 @@ function populateBulkScope() {
       container.appendChild(newRow);
     };
 
-    window.saveEditorChanges = function() {
+    window.saveEditorChanges = function(silent) {
       let cName = document.getElementById('editor-course-select').value;
       if (!cName) return;
 
@@ -2969,7 +3136,7 @@ function populateBulkScope() {
         });
       });
       adminDirty = true;
-      toast('تم حفظ التعديلات لهذه المادة مؤقتًا في الذاكرة.', 'success');
+      if (silent !== true) toast('تم حفظ التعديلات لهذه المادة مؤقتًا في الذاكرة.', 'success');
     };
 
     window.copyCredits = function() {
