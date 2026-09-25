@@ -1399,7 +1399,14 @@
       "capacity": "40",
       "registered": "40",
       "seats": "40/40",
-      "times": []
+      "times": [
+        {
+          "day": "السبت",
+          "start": 580,
+          "end": 680,
+          "raw": "السبت 09:40AM-11:20AM"
+        }
+      ]
     },
     {
       "id": "hcwvot07m",
