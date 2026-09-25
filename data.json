@@ -1399,7 +1399,14 @@
       "capacity": "40",
       "registered": "40",
       "seats": "40/40",
-      "times": []
+      "times": [
+        {
+          "day": "الثلاثاء",
+          "start": 580,
+          "end": 680,
+          "raw": "الثلاثاء 09:40AM-11:20AM"
+        }
+      ]
     },
     {
       "id": "8cn93tb5h",
@@ -1442,7 +1449,7 @@
       "course": "علم المناعة (MEBI-3-04)",
       "type": "theory",
       "className": "E (نظري)",
-      "status": "الفئات ممتلئة",
+      "status": "فئة ممتلئة",
       "capacity": "40",
       "registered": "40",
       "seats": "40/40",
