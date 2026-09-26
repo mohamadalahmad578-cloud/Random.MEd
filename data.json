@@ -2711,6 +2711,40 @@
           "raw": "الإثنين 09:40AM-11:20AM"
         }
       ]
+    },
+    {
+      "id": "81j4eutiy",
+      "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
+      "type": "theory",
+      "className": "A (نظري)",
+      "status": "فئة متاحة",
+      "seats": "0/40",
+      "times": [
+        {
+          "day": "الأحد",
+          "start": 780,
+          "end": 930,
+          "raw": "الأحد 01:00PM-03:30PM"
+        }
+      ]
+    },
+    {
+      "id": "hw4z1hui2",
+      "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
+      "type": "practical",
+      "className": "I (عملي)",
+      "status": "فئة متاحة",
+      "seats": "0/40",
+      "times": []
+    },
+    {
+      "id": "aim0bk5ni",
+      "course": "الأحياء الدقيقة (1) (MEBI-2-02)",
+      "type": "practical",
+      "className": "J (عملي)",
+      "status": "فئة متاحة",
+      "seats": "0/40",
+      "times": []
     }
   ],
   "الأحياء الدقيقة (2) (MEBI-3-03)": [
