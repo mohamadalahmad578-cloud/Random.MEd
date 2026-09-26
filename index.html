@@ -223,6 +223,9 @@
   .picker-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
   .picker-actions:not(:has(> :not([hidden]))){ display:none; }
   .uni-card .college-card-name{ font-size:16px; }
+  .fac-card .college-card-name::after{ content:' ‹'; color:var(--brass); }
+  .fac-group{ margin:14px 0 4px; }
+  .fac-group > b{ display:block; font-size:13px; color:var(--ink-soft); margin:0 0 8px; }
   .uni-short{ display:inline-block; padding:1px 8px; border-radius:999px; background:var(--paper); border:1px solid var(--line); font-size:11px; font-weight:800; direction:ltr; }
   .uni-block{ margin-bottom:18px; padding:14px; border-radius:14px; background:var(--paper); }
   .uni-block.is-hidden{ background:transparent; outline:1.5px dashed var(--line); outline-offset:-1.5px; }
@@ -1277,6 +1280,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       <div id="college-grid" class="college-grid"></div>
       <div class="picker-actions">
         <button type="button" class="btn btn-secondary" id="picker-unis-btn" onclick="showCollegePicker(null)" hidden>→ كل الجامعات</button>
+        <button type="button" class="btn btn-secondary" id="picker-facs-btn" onclick="showCollegePicker(window.__pickerUni)" hidden>→ كل الكليات</button>
         <button type="button" class="btn btn-secondary college-back" id="college-back-btn" onclick="hideCollegePicker()" hidden>رجوع</button>
       </div>
     </div>
@@ -1324,12 +1328,14 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <p class="college-admin-note">كل جامعة وكلياتها تحتها. اختار كلية لتدير موادها وإعداداتها لحالها. الجامعة أو الكلية المخفية ما بتطلع للطلاب، بس بياناتها بتضل محفوظة.</p>
           </div>
           <div id="admin-college-grid" class="uni-blocks"></div>
+          <datalist id="faculty-names"></datalist>
           <details class="college-admin" style="margin-top:16px;">
             <summary>➕ إضافة كلية جديدة</summary>
             <div class="gh-fields">
               <div><label>اسم الكلية</label><input type="text" id="new-college-name" class="editor-input" placeholder="مثال: كلية طب الأسنان"></div>
               <div><label>رمز قصير بالإنكليزي (بيطلع بالرابط)</label><input type="text" id="new-college-id" class="editor-input" placeholder="dent" dir="ltr" autocapitalize="off" spellcheck="false"></div>
               <div><label>حد الساعات بالفصل</label><input type="number" id="new-college-limit" class="editor-input" min="1" step="1" value="25"></div>
+              <div><label>تابعة لكلية (بس إذا هاد اختصاص — متل: كلية الهندسة)</label><input type="text" id="new-college-faculty" class="editor-input" list="faculty-names" placeholder="فاضي = كلية عادية"></div>
               <div><label>الجامعة</label><select id="new-college-uni" class="editor-input"></select></div>
             </div>
             <label class="gh-remember"><input type="checkbox" id="new-college-hidden" checked> خليها مخفية عن الطلاب لحد ما تجهز بياناتها</label>
@@ -1361,6 +1367,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
               <div><label>اسم الكلية</label><input type="text" id="cs-name" class="editor-input"></div>
               <div><label>حد الساعات بالفصل</label><input type="number" id="cs-limit" class="editor-input" min="1" step="1"></div>
               <div><label>الجامعة</label><select id="cs-uni" class="editor-input"></select></div>
+              <div><label>تابعة لكلية (إذا اختصاص)</label><input type="text" id="cs-faculty" class="editor-input" list="faculty-names" placeholder="فاضي = كلية عادية"></div>
               <label class="gh-remember cs-visible"><input type="checkbox" id="cs-visible"> ظاهرة للطلاب</label>
               <div><label>حد الإنذار الأكاديمي (المعدل)</label><input type="number" id="cs-probation" class="editor-input" min="0" max="4" step="0.01" placeholder="2.00"></div>
               <div><label>ساعات التخرج</label><input type="number" id="cs-grad" class="editor-input" min="1" step="1" placeholder="مثال: 240"></div>
@@ -1594,6 +1601,9 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
     const DEFAULT_UNIS = [{ id: 'spu', name: 'الجامعة السورية الخاصة', short: 'SPU' }];
     let universities = DEFAULT_UNIS;
     function uniOf(c) { return universities.find(u => c && u.id === c.uni) || universities[0]; }
+    // الاختصاص: بيانات مستقلة متل الكلية، بس بيتجمّع تحت اسم كليته (faculty) بشاشة الاختيار
+    function facultyOf(c) { return c && typeof c.faculty === 'string' ? c.faculty.trim() : ''; }
+    function collegeLabel(c) { return c ? (facultyOf(c) ? `${facultyOf(c)} — ${c.name}` : c.name) : ''; }
     function collegesOfUni(uid, list) { return (list || colleges).filter(c => uniOf(c).id === uid); }
     let currentCollege = null;
     let appBooted = false;
@@ -1659,8 +1669,9 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
     function pickableUnis() { const cs = pickableColleges(); return universities.filter(u => cs.some(c => uniOf(c).id === u.id)); }
 
     // شاشة الاختيار: الجامعات أولًا (إذا في أكتر من وحدة) وبعدين كليات الجامعة
-    window.showCollegePicker = function(uid) {
+    window.showCollegePicker = function(uid, facIdx) {
       const unis = pickableUnis(), grid = document.getElementById('college-grid');
+      const fac = facIdx != null && window.__pickerFacs ? window.__pickerFacs[facIdx] : null;
       if (uid === undefined) uid = unis.length === 1 ? unis[0].id : null;
       if (uid === null && unis.length <= 1) uid = unis[0] ? unis[0].id : null;
       const curUni = currentCollege ? uniOf(currentCollege).id : null;
@@ -1673,16 +1684,36 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <span class="college-card-name">${esc(u.name)}</span>
             <span class="college-card-meta">${u.short ? `<span class="uni-short">${esc(u.short)}</span> · ` : ''}${n} ${n === 1 ? 'كلية' : 'كليات'}${curUni === u.id ? ' · جامعتك الحالية' : ''}${u.hidden ? ' · مخفية عن الطلاب' : ''}</span>
           </button>`; }).join('');
+      } else if (fac) {
+        title.textContent = 'اختار اختصاصك';
+        msg.textContent = fac + ' — كل اختصاص إلو موادو وجداولو. اختياراتك وجدولك ومفضلتك بتنحفظ لكل اختصاص لحال.';
+        grid.innerHTML = collegesOfUni(uid, pickableColleges()).filter(c => facultyOf(c) === fac).map(c => `<button type="button" class="college-card ${currentCollege && currentCollege.id === c.id ? 'current' : ''} ${c.hidden ? 'is-hidden' : ''}" onclick="selectCollege('${c.id}')">
+          <span class="college-card-name">${esc(c.name)}</span>
+          <span class="college-card-meta">${currentCollege && currentCollege.id === c.id ? 'اختصاصك الحالي' : 'اضغط للدخول'}${c.hidden ? ' · مخفي عن الطلاب' : ''}</span>
+        </button>`).join('');
       } else {
-        const u = universities.find(x => x.id === uid);
+        const u = universities.find(x => x.id === uid), list = collegesOfUni(uid, pickableColleges());
         title.textContent = 'اختار كليتك';
         msg.textContent = (unis.length > 1 && u ? u.name + ' — ' : '') + 'كل كلية إلها موادها وجداولها الخاصة. اختياراتك وجدولك ومفضلتك بتنحفظ لكل كلية لحال.';
-        grid.innerHTML = collegesOfUni(uid, pickableColleges()).map(c => `<button type="button" class="college-card ${currentCollege && currentCollege.id === c.id ? 'current' : ''} ${c.hidden ? 'is-hidden' : ''}" onclick="selectCollege('${c.id}')">
-          <span class="college-card-name">${esc(c.name)}</span>
-          <span class="college-card-meta">${currentCollege && currentCollege.id === c.id ? 'الكلية الحالية' : 'اضغط للدخول'}${c.hidden ? ' · مخفية عن الطلاب' : ''}</span>
-        </button>`).join('');
+        // الكليات يلي فيها اختصاصات بتطلع بطاقة وحدة، وبتفتح على اختصاصاتها
+        const facs = [], cards = [];
+        list.forEach(c => { const f = facultyOf(c);
+          if (!f) { cards.push(c); return; }
+          if (!facs.includes(f)) { facs.push(f); cards.push({ __fac: f }); } });
+        window.__pickerFacs = facs; window.__pickerUni = uid;
+        grid.innerHTML = cards.map(c => {
+          if (c.__fac) { const k = facs.indexOf(c.__fac), subs = list.filter(x => facultyOf(x) === c.__fac), cur = subs.some(x => currentCollege && x.id === currentCollege.id);
+            return `<button type="button" class="college-card fac-card ${cur ? 'current' : ''}" onclick="showCollegePicker('${uid}', ${k})">
+              <span class="college-card-name">${esc(c.__fac)}</span>
+              <span class="college-card-meta">${subs.length} ${subs.length === 1 ? 'اختصاص' : 'اختصاصات'}${cur ? ` · اختصاصك: ${esc(subs.find(x => x.id === currentCollege.id).name)}` : ''}</span>
+            </button>`; }
+          return `<button type="button" class="college-card ${currentCollege && currentCollege.id === c.id ? 'current' : ''} ${c.hidden ? 'is-hidden' : ''}" onclick="selectCollege('${c.id}')">
+            <span class="college-card-name">${esc(c.name)}</span>
+            <span class="college-card-meta">${currentCollege && currentCollege.id === c.id ? 'الكلية الحالية' : 'اضغط للدخول'}${c.hidden ? ' · مخفية عن الطلاب' : ''}</span>
+          </button>`; }).join('');
       }
-      document.getElementById('picker-unis-btn').hidden = !(uid !== null && unis.length > 1);
+      document.getElementById('picker-unis-btn').hidden = !(uid !== null && !fac && unis.length > 1);
+      document.getElementById('picker-facs-btn').hidden = !fac;
       if (document.getElementById('college-screen').style.display === 'block') return;
       ['loading-screen', 'setup-screen', 'app-screen', 'editor-screen'].forEach(id => {
         const el = document.getElementById(id);
@@ -1715,9 +1746,9 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       if (!currentCollege) { chip.hidden = true; return; }
       chip.hidden = false;
       const many = pickableColleges().length > 1, u = uniOf(currentCollege);
-      chip.innerHTML = `${ic('users')} ${pickableUnis().length > 1 ? `${esc(u.short || u.name)} · ` : ''}${esc(currentCollege.name)}${many ? ' <span class="college-chip-change">· تغيير</span>' : ''}`;
+      chip.innerHTML = `${ic('users')} ${pickableUnis().length > 1 ? `${esc(u.short || u.name)} · ` : ''}${esc(facultyOf(currentCollege) ? `${facultyOf(currentCollege)} · ${currentCollege.name}` : currentCollege.name)}${many ? ' <span class="college-chip-change">· تغيير</span>' : ''}`;
       chip.disabled = !many;
-      document.title = `Random.MEd · ${currentCollege.name} — منسّق الجداول وحاسبة المعدل`;
+      document.title = `Random.MEd · ${collegeLabel(currentCollege)} — منسّق الجداول وحاسبة المعدل`;
     }
     const daysOfWeek = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
     const personColors = ['#1D5B8C', '#8A4FBF', '#B8631B', '#3E7D44', '#B23570'];
@@ -2256,7 +2287,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       admin_home: { label: 'لوحة التحكم — الجامعات والكليات', steps: [
         { sel: '#admin-college-grid .uni-head', title: 'الجامعات', text: 'كل جامعة إلها صندوق فيه كلياتها. من هون بتعدّل اسمها واختصارها، بتخفيها (مع كلياتها) عن الطلاب، أو بتحذفها إذا ما فيها كليات.' },
         { sel: '#admin-college-grid', title: 'كل الكليات', text: 'كل كلية بطاقة: ظاهرة أو مخفية، ورمزها، وعدد موادها. كبسة على البطاقة بتفتح صفحة الكلية لتدير موادها وإعداداتها لحالها.' },
-        { sel: '#admin-home details.college-admin', title: 'إضافة كلية', text: 'اسم ورمز قصير بالإنكليزي وحد الساعات. بتنضاف مخفية لحد ما تستورد بياناتها وتظهّرها من إعداداتها.' },
+        { sel: '#admin-home details.college-admin', title: 'إضافة كلية', text: 'اسم ورمز قصير بالإنكليزي وحد الساعات. بتنضاف مخفية لحد ما تستورد بياناتها وتظهّرها من إعداداتها. وإذا الكلية فيها اختصاصات: ضيف كل اختصاص ككلية واكتب اسم كليته بخانة «تابعة لكلية»، فالطالب بيختار الكلية وبعدين الاختصاص.' },
         { sel: '#add-uni-details', title: 'إضافة جامعة', text: 'اسم ورمز واختصار. بعد ما تضيفها، ضيف كلياتها واختار الجامعة من القائمة.' },
         { sel: '[onclick="msLockAdminNow()"]', title: 'قفل الجلسة', text: 'بيمسح المفتاح من هالجهاز فورًا.' },
       ]},
@@ -2670,7 +2701,7 @@ function renderTourStep() {
     function showSetupScreen(missing) {
       document.getElementById('loading-screen').style.display = 'none';
       if (missing) {
-        document.getElementById('ic-setup-title').innerHTML = ic('alert') + ` بيانات «${esc(currentCollege.name)}» لسا ما نزلت`;
+        document.getElementById('ic-setup-title').innerHTML = ic('alert') + ` بيانات «${esc(collegeLabel(currentCollege))}» لسا ما نزلت`;
         document.getElementById('setup-msg').innerHTML = 'مواد وجداول هالكلية لسا ما انضافت للموقع — جرّب بعد شوي، أو اختار كلية تانية. (المشرف بيقدر يستورد البيانات من «دخول المشرف».)';
       } else {
         document.getElementById('setup-msg').innerHTML = `يرجى لصق نسخة محفوظة من البيانات هنا للدخول المؤقت، أو التأكد من وجود ملف <code>${esc(collegeDataPath(currentCollege))}</code> على السيرفر.`;
@@ -2846,10 +2877,17 @@ function renderTourStep() {
         return `<section class="uni-block ${u.hidden ? 'is-hidden' : ''}">
           <div class="uni-head"><b>🎓 ${esc(u.name)}</b>${u.short ? `<span class="uni-short">${esc(u.short)}</span>` : ''}<span class="college-status ${u.hidden ? 'off' : ''}">${u.hidden ? 'مخفية' : 'ظاهرة'}</span><code dir="ltr">${esc(u.id)}</code>
             <span class="uni-acts"><button type="button" class="btn btn-secondary" onclick="editUniversity('${u.id}')">✎ تعديل</button><button type="button" class="btn btn-secondary" onclick="toggleUniversity('${u.id}')">${u.hidden ? '👁 إظهار' : '🙈 إخفاء'}</button><button type="button" class="btn btn-danger-ghost" onclick="deleteUniversity('${u.id}')">🗑 حذف</button></span></div>
-          ${list.length ? `<div class="college-grid">${list.map(card).join('')}</div>` : '<p class="college-admin-note">ما في كليات بهالجامعة لسا — ضيفها من «إضافة كلية جديدة» تحت.</p>'}
+          ${list.length ? (() => { const plain = list.filter(c => !facultyOf(c)), facs = [...new Set(list.map(facultyOf).filter(Boolean))];
+              return `${plain.length ? `<div class="college-grid">${plain.map(card).join('')}</div>` : ''}${facs.map(f => `<div class="fac-group"><b>🏛️ ${esc(f)} — اختصاصات</b><div class="college-grid">${list.filter(c => facultyOf(c) === f).map(card).join('')}</div></div>`).join('')}`; })()
+            : '<p class="college-admin-note">ما في كليات بهالجامعة لسا — ضيفها من «إضافة كلية جديدة» تحت.</p>'}
         </section>`; }).join('');
       fillUniSelect('new-college-uni', currentCollege ? uniOf(currentCollege).id : universities[0].id);
+      fillFacultyList();
     };
+    function fillFacultyList() {
+      const dl = document.getElementById('faculty-names'); if (!dl) return;
+      dl.innerHTML = [...new Set(colleges.map(facultyOf).filter(Boolean))].map(f => `<option value="${esc(f)}"></option>`).join('');
+    }
     function fillUniSelect(id, sel) {
       const el = document.getElementById(id); if (!el) return;
       el.innerHTML = universities.map(u => `<option value="${esc(u.id)}" ${u.id === sel ? 'selected' : ''}>${esc(u.name)}</option>`).join('');
@@ -2859,7 +2897,7 @@ function renderTourStep() {
     function showAdminCollege() {
       document.getElementById('admin-home').style.display = 'none';
       document.getElementById('admin-college-view').style.display = 'block';
-      document.getElementById('ic-editor-title').innerHTML = ic('gear') + ' لوحة التحكم — ' + esc(currentCollege.name);
+      document.getElementById('ic-editor-title').innerHTML = ic('gear') + ' لوحة التحكم — ' + esc(collegeLabel(currentCollege));
       renderCollegeAdmin();
       let tab = 'course'; try { tab = sessionStorage.getItem('spu_admin_tab') || (Object.keys(parsedCourses).length ? 'course' : 'bulk'); } catch (e) {}
       if (!Object.keys(parsedCourses).length) tab = 'bulk';   // كلية بدون مواد ← منبلش بلصق البيانات
@@ -2869,7 +2907,7 @@ function renderTourStep() {
 
     window.adminOpenCollege = async function(id) {
       if (currentCollege && id === currentCollege.id) { showAdminCollege(); return; }
-      if (adminDirty && !await uiConfirm(`في تعديلات على «${currentCollege.name}» ما نشرتها — رح تضيع إذا انتقلت. متأكد؟`, { danger: true })) return;
+      if (adminDirty && !await uiConfirm(`في تعديلات على «${collegeLabel(currentCollege)}» ما نشرتها — رح تضيع إذا انتقلت. متأكد؟`, { danger: true })) return;
       try { localStorage.setItem(COLLEGE_KEY, id); } catch (e) {}
       location.href = collegeUrl(id, { admin: '1' });
     };
@@ -2877,7 +2915,9 @@ function renderTourStep() {
     function renderCollegeAdmin() {
       if (!currentCollege) return;
       const c = currentCollege;
-      document.getElementById('admin-college-name').textContent = c.name;
+      document.getElementById('admin-college-name').textContent = collegeLabel(c);
+      document.getElementById('cs-faculty').value = facultyOf(c);
+      fillFacultyList();
       document.getElementById('admin-college-path').textContent = collegeDataPath(c);
       const st = document.getElementById('admin-college-status');
       st.textContent = c.hidden ? 'مخفية عن الطلاب' : 'ظاهرة للطلاب';
@@ -2990,7 +3030,7 @@ function renderTourStep() {
           <span class="ip-stat">${plan.changed.length} تغيّرت</span>
           <span class="ip-stat del">−${plan.removed.length} رح تنحذف</span>
         </div>
-        ${curCount && plan.removed.length > curCount / 2 ? `<p class="ip-warn">⚠️ أكتر من نص المواد الحالية رح تنحذف — متأكد إنها بيانات «${esc(currentCollege.name)}»؟</p>` : ''}
+        ${curCount && plan.removed.length > curCount / 2 ? `<p class="ip-warn">⚠️ أكتر من نص المواد الحالية رح تنحذف — متأكد إنها بيانات «${esc(collegeLabel(currentCollege))}»؟</p>` : ''}
         ${plan.added.length ? `<strong>مواد جديدة:</strong>${list(plan.added)}` : ''}
         ${plan.removed.length ? `<strong>مواد رح تنحذف:</strong>${list(plan.removed)}` : ''}
         ${plan.changed.length ? `<strong>مواد تغيّرت:</strong>${list(plan.changed)}` : ''}
@@ -3002,7 +3042,7 @@ function renderTourStep() {
     window.importAndPublish = async function() {
       const plan = importPreview();
       if (!plan.next) return;
-      const msg = `رح ${plan.merge ? 'تدمج' : 'تستبدل'} بيانات «${currentCollege.name}» وتنشرها للطلاب:\n+${plan.added.length} جديدة · ${plan.changed.length} تغيّرت · −${plan.removed.length} رح تنحذف\n\nمتأكد؟`;
+      const msg = `رح ${plan.merge ? 'تدمج' : 'تستبدل'} بيانات «${collegeLabel(currentCollege)}» وتنشرها للطلاب:\n+${plan.added.length} جديدة · ${plan.changed.length} تغيّرت · −${plan.removed.length} رح تنحذف\n\nمتأكد؟`;
       if (!await uiConfirm(msg, { okText: 'نشر', danger: plan.removed.length > 0 })) return;
       const backup = parsedCourses;
       parsedCourses = plan.next;
@@ -3078,6 +3118,7 @@ function renderTourStep() {
       }
       if (hidden && colleges.every(c => c.id === id || c.hidden || uniOf(c).hidden) && !await uiConfirm('هيك ما رح يضل ولا كلية ظاهرة للطلاب. متأكد؟', { danger: true })) return;
       const entry = Object.assign({}, currentCollege, { name, uni: document.getElementById('cs-uni').value || uniOf(currentCollege).id });
+      const fac = document.getElementById('cs-faculty').value.trim(); delete entry.faculty; if (fac) entry.faculty = fac;
       ['creditLimit', 'hidden', 'notice', 'whatsapp', 'probation', 'gradHours', 'honors'].forEach(k => delete entry[k]);
       if (gradRaw) entry.gradHours = grad;
       if (honors.length) entry.honors = honors.sort((a, b) => b.min - a.min);
@@ -3113,6 +3154,7 @@ function renderTourStep() {
       if (!COLLEGE_ID_RE.test(id)) { toast('الرمز لازم يكون أحرف إنكليزية صغيرة أو أرقام أو -، بدون فراغات (مثال: dent).', 'error', 7000); return; }
       if (colleges.some(c => c.id === id)) { toast('في كلية بنفس الرمز.', 'error'); return; }
       const entry = { id, name, uni: document.getElementById('new-college-uni').value || universities[0].id };
+      const fac = document.getElementById('new-college-faculty').value.trim(); if (fac) entry.faculty = fac;
       if (Number.isFinite(limit) && limit > 0 && limit !== 25) entry.creditLimit = limit;
       if (document.getElementById('new-college-hidden').checked) entry.hidden = true;
       if (!await publishColleges(colleges.concat([entry]), `إضافة ${name} لقائمة الكليات`)) return;
@@ -3374,7 +3416,7 @@ function renderTourStep() {
       btn.innerHTML = 'جاري النشر…';
       try {
         if (!Object.keys(parsedCourses).length) throw new Error('ما في مواد لهالكلية لسا — استورد البيانات أولًا.');
-        const cName = currentCollege.name;
+        const cName = collegeLabel(currentCollege);
         await githubPutJson(cfg, collegeDataPath(currentCollege), parsedCourses, `تحديث بيانات الجداول (${cName}) عبر Random.MEd`);
 
         // ننشر ملف الساعات كمان (منفصل حتى ما يضيع لما تستبدل data.json)
@@ -3385,7 +3427,7 @@ function renderTourStep() {
         } catch (e) { creditsMsg = ' — لكن فشل نشر ملف الساعات: ' + friendlyGithubError(e); }
 
         adminDirty = false;
-        toast(`تم نشر بيانات «${currentCollege.name}» على GitHub بنجاح` + creditsMsg + '. سيتحدث الموقع خلال دقيقة.', 'success', 8000);
+        toast(`تم نشر بيانات «${collegeLabel(currentCollege)}» على GitHub بنجاح` + creditsMsg + '. سيتحدث الموقع خلال دقيقة.', 'success', 8000);
         return true;
       } catch (e) {
         toast('فشل النشر المباشر: ' + friendlyGithubError(e), 'error', 9000);
@@ -4909,7 +4951,7 @@ function populateBulkScope() {
       try {
         const mark = document.createElement('div');
         mark.className = 'export-brand';
-        mark.innerHTML = `<img src="${(document.querySelector('.logo-mark') || {}).src || ''}" alt=""><span class="brand-word">Random<i>.</i>MEd</span>${currentCollege ? `<span>${esc(currentCollege.name)}</span>` : ''}`;
+        mark.innerHTML = `<img src="${(document.querySelector('.logo-mark') || {}).src || ''}" alt=""><span class="brand-word">Random<i>.</i>MEd</span>${currentCollege ? `<span>${esc(collegeLabel(currentCollege))}</span>` : ''}`;
         target.appendChild(mark);
         const canvas = await html2canvas(target, {
           backgroundColor: getComputedStyle(document.body).backgroundColor,
@@ -5688,7 +5730,7 @@ function populateBulkScope() {
       const r = computeGPA(gpaState); if (!Number.isFinite(r.cum) && !Number.isFinite(r.sem)) { toast('عبّي معدلك أو علامات هالفصل أول.', 'error'); return; }
       const box = document.getElementById('gpa-share'), hon = honorsFor(r.cum);
       const logo = document.querySelector('.logo-mark'), date = new Date().toLocaleDateString('ar-SY', { year: 'numeric', month: 'long' });
-      box.innerHTML = `<div class="gs-top">${logo ? `<img src="${logo.src}">` : ''}<b>Random.MEd</b><span>${esc(currentCollege ? currentCollege.name : '')}</span></div>
+      box.innerHTML = `<div class="gs-top">${logo ? `<img src="${logo.src}">` : ''}<b>Random.MEd</b><span>${esc(currentCollege ? collegeLabel(currentCollege) : '')}</span></div>
         <div class="gs-main"><small>المعدل التراكمي</small><strong>${fmtGpa(r.cum)}</strong>${hon ? `<em>🏅 ${esc(hon)}</em>` : ''}</div>
         <div class="gs-row"><div><small>معدل الفصل</small><b>${fmtGpa(r.sem)}</b></div><div><small>الساعات المنجزة</small><b>${r.done || '—'}</b></div></div>
         <div class="gs-foot">${esc(date)} · من 4.00</div>`;
