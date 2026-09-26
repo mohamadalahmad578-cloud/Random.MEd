@@ -7018,6 +7018,47 @@
           "raw": "الثلاثاء 01:00PM-02:40PM"
         }
       ]
+    },
+    {
+      "id": "3zes377jr",
+      "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
+      "type": "theory",
+      "className": "E (نظري)",
+      "status": "فئة متاحة",
+      "seats": "0/40",
+      "times": [
+        {
+          "day": "الأحد",
+          "start": 880,
+          "end": 980,
+          "raw": "الأحد 02:40PM-04:20PM"
+        }
+      ]
+    },
+    {
+      "id": "vt4ig121a",
+      "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
+      "type": "practical",
+      "className": "E1 (عملي)",
+      "status": "فئة متاحة",
+      "seats": "0/20",
+      "times": [
+        {
+          "day": "الإثنين",
+          "start": 880,
+          "end": 980,
+          "raw": "الإثنين 02:40PM-04:20PM"
+        }
+      ]
+    },
+    {
+      "id": "ga4g4tque",
+      "course": "جراحة(1) (جراحة صغرى) (MESR-5-01)",
+      "type": "practical",
+      "className": "H (عملي)",
+      "status": "فئة متاحة",
+      "seats": "0/40",
+      "times": []
     }
   ],
   "رسالة التخرج (MEXX-1-08)": [],
