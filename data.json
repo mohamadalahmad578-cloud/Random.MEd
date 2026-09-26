@@ -1190,7 +1190,7 @@
       "type": "practical",
       "className": "B1 (عملي)",
       "status": "فئة متاحة",
-      "seats": "0/40",
+      "seats": "0/20",
       "times": [
         {
           "day": "الإثنين",
@@ -1206,7 +1206,7 @@
       "type": "practical",
       "className": "B2 (عملي)",
       "status": "فئة متاحة",
-      "seats": "0/40",
+      "seats": "0/20",
       "times": [
         {
           "day": "الإثنين",
@@ -4987,6 +4987,22 @@
           "raw": "الثلاثاء 09:40AM-11:20AM"
         }
       ]
+    },
+    {
+      "id": "2xxkekhdw",
+      "course": "الفيزيولوجيا (2) (MEPH-2-02)",
+      "type": "practical",
+      "className": "D3 (عملي)",
+      "status": "فئة متاحة",
+      "seats": "0/20",
+      "times": [
+        {
+          "day": "الأحد",
+          "start": 880,
+          "end": 980,
+          "raw": "الأحد 02:40PM-04:20PM"
+        }
+      ]
     }
   ],
   "الفيزيولوجيا (3) (MEPH-3-03)": [
@@ -7651,6 +7667,22 @@
           "start": 680,
           "end": 780,
           "raw": "الإثنين 11:20AM-01:00PM"
+        }
+      ]
+    },
+    {
+      "id": "0buj2993n",
+      "course": "علم الأمراض (1) (العام) (MEPA-4-03)",
+      "type": "practical",
+      "className": "A3 (عملي)",
+      "status": "فئة متاحة",
+      "seats": "0/20",
+      "times": [
+        {
+          "day": "الإثنين",
+          "start": 880,
+          "end": 980,
+          "raw": "الإثنين 02:40PM-04:20PM"
         }
       ]
     }
