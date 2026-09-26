@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mohamadalahmad578-cloud.github.io/Random.MEd/sitemap.xml
