@@ -8017,6 +8017,46 @@
           "raw": "الإثنين 11:20AM-01:00PM"
         }
       ]
+    },
+    {
+      "id": "2wrsbdkwg",
+      "course": "علم الأنسجة (1) (MEPA-2-01)",
+      "type": "theory",
+      "className": "F (نظري)",
+      "status": "فئة متاحة",
+      "seats": "0/40",
+      "times": [
+        {
+          "day": "السبت",
+          "start": 930,
+          "end": 980,
+          "raw": "السبت 03:30PM-04:20PM"
+        },
+        {
+          "day": "الإثنين",
+          "start": 780,
+          "end": 880,
+          "raw": "الإثنين 01:00PM-02:40PM"
+        }
+      ]
+    },
+    {
+      "id": "o2bikf0v5",
+      "course": "علم الأنسجة (1) (MEPA-2-01)",
+      "type": "practical",
+      "className": "I (عملي)",
+      "status": "فئة متاحة",
+      "seats": "0/40",
+      "times": []
+    },
+    {
+      "id": "oenqkil4o",
+      "course": "علم الأنسجة (1) (MEPA-2-01)",
+      "type": "practical",
+      "className": "J (عملي)",
+      "status": "فئة متاحة",
+      "seats": "0/40",
+      "times": []
     }
   ],
   "علم الأنسجة (2) (MEPA-3-02)": [
