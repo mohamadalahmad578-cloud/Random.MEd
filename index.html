@@ -97,7 +97,7 @@
     --font-display:'El Messiri','Tahoma',sans-serif;
     --font-body:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
     --font-mono:'IBM Plex Mono','Consolas',monospace;
-    --p0:#1D5B8C; --p1:#8A4FBF; --p2:#B8631B; --p3:#3E7D44; --p4:#B23570;
+    --p0:#1D5B8C; --p1:#8A4FBF; --p2:#B8631B; --p3:#3E7D44; --p4:#B23570; --on-p:#fff;
     --ink-fixed:#141B2E;
   }
   :root{ color-scheme: light; }
@@ -113,7 +113,7 @@
     --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.5);
   }
   :root[data-theme="dark"]{ --brass-deep:#D9A84E; --teal-text:#5FD1BB; --rose-text:#F08A80;
-    --p0:#7EB6E8; --p1:#C9A6E8; --p2:#F0B26B; --p3:#7ED08A; --p4:#EC8FB8; }
+    --p0:#7EB6E8; --p1:#C9A6E8; --p2:#F0B26B; --p3:#7ED08A; --p4:#EC8FB8; --on-p:#0B1220; }
   :root[data-theme="dark"] .section-name.practical,
   :root[data-theme="dark"] .status-pill.ok,
   :root[data-theme="dark"] [style*="color:var(--teal)"]{ color:#5FD1BB !important; }
@@ -381,6 +381,10 @@
   .day-chip.just-checked, .user-chip.just-checked{ animation:chipPop .32s ease; }
 
   .user-chip{ position:relative; display:inline-flex; align-items:center; gap:6px; padding:5px 10px 5px 8px; border-radius:999px; border:1px solid var(--line); background:var(--surface); font-size:12px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:.15s; user-select:none; }
+  .full-toggle{ display:inline-flex; align-items:center; gap:6px; margin:0 0 8px; padding:6px 12px; border-radius:999px; border:none; background:var(--rose-soft); color:var(--rose-text); font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+  .full-toggle.on{ background:var(--paper); color:var(--ink-soft); }
+  .full-toggle[hidden]{ display:none; }
+  .full-toggle.all{ align-self:flex-start; margin:2px 0 0; }
   .user-chip input{ position:absolute; opacity:0; width:0; height:0; }
   .user-chip .dot{ width:8px; height:8px; border-radius:50%; background:var(--c,var(--ink-soft)); flex-shrink:0; }
   .user-chip:has(input:checked){ background:var(--c-bg,var(--paper)); border-color:var(--c,var(--line)); color:var(--c,var(--ink)); }
@@ -1010,6 +1014,12 @@
 .btn-secondary, .btn-ghost, .btn-star, .day-chip, .user-chip, .pick-chip, .pref-chip, .metric-chip, .ms-day, .wz-chip, .bulk-ex-chip,
 .seat-badge, .credit-badge, .lock-btn, .wa-menu a, .bulk-seg, .ms-draft-count, .diff-key{ border-color:transparent !important; }
 .btn-secondary, .btn-ghost{ background:var(--paper); }
+/* «أنا / صديق»: المختار معبّى بلون الشخص وواضح، وغير المختار هادي */
+.user-chip{ background:var(--paper); }
+.user-chip:has(input:checked){ background:var(--c) !important; color:var(--on-p) !important; box-shadow:0 2px 8px rgba(0,0,0,.18); }
+.user-chip:has(input:checked) .dot{ background:var(--on-p); box-shadow:0 0 0 2px rgba(255,255,255,.25); }
+.user-chip:has(input:checked)::after{ content:'✓'; font-size:11px; margin-inline-start:2px; }
+.user-chip:has(input:focus-visible){ outline:2px solid var(--brass); outline-offset:2px; }
 .btn-secondary:hover, .btn-ghost:hover{ background:var(--line); }
 /* الحقول: خلفية معبّاية وحافة بس وقت التركيز */
 .editor-input, #search, .ms-search, .ui-modal-input, .wz-combo-field{ border-color:transparent !important; background:var(--paper); }
@@ -3833,7 +3843,7 @@ function populateBulkScope() {
             <button class="course-toggle" type="button" tabindex="-1">${ic('chevron')}</button>
           </div>
           <div class="course-row-users">${usersHTML_Header}</div>
-          <div id="${safeId}" class="course-body"><div class="course-body-inner">${sectionsHTML}</div></div>
+          <div id="${safeId}" class="course-body"><div class="course-body-inner">${parsedCourses[courseName].some(isSectionClosed) ? `<button type="button" class="full-toggle" data-course="${esc(courseName)}" onclick="toggleFullSections(this.dataset.course)"></button>` : ''}${sectionsHTML}</div></div>
         </div>`;
       }).join('');
 
@@ -3856,6 +3866,7 @@ function populateBulkScope() {
             renderSelectedSummary();
             persistSelections();
             popChip(e.target);
+            const cn = e.target.dataset.course || e.target.value; if (cn) updateFullToggle(cn);
             if (e.target.checked && e.target.dataset.closed === 'true') {
               toast('تنبيه: هاي الفئة مسجّلة "ممتلئة" — تأكد من إمكانية التسجيل فيها فعليًا قبل الاعتماد عليها بجدولك.', 'error', 6000);
             }
@@ -3863,6 +3874,7 @@ function populateBulkScope() {
         });
       }
       renderSelectedSummary();
+      Object.keys(parsedCourses).forEach(updateFullToggle);
 
       if (!document.getElementById('results-container').dataset.filled) {
         document.getElementById('results-container').innerHTML = `<div class="empty-state"><div class="ic-wrap">${ic('calendar')}</div><p>حدد المواد لك ولأصدقائك ثم اضغط توليد الجداول</p></div>`;
@@ -3892,6 +3904,7 @@ function populateBulkScope() {
       panel.style.display = 'flex';
       const collapsed = localStorage.getItem('spu_picks_collapsed') === '1';
       panel.classList.toggle('collapsed', collapsed);
+      setTimeout(updateFullAllBtn, 0);
       const escName = n => n.replace(/'/g, "\\'");
       const preview = `<span>${names.slice(0, 2).map(esc).join('، ')}</span>` + (names.length > 2 ? `<span class="more">+${names.length - 2}</span>` : '');
 
@@ -3903,6 +3916,7 @@ function populateBulkScope() {
           </button>
           <button class="picks-clear" onclick="clearAllSelections()">مسح الكل</button>
         </div>
+        <button type="button" class="full-toggle all" id="full-all-btn" onclick="toggleFullAll()" hidden></button>
         ${collapsed ? `<div class="picks-preview">${preview}</div>` : `<div class="picks-list">${names.map(courseName => {
           const dots = perCourseUsers[courseName].map(u => `<span class="pick-dot ${getColorClass(u)}"></span>`).join('');
           return `<span class="pick-chip">
@@ -3934,12 +3948,14 @@ function populateBulkScope() {
       }
       renderSelectedSummary();
       persistSelections();
+      updateFullToggle(courseName);
     };
 
     window.clearAllSelections = function() {
       document.querySelectorAll('#courses-list input[type="checkbox"]').forEach(cb => cb.checked = false);
       renderSelectedSummary();
       persistSelections();
+      Object.keys(parsedCourses).forEach(updateFullToggle);
     };
 
     window.startFresh = async function() {
@@ -3960,6 +3976,46 @@ function populateBulkScope() {
       toast('تم البدء من جديد — جداولك المميزة لسا محفوظة بتبويب المفضّلة.', 'success');
     };
 
+    // زر «الفئات الممتلئة كمان»: بيضمّها (أو بيشيلها) لكل شخص محدّد هالمادة — بدل ما تنكبس وحدة وحدة
+    function fullSectionBoxes(courseName, u) { return [...document.querySelectorAll(`.cb-user-${u}-section[data-course="${CSS.escape(courseName)}"][data-closed="true"]`)]; }
+    function usersOfCourse(courseName) {
+      const out = []; for (let u = 0; u < usersCount; u++) {
+        const cb = document.querySelector(`.cb-user-${u}-course[value="${CSS.escape(courseName)}"]`);
+        if ((cb && cb.checked) || document.querySelector(`.cb-user-${u}-section[data-course="${CSS.escape(courseName)}"]:checked`)) out.push(u);
+      } return out;
+    }
+    function updateFullToggle(courseName) {
+      const btn = document.querySelector(`.full-toggle[data-course="${CSS.escape(courseName)}"]`); if (!btn) return;
+      const users = usersOfCourse(courseName), n = fullSectionBoxes(courseName, 0).length;
+      const allOn = users.length && users.every(u => fullSectionBoxes(courseName, u).every(cb => cb.checked));
+      btn.hidden = !users.length;
+      btn.classList.toggle('on', !!allOn);
+      btn.innerHTML = allOn ? `✕ شيل الفئات الممتلئة (${n})` : `🔴 اختار الفئات الممتلئة كمان (${n})`;
+    }
+    window.toggleFullSections = function(courseName) {
+      const users = usersOfCourse(courseName); if (!users.length) return;
+      const allOn = users.every(u => fullSectionBoxes(courseName, u).every(cb => cb.checked));
+      users.forEach(u => fullSectionBoxes(courseName, u).forEach(cb => { cb.checked = !allOn; }));
+      renderSelectedSummary(); persistSelections(); updateFullToggle(courseName); updateFullAllBtn();
+      toast(allOn ? 'انشالت الفئات الممتلئة من هالمادة.' : 'انضافت الفئات الممتلئة — الجداول يلي فيها بتتعلّم «فيها فئة ممتلئة».', 'success', 4000);
+    };
+    // نفس الشي بس لكل المواد المختارة سوا
+    function updateFullAllBtn() {
+      const btn = document.getElementById('full-all-btn'); if (!btn) return;
+      const courses = Object.keys(parsedCourses).filter(c => usersOfCourse(c).length && fullSectionBoxes(c, 0).length);
+      const allOn = courses.length && courses.every(c => usersOfCourse(c).every(u => fullSectionBoxes(c, u).every(cb => cb.checked)));
+      btn.hidden = !courses.length;
+      btn.classList.toggle('on', !!allOn);
+      btn.innerHTML = allOn ? '✕ شيل الممتلئة من الكل' : '🔴 ضم الممتلئة لكل المواد';
+    }
+    window.toggleFullAll = function() {
+      const courses = Object.keys(parsedCourses).filter(c => usersOfCourse(c).length && fullSectionBoxes(c, 0).length);
+      if (!courses.length) return;
+      const allOn = courses.every(c => usersOfCourse(c).every(u => fullSectionBoxes(c, u).every(cb => cb.checked)));
+      courses.forEach(c => usersOfCourse(c).forEach(u => fullSectionBoxes(c, u).forEach(cb => { cb.checked = !allOn; })));
+      renderSelectedSummary(); persistSelections(); courses.forEach(updateFullToggle);
+      toast(allOn ? 'انشالت الفئات الممتلئة من كل المواد.' : `انضافت الفئات الممتلئة لـ ${courses.length} مادة.`, 'success', 4000);
+    };
     window.toggleGroup = function(mainCb, sectionClass) {
       document.querySelectorAll(`.${sectionClass}[data-course="${CSS.escape(mainCb.value)}"]`).forEach(cb => {
         if (mainCb.checked) {
