@@ -4,5 +4,42 @@
     "indigo-light",
     "royal",
     "tweety"
-  ]
+  ],
+  "paletteOrder": [
+    "classic-plus",
+    "princess",
+    "classic",
+    "indigo",
+    "hasan",
+    "petrol",
+    "plum",
+    "charcoal",
+    "indigo-light",
+    "blue",
+    "medical",
+    "royal",
+    "pink",
+    "lavender",
+    "tweety"
+  ],
+  "paletteNames": {
+    "classic-plus": {
+      "name": "الكلاسيكي"
+    },
+    "princess": {
+      "name": "توليب"
+    },
+    "hasan": {
+      "name": "Hasan"
+    },
+    "plum": {
+      "name": "بنفسجي مع ذهبي"
+    },
+    "charcoal": {
+      "name": "رمادي مع برتقالي"
+    },
+    "pink": {
+      "name": "وردي مع خوخي"
+    }
+  }
 }
