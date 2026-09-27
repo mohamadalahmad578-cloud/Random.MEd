@@ -1389,7 +1389,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <summary>🎨 الثيمات — الأسماء والترتيب والتفعيل</summary>
             <p class="college-admin-note">غيّر اسم ووصف أي ثيم، ورتّبهن بالأسهم ▲▼ متل ما بدك يطلعو للطلاب. الثيم المطفي ما بيطلع للطلاب، ويلي كان مختارو بيرجع للافتراضي لحد ما تفعّلو من جديد. الثيم الافتراضي دايمًا مفعّل.</p>
             <div id="themes-admin-list" class="themes-admin-list"></div>
-            <div class="bulk-actions" style="margin-top:10px;"><button type="button" class="btn btn-primary" onclick="saveThemesAdmin()">حفظ ونشر</button><button type="button" class="btn btn-ghost" onclick="resetThemesAdmin()">رجّع الأسماء والترتيب للأصل</button></div>
+            <div class="bulk-actions" style="margin-top:10px;"><button type="button" class="btn btn-primary" onclick="saveThemesAdmin()">حفظ ونشر</button><button type="button" class="btn btn-ghost" onclick="resetThemesAdmin()">رجّع الأسماء والترتيب للأصل</button><button type="button" class="btn btn-secondary" onclick="askAllThemes()">📣 اطلب من الكل يختارو الثيم من جديد</button></div>
           </details>
           <details class="college-admin" id="add-uni-details" style="margin-top:12px;">
             <summary>🎓 إضافة جامعة جديدة</summary>
@@ -1985,9 +1985,14 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       if (j && j.paletteNames && typeof j.paletteNames === 'object') Object.keys(j.paletteNames).forEach(id => { const v = j.paletteNames[id] || {};
         const o = {}; if (typeof v.name === 'string' && v.name.trim()) o.name = v.name.trim().slice(0, 40); if (typeof v.desc === 'string' && v.desc.trim()) o.desc = v.desc.trim().slice(0, 60);
         if (o.name || o.desc) names[id] = o; });
-      return { disabledPalettes: Array.isArray(j && j.disabledPalettes) ? j.disabledPalettes.filter(x => typeof x === 'string') : [],
+      const out = { disabledPalettes: Array.isArray(j && j.disabledPalettes) ? j.disabledPalettes.filter(x => typeof x === 'string') : [],
         paletteOrder: Array.isArray(j && j.paletteOrder) ? j.paletteOrder.filter(x => typeof x === 'string') : [], paletteNames: names };
+      const ask = parseInt(j && j.themeAsk, 10); if (ask > 0) out.themeAsk = ask;   // رقم «اطلب من الكل يختارو الثيم» — كل ما زاد بتطلع شاشة الثيمات مرة وحدة لكل طالب
+      return out;
     }
+    const THEME_ASK_KEY = 'spu_theme_asked';
+    function themeAskPending() { const want = +siteSettings.themeAsk || 0; let seen = 0; try { seen = +localStorage.getItem(THEME_ASK_KEY) || 0; } catch (e) {} return want > seen; }
+    function markThemeAsked() { try { if (+siteSettings.themeAsk > 0) localStorage.setItem(THEME_ASK_KEY, String(+siteSettings.themeAsk)); } catch (e) {} }
     function orderedPalettes() {
       const order = siteSettings.paletteOrder || [], names = siteSettings.paletteNames || {};
       const pos = id => { const i = order.indexOf(id); return i === -1 ? order.length + PALETTES.findIndex(p => p.id === id) : i; };
@@ -2085,7 +2090,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       const cur = savedPalette() || DEFAULT_PALETTE;
       tpState = { first: first === true, origPalette: cur, origMode: document.documentElement.getAttribute('data-theme') || 'light', pick: cur };
       document.body.classList.toggle('tp-first', tpState.first);
-      document.getElementById('tp-title').textContent = tpState.first ? 'أهلًا! اختار شكل الموقع يلي بيريحك' : 'اختار شكل الموقع';
+      document.getElementById('tp-title').textContent = tpState.first ? (savedPalette() ? 'في ثيمات جديدة 🎨 اختار شكل الموقع يلي بيريحك' : 'أهلًا! اختار شكل الموقع يلي بيريحك') : 'اختار شكل الموقع';
       renderThemePicker();
       document.getElementById('theme-picker').hidden = false;
     };
@@ -2924,9 +2929,9 @@ function renderTourStep() {
       else { document.body.dataset.mtab = 'results'; updateBottomNav(); }
       initGenFab();
       renderWelcome();
-      if (!savedPalette()) {
-        // أول زيارة: منطلب من الطالب يختار ثيم، وبعدها بتبلش الجولة
-        setTimeout(() => { openThemePicker(true); tpState.onClose = () => setTimeout(askIntentThenTour, 400); }, 500);
+      if (!savedPalette() || themeAskPending()) {
+        // أول زيارة (أو المشرف طلب من الكل يختارو من جديد): منطلب من الطالب يختار ثيم، وبعدها بتبلش الجولة
+        setTimeout(() => { openThemePicker(true); tpState.onClose = () => { markThemeAsked(); setTimeout(askIntentThenTour, 400); }; }, 500);
       } else setTimeout(askIntentThenTour, 600);
       if (hadAnyChecked) toast('تم استرجاع اختياراتك المحفوظة من زيارتك السابقة.', 'success');
     }
@@ -3351,6 +3356,17 @@ function renderTourStep() {
         renumber(); b.focus();
       }));
     };
+    window.askAllThemes = async function() {
+      const cfg = getGithubConfig();
+      if (!cfg) { toast('لازم تتحقق كمشرف أولًا.', 'error'); return; }
+      if (!await uiConfirm('كل طالب بيفوت ع الموقع رح تطلعلو شاشة اختيار الثيم مرة وحدة (حتى لو اختار قبل). متأكد؟', { okText: 'اطلب من الكل' })) return;
+      const next = cleanSettings(Object.assign({}, siteSettings, { themeAsk: (+siteSettings.themeAsk || 0) + 1 }));
+      try { await githubPutJson(cfg, 'settings.json', next, 'طلب من كل الطلاب يختارو الثيم من جديد'); }
+      catch (e) { toast('فشل النشر: ' + friendlyGithubError(e), 'error', 9000); return; }
+      siteSettings = next; markThemeAsked();
+      try { sessionStorage.setItem(PENDING_SETTINGS_KEY, JSON.stringify({ at: Date.now(), value: next })); } catch (e) {}
+      toast('تم — كل طالب رح تطلعلو شاشة الثيمات مرة وحدة بزيارتو الجاية.', 'success', 6000);
+    };
     window.resetThemesAdmin = async function() {
       if (!await uiConfirm('ترجّع كل الأسماء والترتيب للأصل؟ (التفعيل والإطفاء ما بيتغيّر) — لازم تكبس «حفظ ونشر» بعدها.', { okText: 'رجّع' })) return;
       const keep = siteSettings; siteSettings = Object.assign({}, siteSettings, { paletteOrder: [], paletteNames: {} });
@@ -3366,7 +3382,7 @@ function renderTourStep() {
       rows.forEach(r => { const o = PALETTES.find(x => x.id === r.dataset.pal); const n = r.querySelector('.tar-name-in').value.trim(), d = r.querySelector('.tar-desc-in').value.trim();
         const v = {}; if (n && n !== o.name) v.name = n; if (d && d !== o.desc) v.desc = d; if (v.name || v.desc) names[o.id] = v; });
       const same = order.every((id, i) => id === PALETTES[i].id);
-      const next = cleanSettings({ disabledPalettes: disabled, paletteOrder: same ? [] : order, paletteNames: names });
+      const next = cleanSettings({ disabledPalettes: disabled, paletteOrder: same ? [] : order, paletteNames: names, themeAsk: siteSettings.themeAsk });
       try { await githubPutJson(cfg, 'settings.json', next, `تعديل الثيمات (${PALETTES.length - disabled.length} مفعّل من ${PALETTES.length}${Object.keys(names).length ? `، ${Object.keys(names).length} اسم معدّل` : ''}${same ? '' : '، ترتيب جديد'})`); }
       catch (e) { toast('فشل النشر: ' + friendlyGithubError(e), 'error', 9000); return; }
       siteSettings = next;
