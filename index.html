@@ -381,6 +381,20 @@
   .day-chip.just-checked, .user-chip.just-checked{ animation:chipPop .32s ease; }
 
   .user-chip{ position:relative; display:inline-flex; align-items:center; gap:6px; padding:5px 10px 5px 8px; border-radius:999px; border:1px solid var(--line); background:var(--surface); font-size:12px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:.15s; user-select:none; }
+  .tp-card{ position:relative; }
+  .tp-mascot{ position:absolute; top:-10px; inset-inline-end:-6px; width:40px; height:44px; filter:drop-shadow(0 2px 3px rgba(0,0,0,.18)); pointer-events:none; }
+  .tp-off{ color:var(--rose-text); }
+  .themes-admin-list{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:8px; }
+  .theme-admin-row{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; background:var(--surface); cursor:pointer; }
+  .theme-admin-row.off{ opacity:.6; }
+  .theme-admin-row input{ width:18px; height:18px; accent-color:var(--brass); flex-shrink:0; }
+  .tar-sw{ display:flex; border-radius:6px; overflow:hidden; flex-shrink:0; }
+  .tar-sw i{ width:14px; height:22px; display:block; }
+  .tar-icon{ width:24px; height:26px; flex-shrink:0; }
+  .tar-name{ display:flex; flex-direction:column; min-width:0; flex:1; }
+  .tar-name b{ font-size:13px; } .tar-name small{ font-size:11px; color:var(--ink-soft); }
+  .tar-state{ font-size:11px; font-weight:700; color:var(--teal-text); flex-shrink:0; }
+  .theme-admin-row.off .tar-state{ color:var(--rose-text); }
   .ms-more{ display:flex; margin:14px auto 4px; }
   .ms-more-note{ text-align:center; font-size:12px; color:var(--ink-soft); margin:4px 0 0; }
   .full-toggle{ display:inline-flex; align-items:center; gap:6px; margin:0 0 8px; padding:6px 12px; border-radius:999px; border:none; background:var(--rose-soft); color:var(--rose-text); font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
@@ -1354,6 +1368,12 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <p class="college-admin-note">رح تنضاف لملف <code>colleges.json</code> على GitHub، وبياناتها بتنحفظ بـ <code dir="ltr">colleges/&lt;الرمز&gt;/data.json</code>. بعد الإضافة منفتحلك صفحتها لتستورد بياناتها.</p>
             <button type="button" class="btn btn-primary" style="margin-top:8px;" onclick="addCollege()">إضافة ونشر</button>
           </details>
+          <details class="college-admin" id="themes-admin" style="margin-top:12px;" ontoggle="if(this.open) renderThemesAdmin()">
+            <summary>🎨 الثيمات — تفعيل وإطفاء</summary>
+            <p class="college-admin-note">الثيم المطفي ما بيطلع للطلاب بقائمة الثيمات، ويلي كان مختارو بيرجع للافتراضي لحد ما تفعّلو من جديد. الثيم الافتراضي دايمًا مفعّل.</p>
+            <div id="themes-admin-list" class="themes-admin-list"></div>
+            <button type="button" class="btn btn-primary" style="margin-top:10px;" onclick="saveThemesAdmin()">حفظ ونشر</button>
+          </details>
           <details class="college-admin" id="add-uni-details" style="margin-top:12px;">
             <summary>🎓 إضافة جامعة جديدة</summary>
             <div class="gh-fields">
@@ -1840,6 +1860,10 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       return css;
     }
     const GREEN_STATUS = { ok:'#047857', okSoft:'#D1FAE5', bad:'#B91C1C', badSoft:'#FEE2E2', dOk:'#34D399', dBad:'#F87171', dOkSoft:'#064E3B', dBadSoft:'#450A0A' };
+    // عصفور الكناري — رسمة أصلية خاصة بـ Random.MEd (مستوحاة من روح الكرتون، مو شخصية محمية)
+    const BIRD_SVG = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 130'> <g stroke='#C98A00' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'> <path d='M58 20 C54 10 48 6 44 8 C49 10 52 14 54 21' fill='#FFD400'/> <path d='M61 19 C61 8 64 3 69 3 C65 7 64 12 64 20' fill='#FFD400'/> <path d='M64 21 C70 12 77 10 80 13 C75 14 71 17 68 23' fill='#FFD400'/> <ellipse cx='46' cy='121' rx='10' ry='5' fill='#F28C28' stroke='#C85F0C'/> <ellipse cx='74' cy='121' rx='10' ry='5' fill='#F28C28' stroke='#C85F0C'/> <ellipse cx='60' cy='97' rx='25' ry='22' fill='#FFD400'/> <path d='M36 92 C28 96 27 106 34 108 C38 103 40 98 40 94Z' fill='#FFC400'/> <path d='M84 92 C92 96 93 106 86 108 C82 103 80 98 80 94Z' fill='#FFC400'/> <circle cx='60' cy='55' r='36' fill='#FFD400'/> </g> <ellipse cx='60' cy='100' rx='14' ry='12' fill='#FFE766'/> <ellipse cx='34' cy='66' rx='7' ry='4.5' fill='#FF9EAA' opacity='.55'/> <ellipse cx='86' cy='66' rx='7' ry='4.5' fill='#FF9EAA' opacity='.55'/> <g class='eyes'> <ellipse cx='47' cy='50' rx='11' ry='15' fill='#fff' stroke='#C98A00' stroke-width='1.5'/> <ellipse cx='73' cy='50' rx='11' ry='15' fill='#fff' stroke='#C98A00' stroke-width='1.5'/> <circle cx='49' cy='54' r='7.5' fill='#2E86DE'/><circle cx='71' cy='54' r='7.5' fill='#2E86DE'/> <circle cx='49.5' cy='55' r='3.8' fill='#10223A'/><circle cx='70.5' cy='55' r='3.8' fill='#10223A'/> <circle cx='52' cy='51' r='2.2' fill='#fff'/><circle cx='74' cy='51' r='2.2' fill='#fff'/> </g> <path d='M36 36 C40 32 46 31 51 33' stroke='#C98A00' stroke-width='2' fill='none' stroke-linecap='round'/> <path d='M84 36 C80 32 74 31 69 33' stroke='#C98A00' stroke-width='2' fill='none' stroke-linecap='round'/> <path d='M51 69 C55 64 65 64 69 69 C66 76 54 76 51 69Z' fill='#F28C28' stroke='#C85F0C' stroke-width='1.8' stroke-linejoin='round'/> <path d='M53 70 C57 72 63 72 67 70' stroke='#C85F0C' stroke-width='1.4' fill='none' stroke-linecap='round'/> </svg>";
+    const BIRD_URL = 'url("data:image/svg+xml;charset=utf-8,' + encodeURIComponent(BIRD_SVG) + '")';
+    const BIRD_SRC = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(BIRD_SVG);
     // sw = [لون الهيدر، اللون الأساسي، الخلفية]
     const PALETTES = [
       { id:'classic-plus', name:'الكلاسيكي المحسّن', desc:'كحلي وذهبي بلون أوضح', sw:['#141B2E','#8A5E12','#EEF0F2'], css:`
@@ -1875,8 +1899,46 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
   :root[data-theme="dark"] .header, :root[data-theme="dark"] .header .brand-word, :root[data-theme="dark"] .header .data-freshness strong{ color:#FFF3B0 !important; }
   :root[data-theme="dark"] .header .hdr-btn{ background:rgba(255,255,255,.1) !important; color:#FFF3B0 !important; }
   :root[data-theme="dark"] .header .college-chip, :root[data-theme="dark"] .header .data-freshness{ color:#FFE680 !important; background:rgba(255,212,0,.14) !important; }
-  :root[data-theme="dark"] .brand-word i{ color:#FFD400 !important; }` },
+  :root[data-theme="dark"] .brand-word i{ color:#FFD400 !important; }
+  :root[data-theme="dark"] .header .header-sub, :root[data-theme="dark"] .header .college-chip .college-chip-change{ color:#E8D9A0 !important; border-color:rgba(255,255,255,.15) !important; }
+  /* ---- العصفور ---- */
+  @keyframes birdBob{ 0%,100%{ transform:translateY(0) rotate(-2deg); } 50%{ transform:translateY(-4px) rotate(2deg); } }
+  @keyframes birdHop{ 0%,100%{ transform:translateY(0); } 30%{ transform:translateY(-10px) rotate(-6deg); } 60%{ transform:translateY(0) rotate(3deg); } }
+  @keyframes birdFly{ 0%,100%{ transform:translateY(0) scale(1); } 50%{ transform:translateY(-14px) scale(1.05); } }
+  body{ background-image:radial-gradient(circle at 1px 1px, rgba(255,196,0,.22) 1.2px, transparent 0); background-size:24px 24px; }
+  :root[data-theme="dark"] body{ background-image:radial-gradient(circle at 1px 1px, rgba(255,212,0,.07) 1.2px, transparent 0); }
+  @media (min-width: 1000px){
+    .header-inner{ position:relative; }
+    .header-inner::after{ content:''; position:absolute; bottom:-10px; left:calc(50% - 26px); width:52px; height:56px; background:${BIRD_URL} no-repeat center/contain; pointer-events:none; animation:birdBob 3.2s ease-in-out infinite; filter:drop-shadow(0 3px 4px rgba(0,0,0,.18)); }
+  }
+  #ic-generate-btn, .gen-fab button{ position:relative; overflow:visible !important; }
+  #ic-generate-btn::after, .gen-fab button::after{ content:''; position:absolute; top:-30px; inset-inline-end:16px; width:34px; height:38px; background:${BIRD_URL} no-repeat center/contain; pointer-events:none; filter:drop-shadow(0 2px 3px rgba(0,0,0,.2)); }
+  #ic-generate-btn:hover::after, .gen-fab button:active::after{ animation:birdHop .7s ease; }
+  .empty-state .ic-wrap{ width:92px; height:100px; background:${BIRD_URL} no-repeat center/contain; }
+  .empty-state .ic-wrap .ic{ display:none; }
+  #loading-screen .spinner{ width:70px; height:76px; border:none !important; border-radius:0; background:${BIRD_URL} no-repeat center/contain; animation:birdFly 1s ease-in-out infinite; }
+  .footer-brand::after{ content:''; width:24px; height:26px; background:${BIRD_URL} no-repeat center/contain; }`, icon: BIRD_SRC },
     ];
+    // إعدادات الموقع العامة (settings.json): الثيمات يلي طفاها المشرف
+    const PENDING_SETTINGS_KEY = 'spu_pending_settings';
+    let siteSettings = { disabledPalettes: [] };
+    function isPaletteDisabled(id) { return id !== DEFAULT_PALETTE && (siteSettings.disabledPalettes || []).includes(id); }
+    // الطالب بيشوف المفعّلة بس؛ المشرف بيشوف الكل (والمطفي معلّم)
+    function visiblePalettes() { let admin = false; try { admin = isAdminVerified(); } catch (e) {} return PALETTES.filter(p => admin || !isPaletteDisabled(p.id)); }
+    async function loadSiteSettings() {
+      try {
+        const res = await fetch('settings.json?v=' + Date.now());
+        if (res.ok) { const j = await res.json(); if (j && typeof j === 'object') siteSettings = { disabledPalettes: Array.isArray(j.disabledPalettes) ? j.disabledPalettes.filter(x => typeof x === 'string') : [] }; }
+      } catch (e) { /* بدون الملف: كل الثيمات مفعّلة */ }
+      try {
+        const pending = JSON.parse(sessionStorage.getItem(PENDING_SETTINGS_KEY) || 'null');
+        if (pending && pending.value && Date.now() - pending.at < 5 * 60 * 1000) siteSettings = pending.value; else sessionStorage.removeItem(PENDING_SETTINGS_KEY);
+      } catch (e) {}
+      // ثيم الطالب انطفى؟ منرجع للافتراضي (واختياره بيرجع إذا انفتح الثيم من جديد)
+      const cur = savedPalette() || DEFAULT_PALETTE;
+      let admin = false; try { admin = isAdminVerified(); } catch (e) {}
+      if (!admin && isPaletteDisabled(cur)) applyPalette(DEFAULT_PALETTE);
+    }
     function paletteById(id) { return PALETTES.find(p => p.id === id) || PALETTES.find(p => p.id === DEFAULT_PALETTE); }
     function savedPalette() { try { return localStorage.getItem(PALETTE_KEY); } catch (e) { return null; } }
     function applyPalette(id) {
@@ -1957,11 +2019,11 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       document.getElementById('theme-picker').hidden = false;
     };
     function renderThemePicker() {
-      document.getElementById('tp-grid').innerHTML = PALETTES.map(p => `<button type="button" class="tp-card ${p.id === tpState.pick ? 'on' : ''}" onclick="tpPick('${p.id}')" aria-pressed="${p.id === tpState.pick}">
+      document.getElementById('tp-grid').innerHTML = visiblePalettes().map(p => `<button type="button" class="tp-card ${p.id === tpState.pick ? 'on' : ''}" onclick="tpPick('${p.id}')" aria-pressed="${p.id === tpState.pick}">${p.icon ? `<img class="tp-mascot" src="${p.icon}" alt="">` : ''}
           <span class="tp-swatch" style="background:${p.sw[2]}"><span class="tp-swatch-hdr" style="background:${p.sw[0]};${p.sw[0] === '#FFFFFF' ? 'box-shadow:inset 0 -1px 0 rgba(0,0,0,.08)' : ''}"></span>
             <span class="tp-swatch-body"><i style="width:38%;background:${p.sw[1]}"></i><i style="width:22%;background:#146B5D;opacity:.8"></i><i style="width:16%;background:#A63A33;opacity:.8"></i></span></span>
           <span class="tp-name">${esc(p.name)}${p.id === DEFAULT_PALETTE ? '<span class="tp-badge">الافتراضي</span>' : ''}</span>
-          <span class="tp-desc">${esc(p.desc)}</span>
+          <span class="tp-desc">${esc(p.desc)}${isPaletteDisabled(p.id) ? ' · <b class="tp-off">مطفي عن الطلاب</b>' : ''}</span>
         </button>`).join('');
       const mode = document.documentElement.getAttribute('data-theme') || 'light';
       document.querySelectorAll('.tp-mode button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
@@ -2693,7 +2755,7 @@ function renderTourStep() {
     setInterval(renderDataFreshness, 60000);
 
     window.onload = async function() {
-      await loadColleges();
+      await Promise.all([loadColleges(), loadSiteSettings()]);
       const pickable = pickableColleges();
       currentCollege = pickable.find(c => c.id === COLLEGE_ID) || null;
       if (!currentCollege) {
@@ -3191,6 +3253,32 @@ function renderTourStep() {
       if (!await publishColleges(colleges.concat([entry]), `إضافة ${name} لقائمة الكليات`)) return;
       toast(`تمت إضافة «${name}». هلق منحوّلك عليها لتستورد بياناتها.`, 'success', 6000);
       setTimeout(() => { try { localStorage.setItem(COLLEGE_KEY, id); } catch (e) {} location.href = collegeUrl(id, { admin: '1' }); }, 1500);
+    };
+
+    // ---- الثيمات: تفعيل وإطفاء لكل الطلاب ----
+    window.renderThemesAdmin = function() {
+      const box = document.getElementById('themes-admin-list'); if (!box) return;
+      box.innerHTML = PALETTES.map(p => { const def = p.id === DEFAULT_PALETTE, on = !isPaletteDisabled(p.id);
+        return `<label class="theme-admin-row ${on ? '' : 'off'}">
+          <input type="checkbox" data-pal="${esc(p.id)}" ${on ? 'checked' : ''} ${def ? 'disabled' : ''}>
+          <span class="tar-sw">${p.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>
+          ${p.icon ? `<img src="${p.icon}" alt="" class="tar-icon">` : ''}
+          <span class="tar-name"><b>${esc(p.name)}</b><small>${esc(p.desc)}${def ? ' · الافتراضي' : ''}</small></span>
+          <span class="tar-state">${on ? 'مفعّل' : 'مطفي'}</span>
+        </label>`; }).join('');
+      box.querySelectorAll('input').forEach(cb => cb.addEventListener('change', () => { const row = cb.closest('.theme-admin-row'); row.classList.toggle('off', !cb.checked); row.querySelector('.tar-state').textContent = cb.checked ? 'مفعّل' : 'مطفي'; }));
+    };
+    window.saveThemesAdmin = async function() {
+      const cfg = getGithubConfig();
+      if (!cfg) { toast('لازم تتحقق كمشرف أولًا.', 'error'); return; }
+      const disabled = [...document.querySelectorAll('#themes-admin-list input[data-pal]')].filter(cb => !cb.checked && cb.dataset.pal !== DEFAULT_PALETTE).map(cb => cb.dataset.pal);
+      const next = Object.assign({}, siteSettings, { disabledPalettes: disabled });
+      try { await githubPutJson(cfg, 'settings.json', next, `تعديل الثيمات المفعّلة (${PALETTES.length - disabled.length} من ${PALETTES.length})`); }
+      catch (e) { toast('فشل النشر: ' + friendlyGithubError(e), 'error', 9000); return; }
+      siteSettings = next;
+      try { sessionStorage.setItem(PENDING_SETTINGS_KEY, JSON.stringify({ at: Date.now(), value: next })); } catch (e) {}
+      renderThemesAdmin();
+      toast(disabled.length ? `تم — ${disabled.length} ثيم مطفي عن الطلاب. بيتحدّث عندهم خلال دقيقة.` : 'تم — كل الثيمات مفعّلة للطلاب.', 'success', 6000);
     };
 
     // ---- الجامعات ----
