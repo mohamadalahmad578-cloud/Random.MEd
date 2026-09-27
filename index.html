@@ -384,8 +384,18 @@
   .tp-card{ position:relative; }
   .tp-mascot{ position:absolute; top:-10px; inset-inline-end:-6px; width:40px; height:44px; filter:drop-shadow(0 2px 3px rgba(0,0,0,.18)); pointer-events:none; }
   .tp-off{ color:var(--rose-text); }
-  .themes-admin-list{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:8px; }
-  .theme-admin-row{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; background:var(--surface); cursor:pointer; }
+  .themes-admin-list{ display:flex; flex-direction:column; gap:6px; }
+  .theme-admin-row{ display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:12px; background:var(--surface); }
+  .tar-num{ width:20px; text-align:center; font-weight:800; color:var(--ink-soft); font-size:12px; flex-shrink:0; }
+  .tar-move{ display:flex; flex-direction:column; gap:2px; flex-shrink:0; }
+  .tar-move button{ width:26px; height:18px; border:none; border-radius:6px; background:var(--paper); color:var(--ink-soft); font-size:9px; cursor:pointer; line-height:1; }
+  .tar-move button:hover{ background:var(--line); color:var(--ink); }
+  .tar-edit{ display:flex; gap:6px; flex:1; min-width:0; align-items:center; flex-wrap:wrap; }
+  .tar-edit input{ flex:1 1 140px; min-width:0; margin:0; padding:6px 10px; font-size:12.5px; border:1px solid var(--line) !important; background:var(--paper) !important; }
+  .tar-edit input:focus{ border-color:var(--brass) !important; background:var(--surface) !important; }
+  .tar-edit .tar-name-in{ font-weight:700; flex-basis:120px; }
+  .tar-edit small{ font-size:11px; color:var(--ink-soft); }
+  @media (max-width: 560px){ .theme-admin-row{ flex-wrap:wrap; } .tar-edit{ flex-basis:100%; order:5; } }
   .theme-admin-row.off{ opacity:.6; }
   .theme-admin-row input{ width:18px; height:18px; accent-color:var(--brass); flex-shrink:0; }
   .tar-sw{ display:flex; border-radius:6px; overflow:hidden; flex-shrink:0; }
@@ -1376,10 +1386,10 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
             <button type="button" class="btn btn-primary" style="margin-top:8px;" onclick="addCollege()">إضافة ونشر</button>
           </details>
           <details class="college-admin" id="themes-admin" style="margin-top:12px;" ontoggle="if(this.open) renderThemesAdmin()">
-            <summary>🎨 الثيمات — تفعيل وإطفاء</summary>
-            <p class="college-admin-note">الثيم المطفي ما بيطلع للطلاب بقائمة الثيمات، ويلي كان مختارو بيرجع للافتراضي لحد ما تفعّلو من جديد. الثيم الافتراضي دايمًا مفعّل.</p>
+            <summary>🎨 الثيمات — الأسماء والترتيب والتفعيل</summary>
+            <p class="college-admin-note">غيّر اسم ووصف أي ثيم، ورتّبهن بالأسهم ▲▼ متل ما بدك يطلعو للطلاب. الثيم المطفي ما بيطلع للطلاب، ويلي كان مختارو بيرجع للافتراضي لحد ما تفعّلو من جديد. الثيم الافتراضي دايمًا مفعّل.</p>
             <div id="themes-admin-list" class="themes-admin-list"></div>
-            <button type="button" class="btn btn-primary" style="margin-top:10px;" onclick="saveThemesAdmin()">حفظ ونشر</button>
+            <div class="bulk-actions" style="margin-top:10px;"><button type="button" class="btn btn-primary" onclick="saveThemesAdmin()">حفظ ونشر</button><button type="button" class="btn btn-ghost" onclick="resetThemesAdmin()">رجّع الأسماء والترتيب للأصل</button></div>
           </details>
           <details class="college-admin" id="add-uni-details" style="margin-top:12px;">
             <summary>🎓 إضافة جامعة جديدة</summary>
@@ -1968,14 +1978,28 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
     ];
     // إعدادات الموقع العامة (settings.json): الثيمات يلي طفاها المشرف
     const PENDING_SETTINGS_KEY = 'spu_pending_settings';
-    let siteSettings = { disabledPalettes: [] };
+    let siteSettings = { disabledPalettes: [], paletteOrder: [], paletteNames: {} };
+    // ترتيب وأسماء الثيمات يلي حطّها المشرف (يلي ما إلو ترتيب بيجي بالآخر بترتيبه الأصلي)
+    function cleanSettings(j) {
+      const names = {};
+      if (j && j.paletteNames && typeof j.paletteNames === 'object') Object.keys(j.paletteNames).forEach(id => { const v = j.paletteNames[id] || {};
+        const o = {}; if (typeof v.name === 'string' && v.name.trim()) o.name = v.name.trim().slice(0, 40); if (typeof v.desc === 'string' && v.desc.trim()) o.desc = v.desc.trim().slice(0, 60);
+        if (o.name || o.desc) names[id] = o; });
+      return { disabledPalettes: Array.isArray(j && j.disabledPalettes) ? j.disabledPalettes.filter(x => typeof x === 'string') : [],
+        paletteOrder: Array.isArray(j && j.paletteOrder) ? j.paletteOrder.filter(x => typeof x === 'string') : [], paletteNames: names };
+    }
+    function orderedPalettes() {
+      const order = siteSettings.paletteOrder || [], names = siteSettings.paletteNames || {};
+      const pos = id => { const i = order.indexOf(id); return i === -1 ? order.length + PALETTES.findIndex(p => p.id === id) : i; };
+      return PALETTES.slice().sort((a, b) => pos(a.id) - pos(b.id)).map(p => names[p.id] ? Object.assign({}, p, names[p.id]) : p);
+    }
     function isPaletteDisabled(id) { return id !== DEFAULT_PALETTE && (siteSettings.disabledPalettes || []).includes(id); }
     // الطالب بيشوف المفعّلة بس؛ المشرف بيشوف الكل (والمطفي معلّم)
-    function visiblePalettes() { let admin = false; try { admin = isAdminVerified(); } catch (e) {} return PALETTES.filter(p => admin || !isPaletteDisabled(p.id)); }
+    function visiblePalettes() { let admin = false; try { admin = isAdminVerified(); } catch (e) {} return orderedPalettes().filter(p => admin || !isPaletteDisabled(p.id)); }
     async function loadSiteSettings() {
       try {
         const res = await fetch('settings.json?v=' + Date.now());
-        if (res.ok) { const j = await res.json(); if (j && typeof j === 'object') siteSettings = { disabledPalettes: Array.isArray(j.disabledPalettes) ? j.disabledPalettes.filter(x => typeof x === 'string') : [] }; }
+        if (res.ok) { const j = await res.json(); if (j && typeof j === 'object') siteSettings = cleanSettings(j); }
       } catch (e) { /* بدون الملف: كل الثيمات مفعّلة */ }
       try {
         const pending = JSON.parse(sessionStorage.getItem(PENDING_SETTINGS_KEY) || 'null');
@@ -3305,27 +3329,50 @@ function renderTourStep() {
     // ---- الثيمات: تفعيل وإطفاء لكل الطلاب ----
     window.renderThemesAdmin = function() {
       const box = document.getElementById('themes-admin-list'); if (!box) return;
-      box.innerHTML = PALETTES.map(p => { const def = p.id === DEFAULT_PALETTE, on = !isPaletteDisabled(p.id);
-        return `<label class="theme-admin-row ${on ? '' : 'off'}">
-          <input type="checkbox" data-pal="${esc(p.id)}" ${on ? 'checked' : ''} ${def ? 'disabled' : ''}>
+      const orig = id => PALETTES.find(x => x.id === id);
+      box.innerHTML = orderedPalettes().map((p, i) => { const def = p.id === DEFAULT_PALETTE, on = !isPaletteDisabled(p.id);
+        return `<div class="theme-admin-row ${on ? '' : 'off'}" data-pal="${esc(p.id)}">
+          <span class="tar-num">${i + 1}</span>
+          <span class="tar-move"><button type="button" class="tar-up" title="لفوق" aria-label="نقل لفوق">▲</button><button type="button" class="tar-down" title="لتحت" aria-label="نقل لتحت">▼</button></span>
+          <input type="checkbox" class="tar-on" ${on ? 'checked' : ''} ${def ? 'disabled' : ''} title="${def ? 'الافتراضي دايمًا مفعّل' : 'مفعّل للطلاب'}">
           <span class="tar-sw">${p.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>
           ${p.icon ? `<img src="${p.icon}" alt="" class="tar-icon">` : ''}
-          <span class="tar-name"><b>${esc(p.name)}</b><small>${esc(p.desc)}${def ? ' · الافتراضي' : ''}</small></span>
+          <span class="tar-edit"><input type="text" class="editor-input tar-name-in" value="${esc(p.name)}" placeholder="${esc(orig(p.id).name)}" maxlength="40" aria-label="اسم الثيم">
+            <input type="text" class="editor-input tar-desc-in" value="${esc(p.desc)}" placeholder="${esc(orig(p.id).desc)}" maxlength="60" aria-label="وصف الثيم">
+            ${def ? '<small>الافتراضي</small>' : ''}</span>
           <span class="tar-state">${on ? 'مفعّل' : 'مطفي'}</span>
-        </label>`; }).join('');
-      box.querySelectorAll('input').forEach(cb => cb.addEventListener('change', () => { const row = cb.closest('.theme-admin-row'); row.classList.toggle('off', !cb.checked); row.querySelector('.tar-state').textContent = cb.checked ? 'مفعّل' : 'مطفي'; }));
+        </div>`; }).join('');
+      const renumber = () => box.querySelectorAll('.theme-admin-row').forEach((r, i) => { r.querySelector('.tar-num').textContent = i + 1; });
+      box.querySelectorAll('.tar-on').forEach(cb => cb.addEventListener('change', () => { const row = cb.closest('.theme-admin-row'); row.classList.toggle('off', !cb.checked); row.querySelector('.tar-state').textContent = cb.checked ? 'مفعّل' : 'مطفي'; }));
+      box.querySelectorAll('.tar-up, .tar-down').forEach(b => b.addEventListener('click', () => {
+        const row = b.closest('.theme-admin-row');
+        if (b.classList.contains('tar-up') && row.previousElementSibling) row.parentNode.insertBefore(row, row.previousElementSibling);
+        if (b.classList.contains('tar-down') && row.nextElementSibling) row.parentNode.insertBefore(row.nextElementSibling, row);
+        renumber(); b.focus();
+      }));
+    };
+    window.resetThemesAdmin = async function() {
+      if (!await uiConfirm('ترجّع كل الأسماء والترتيب للأصل؟ (التفعيل والإطفاء ما بيتغيّر) — لازم تكبس «حفظ ونشر» بعدها.', { okText: 'رجّع' })) return;
+      const keep = siteSettings; siteSettings = Object.assign({}, siteSettings, { paletteOrder: [], paletteNames: {} });
+      renderThemesAdmin(); siteSettings = keep;
     };
     window.saveThemesAdmin = async function() {
       const cfg = getGithubConfig();
       if (!cfg) { toast('لازم تتحقق كمشرف أولًا.', 'error'); return; }
-      const disabled = [...document.querySelectorAll('#themes-admin-list input[data-pal]')].filter(cb => !cb.checked && cb.dataset.pal !== DEFAULT_PALETTE).map(cb => cb.dataset.pal);
-      const next = Object.assign({}, siteSettings, { disabledPalettes: disabled });
-      try { await githubPutJson(cfg, 'settings.json', next, `تعديل الثيمات المفعّلة (${PALETTES.length - disabled.length} من ${PALETTES.length})`); }
+      const rows = [...document.querySelectorAll('#themes-admin-list .theme-admin-row')];
+      const disabled = rows.filter(r => !r.querySelector('.tar-on').checked && r.dataset.pal !== DEFAULT_PALETTE).map(r => r.dataset.pal);
+      const order = rows.map(r => r.dataset.pal);
+      const names = {};
+      rows.forEach(r => { const o = PALETTES.find(x => x.id === r.dataset.pal); const n = r.querySelector('.tar-name-in').value.trim(), d = r.querySelector('.tar-desc-in').value.trim();
+        const v = {}; if (n && n !== o.name) v.name = n; if (d && d !== o.desc) v.desc = d; if (v.name || v.desc) names[o.id] = v; });
+      const same = order.every((id, i) => id === PALETTES[i].id);
+      const next = cleanSettings({ disabledPalettes: disabled, paletteOrder: same ? [] : order, paletteNames: names });
+      try { await githubPutJson(cfg, 'settings.json', next, `تعديل الثيمات (${PALETTES.length - disabled.length} مفعّل من ${PALETTES.length}${Object.keys(names).length ? `، ${Object.keys(names).length} اسم معدّل` : ''}${same ? '' : '، ترتيب جديد'})`); }
       catch (e) { toast('فشل النشر: ' + friendlyGithubError(e), 'error', 9000); return; }
       siteSettings = next;
       try { sessionStorage.setItem(PENDING_SETTINGS_KEY, JSON.stringify({ at: Date.now(), value: next })); } catch (e) {}
       renderThemesAdmin();
-      toast(disabled.length ? `تم — ${disabled.length} ثيم مطفي عن الطلاب. بيتحدّث عندهم خلال دقيقة.` : 'تم — كل الثيمات مفعّلة للطلاب.', 'success', 6000);
+      toast(`تم حفظ الثيمات (الأسماء والترتيب والتفعيل)${disabled.length ? ` — ${disabled.length} مطفي عن الطلاب` : ''}. بيتحدّث عندهم خلال دقيقة.`, 'success', 6000);
     };
 
     // ---- الجامعات ----
