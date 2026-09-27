@@ -381,6 +381,8 @@
   .day-chip.just-checked, .user-chip.just-checked{ animation:chipPop .32s ease; }
 
   .user-chip{ position:relative; display:inline-flex; align-items:center; gap:6px; padding:5px 10px 5px 8px; border-radius:999px; border:1px solid var(--line); background:var(--surface); font-size:12px; font-weight:700; color:var(--ink-soft); cursor:pointer; transition:.15s; user-select:none; }
+  .ms-more{ display:flex; margin:14px auto 4px; }
+  .ms-more-note{ text-align:center; font-size:12px; color:var(--ink-soft); margin:4px 0 0; }
   .full-toggle{ display:inline-flex; align-items:center; gap:6px; margin:0 0 8px; padding:6px 12px; border-radius:999px; border:none; background:var(--rose-soft); color:var(--rose-text); font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
   .full-toggle.on{ background:var(--paper); color:var(--ink-soft); }
   .full-toggle[hidden]{ display:none; }
@@ -1887,6 +1889,8 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
     let intentOnClose = null;
     window.openIntent = function(onClose) {
       intentOnClose = typeof onClose === 'function' ? onClose : null;
+      // جولة ظاهرة أو ناطرة؟ منسكّرها بدون ما نعتبرها خلصت — بترجع بعد ما يسكّر هالشباك
+      try { Object.keys(tourTimers).forEach(k => clearTimeout(tourTimers[k])); if (tour) { tourCleanup(); tour = null; } } catch (e) {}
       document.getElementById('intent-grid').innerHTML = INTENTS.map(x => `<button type="button" class="intent-card" onclick="chooseIntent('${x.id}')"><span class="em">${x.em}</span><span><b>${esc(x.t)}</b><small>${esc(x.d)}</small></span></button>`).join('');
       let off = false; try { off = !!localStorage.getItem(INTENT_OFF_KEY); } catch (e) {}
       document.getElementById('intent-off').checked = off;
@@ -1899,7 +1903,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       const cb = intentOnClose; intentOnClose = null;
       return cb;
     }
-    window.closeIntent = function() { const cb = finishIntent(); if (cb) cb(); };
+    window.closeIntent = function() { const cb = finishIntent(); if (cb) cb(); else setTimeout(() => maybeTour(currentTourContext()), 300); };
     function hasMySchedule() { const ms = loadMySchedule(); return !!(ms && ms.sections.length); }
     function goMain(tab) { if (isPhone()) mobileNav(tab); else switchResultsTab(tab); }
     window.chooseIntent = function(id) {
@@ -6416,7 +6420,8 @@ function populateBulkScope() {
           html += `<p class="ms-panel-note">ما في ولا حل حتى لو فضيت الفئات الممتلئة.</p></div>`;
           return html;
         }
-        html += cond.slice(0, MS_SHOW_SOLUTIONS).map((s, i) => {
+        const condLim = (d.showAll || {}).conditional ? cond.length : MS_SHOW_SOLUTIONS;
+        html += cond.slice(0, condLim).map((s, i) => {
           const ops = diffSchedules(base, s.sections);
           const fulls = fullSectionsOf(s.sections, base);
           return `<div class="ms-opt blocked">
@@ -6436,6 +6441,7 @@ function populateBulkScope() {
             </div>
           </div>`;
         }).join('');
+        html += msMoreBtnHTML(cond.length, condLim, 'conditional');
         html += `</div>`;
         return html;
       }
@@ -6472,7 +6478,8 @@ function populateBulkScope() {
             <li>كل حل تحته سطر «ليش هون» بيشرح موقعه.</li>
           </ul>
         </details>`;
-      html += avail.slice(0, MS_SHOW_SOLUTIONS).map((s, i) => {
+      const availLim = (d.showAll || {}).available ? avail.length : MS_SHOW_SOLUTIONS;
+      html += avail.slice(0, availLim).map((s, i) => {
         const ops = diffSchedules(base, s.sections);
         return `<div class="ms-opt">
           <div class="ms-opt-head">
@@ -6490,10 +6497,23 @@ function populateBulkScope() {
         </div>`;
       }).join('');
 
+      html += msMoreBtnHTML(avail.length, availLim, 'available');
       if (result.truncated) html += `<p class="ms-info">وقفنا البحث عند حد أقصى لحماية الأداء — الحلول المعروضة هي الأقل تعديلًا ضمن يلي فحصناه.</p>`;
       html += `</div>`;
       return html;
     }
+
+    // أول 10 حلول، وتحتهن زر بيعرض الباقي — بنفس الترتيب (الأفضل أولًا)
+    function msMoreBtnHTML(total, shown, which) {
+      if (total <= shown) return total > MS_SHOW_SOLUTIONS ? `<p class="ms-more-note">هيدي كل الخيارات (${total}) — مرتّبة من الأفضل للأقل.</p>` : '';
+      return `<button type="button" class="btn btn-secondary ms-more" onclick="msShowMore('${which}')">${ic('chevron')} عرض باقي الخيارات (${total - shown})</button>
+        <p class="ms-more-note">نعرض أفضل ${shown} من ${total} — الباقي مرتّب كمان من الأفضل للأقل.</p>`;
+    }
+    window.msShowMore = function(which) {
+      const d = msUI.data; if (!d) return;
+      d.showAll = Object.assign({}, d.showAll, { [which]: true });
+      const y = window.scrollY; renderMySchedule(); window.scrollTo(0, y);
+    };
 
     let msFixCache = {};   // الحلول المحسوبة لـ«شو لازم يتغيّر» — بتنمسح مع كل عرض
 
