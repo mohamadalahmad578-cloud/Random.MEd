@@ -1859,6 +1859,23 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
       { id:'pink', name:'وردي ناعم مع خوخي', desc:'نسائي وأنيق', sw:['#5A2140','#C2417A','#FBF3F5'], css: paletteCSS({ink:'#3B1F2B',inkSoft:'#6B5560',paper:'#FBF3F5',line:'#F1E1E6',acc:'#C2417A',accDeep:'#9D2F60',accA:'rgba(194,65,122,',hdr1:'#5A2140',hdr2:'#3A1229',chip:'rgba(249,168,212,.3)',chipText:'#FBCFE8',dPaper:'#140A0F',dSurface:'#21121A',dLine:'#3A2330',dAcc:'#F49AC1',dBtn:'#DB5C93',dInput:'#2A1822'}) },
       { id:'lavender', name:'لافندر ليلكي', desc:'نسائي هادي', sw:['#FFFFFF','#8B5CF6','#F7F5FC'], css: paletteCSS({ink:'#2E2640',inkSoft:'#6A6380',paper:'#F7F5FC',line:'#E9E4F5',acc:'#8B5CF6',accDeep:'#7C3AED',accA:'rgba(139,92,246,',inkFixed:'#3B2F5C',hdr1:'#FFFFFF',hdr2:'#FFFFFF',chip:'rgba(139,92,246,.12)',dPaper:'#0F0C17',dSurface:'#1A1626',dLine:'#2E2842',dAcc:'#C4B5FD',dBtn:'#8B5CF6',dInput:'#231E33',lightHeader:true}) },
       { id:'charcoal', name:'رمادي فحمي مع برتقالي', desc:'جريء ولافت', sw:['#18181B','#EA580C','#F4F4F5'], css: paletteCSS({ink:'#18181B',inkSoft:'#52525B',paper:'#F4F4F5',line:'#E4E4E7',acc:'#EA580C',accDeep:'#C2410C',accA:'rgba(234,88,12,',hdr1:'#18181B',hdr2:'#09090B',chip:'rgba(249,115,22,.3)',dPaper:'#09090B',dSurface:'#18181B',dLine:'#27272A',dAcc:'#FB923C',dBtn:'#EA580C',dInput:'#232326'}) },
+      { id:'hasan', name:'hasan', desc:'برغندي ملكي مع ذهبي', sw:['#4A0E1E','#8B1E3F','#F8F3F4'], css: paletteCSS({ink:'#2A1418',inkSoft:'#6A5458',paper:'#F8F3F4',line:'#EEDFE2',acc:'#8B1E3F',accDeep:'#6E1530',accA:'rgba(139,30,63,',hdr1:'#4A0E1E',hdr2:'#2B0610',chip:'rgba(212,175,55,.3)',chipText:'#F3D98B',dPaper:'#120709',dSurface:'#1E0E12',dLine:'#3A2027',dAcc:'#E48AA5',dBtn:'#B23A5E',dInput:'#28131A'}) + `
+  .brand-word i{ color:#E0B84F !important; }` },
+      { id:'tweety', name:'تويتي', desc:'أصفر مشمس مع أزرق', sw:['#FFD400','#1E88E5','#FFFDF3'], css: paletteCSS({ink:'#2B2410',inkSoft:'#6B5E3A',paper:'#FFFDF3',line:'#F3E9C2',acc:'#B45309',accDeep:'#92400E',accA:'rgba(255,196,0,',hdr1:'#FFD400',hdr2:'#FFC107',inkFixed:'#2B2410',chip:'rgba(43,36,16,.12)',dPaper:'#15120A',dSurface:'#211C0F',dLine:'#3B331B',dAcc:'#FFD84D',dBtn:'#FFD400',dBtnText:'#1A1A1A',dInput:'#2A2413',dHdr1:'#3A2F0A',dHdr2:'#211B06'}) + `
+  .header{ color:#2B2410 !important; }
+  .header .header-sub{ color:#5C4E1E !important; border-color:rgba(0,0,0,.15) !important; }
+  .header .hdr-btn{ background:rgba(0,0,0,.08) !important; color:#2B2410 !important; }
+  .header .college-chip{ color:#2B2410 !important; }
+  .header .college-chip .college-chip-change{ color:#5C4E1E !important; }
+  .header .data-freshness{ background:rgba(0,0,0,.08) !important; color:#5C4E1E !important; }
+  .header .data-freshness strong, .header .brand-word{ color:#2B2410 !important; }
+  .brand-word i{ color:#1E88E5 !important; }
+  .btn-primary, .gen-fab button{ background:#1E88E5 !important; box-shadow:0 4px 14px rgba(30,136,229,.35) !important; }
+  .type-badge.theory{ background:#F28C28 !important; }
+  :root[data-theme="dark"] .header, :root[data-theme="dark"] .header .brand-word, :root[data-theme="dark"] .header .data-freshness strong{ color:#FFF3B0 !important; }
+  :root[data-theme="dark"] .header .hdr-btn{ background:rgba(255,255,255,.1) !important; color:#FFF3B0 !important; }
+  :root[data-theme="dark"] .header .college-chip, :root[data-theme="dark"] .header .data-freshness{ color:#FFE680 !important; background:rgba(255,212,0,.14) !important; }
+  :root[data-theme="dark"] .brand-word i{ color:#FFD400 !important; }` },
     ];
     function paletteById(id) { return PALETTES.find(p => p.id === id) || PALETTES.find(p => p.id === DEFAULT_PALETTE); }
     function savedPalette() { try { return localStorage.getItem(PALETTE_KEY); } catch (e) { return null; } }
