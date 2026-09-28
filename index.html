@@ -4337,7 +4337,7 @@ function populateBulkScope() {
             sh: shareW ? -ch.reduce((s, x) => s + (shareW[x.id] || 0), 0) : 0,
             c: ch.filter(isSectionClosed).length,
             p: (ext && prefs.length) ? prefScore(current.concat(ch), prefs) : 0 }))
-          .sort((a, b) => (a.sh - b.sh) || (a.c - b.c) || (a.p - b.p))
+          .sort((a, b) => (a.c - b.c) || (a.sh - b.sh) || (a.p - b.p))   // المقاعد أولًا، بعدها الفئات المشتركة مع الأصدقاء
           .map(x => x.ch);
       }
       function combine(depth, currentSchedule, pool, sink, cap, orderFn) {
@@ -4749,20 +4749,26 @@ function populateBulkScope() {
         Object.values(meta[a].perT).forEach(l => l.forEach(m => anchors.add(m)));
         meta[a].ranked.forEach(m => { if (m.s.__cover) anchors.add(m); });
         anchors.forEach(am => {
-          const chosen = []; chosen[a] = am;
-          const union = new Set(am.ids);
-          users.forEach((v, b) => {
-            if (b === a) return;
-            let best = null, bestOv = -1;
-            for (const m of meta[b].use) {
-              let ov = 0; m.ids.forEach(id => { if (union.has(id)) ov++; });
-              if (ov > bestOv || (ov === bestOv && ((m.c - best.c) || (m.p - best.p)) < 0)) { best = m; bestOv = ov; }
-            }
-            chosen[b] = best; best.ids.forEach(id => union.add(id));
+          // مرتين لكل مرجع: الأكتر تشابهًا، والأقل فئات ممتلئة ثم الأكتر تشابهًا
+          [false, true].forEach(seatsFirst => {
+            const chosen = []; chosen[a] = am;
+            const union = new Set(am.ids);
+            users.forEach((v, b) => {
+              if (b === a) return;
+              let best = null, bestOv = -1;
+              for (const m of meta[b].use) {
+                let ov = 0; m.ids.forEach(id => { if (union.has(id)) ov++; });
+                const better = !best ? true : seatsFirst
+                  ? (m.c < best.c || (m.c === best.c && (ov > bestOv || (ov === bestOv && m.p < best.p))))
+                  : (ov > bestOv || (ov === bestOv && ((m.c - best.c) || (m.p - best.p)) < 0));
+                if (better) { best = m; bestOv = ov; }
+              }
+              chosen[b] = best; best.ids.forEach(id => union.add(id));
+            });
+            const g = chosen.map((m, i) => ({ userIndex: users[i].userIndex, schedule: m.s }));
+            const k = groupKey(g);
+            if (!out.has(k)) out.set(k, g);
           });
-          const g = chosen.map((m, i) => ({ userIndex: users[i].userIndex, schedule: m.s }));
-          const k = groupKey(g);
-          if (!out.has(k)) out.set(k, g);
         });
       });
       return [...out.values()];
@@ -4785,7 +4791,7 @@ function populateBulkScope() {
         if (!unc.length) break;
         const slots = target - sel.length;
         let best = null, bestNew = 0;
-        for (const g of ranked) {                       // ranked مرتّب مسبقًا: تشابه ↓ ثم ممتلئة ↑ ثم تفضيل ↑
+        for (const g of ranked) {                       // ranked مرتّب مسبقًا: ممتلئة ↑ ثم تشابه ↓ ثم تفضيل ↑
           if (used.has(g)) continue;
           let n = 0; keysOf(g).forEach(k => { if (!covered.has(k)) n++; });
           if (!n) continue;
@@ -4796,7 +4802,7 @@ function populateBulkScope() {
         used.add(best); sel.push(best); keysOf(best).forEach(k => covered.add(k));
       }
       for (const g of ranked) { if (sel.length >= target) break; if (!used.has(g)) { used.add(g); sel.push(g); } }
-      sel.sort((a, b) => (b.score - a.score) || (a.closedCount - b.closedCount) || ((a.pref || 0) - (b.pref || 0)));
+      sel.sort((a, b) => (a.closedCount - b.closedCount) || (b.score - a.score) || ((a.pref || 0) - (b.pref || 0)));
       return sel;
     }
 
@@ -4971,7 +4977,7 @@ function populateBulkScope() {
 
       const gPrefs = activePrefs();
       if (gPrefs.length) scoredGroups.forEach(g => { g.pref = g.groupSchedules.reduce((s, p) => s + prefScore(p.schedule, gPrefs), 0); });
-      scoredGroups.sort((a, b) => (b.score - a.score) || (a.closedCount - b.closedCount) || ((a.pref || 0) - (b.pref || 0)));
+      scoredGroups.sort((a, b) => (a.closedCount - b.closedCount) || (b.score - a.score) || ((a.pref || 0) - (b.pref || 0)));   // المقاعد المتاحة ← التشابه ← التفضيلات
       scoredGroups = selectGroupTop(scoredGroups, 10);
       let limit = Math.min(scoredGroups.length, 10);
 
