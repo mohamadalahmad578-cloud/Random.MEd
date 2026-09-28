@@ -509,6 +509,8 @@
   .results-tab{ flex:1 1 0; min-width:0; white-space:nowrap; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:10px 8px; border:none; border-radius:9px; background:transparent; color:var(--ink-soft); font-family:var(--font-display); font-weight:700; font-size:13.5px; cursor:pointer; transition:background-color .2s ease, color .2s ease, box-shadow .2s ease; }
   .results-tab:hover{ color:var(--ink); }
   .results-tab.active{ background:var(--surface); color:var(--ink); box-shadow:0 1px 3px rgba(20,27,46,.1); }
+  .friends-rank{ margin-bottom:6px; }
+  .friends-rank-note{ font-size:12px; color:var(--ink-soft); margin:0 0 12px; text-align:center; }
   .results-tab#tab-favorites.active{ color:var(--brass-deep); }
   .tab-count{ min-width:20px; height:20px; padding:0 6px; border-radius:999px; background:var(--brass-badge); color:#fff; font-size:11px; font-family:var(--font-mono); display:inline-flex; align-items:center; justify-content:center; }
   .tab-count.zero{ background:var(--line); color:var(--ink-soft); }
@@ -4778,6 +4780,18 @@ function populateBulkScope() {
     //   الشمولية مضمونة (كل فئة نظري لكل شخص لازم تظهر) وبنفس الوقت أعلى تشابه ممكن وأفضل توافر.
     //   لما في مجال كافي (باقي أماكن أكتر من الناقص)، منختار الأعلى تشابهًا يلي بيغطي أي شي جديد.
     //   لما المجال ضيّق، منضحّي بشوي تشابه حتى نضمن التغطية الكاملة (نختار الأكتر تغطية).
+    // ترتيب مطابقات الأصدقاء: «المقاعد أولًا» (الافتراضي) أو «التشابه أولًا» — تبويبين فوق النتائج
+    const FRIENDS_RANK_KEY = 'spu_friends_rank';
+    function friendsRankMode() { try { return localStorage.getItem(FRIENDS_RANK_KEY) === 'shared' ? 'shared' : 'seats'; } catch (e) { return 'seats'; } }
+    function groupCmp(mode) {
+      return mode === 'shared'
+        ? (a, b) => (b.score - a.score) || (a.closedCount - b.closedCount) || ((a.pref || 0) - (b.pref || 0))
+        : (a, b) => (a.closedCount - b.closedCount) || (b.score - a.score) || ((a.pref || 0) - (b.pref || 0));
+    }
+    window.setFriendsRank = function(mode) {
+      try { localStorage.setItem(FRIENDS_RANK_KEY, mode === 'shared' ? 'shared' : 'seats'); } catch (e) {}
+      runGenerator();
+    };
     function selectGroupTop(ranked, target) {
       const keysOf = g => {
         if (!g.__keys) { g.__keys = new Set(); g.groupSchedules.forEach(p => p.schedule.forEach(s => { if (s.type === 'theory') g.__keys.add(p.userIndex + ':' + s.id); })); }
@@ -4802,7 +4816,7 @@ function populateBulkScope() {
         used.add(best); sel.push(best); keysOf(best).forEach(k => covered.add(k));
       }
       for (const g of ranked) { if (sel.length >= target) break; if (!used.has(g)) { used.add(g); sel.push(g); } }
-      sel.sort((a, b) => (a.closedCount - b.closedCount) || (b.score - a.score) || ((a.pref || 0) - (b.pref || 0)));
+      sel.sort(groupCmp(friendsRankMode()));
       return sel;
     }
 
@@ -4977,10 +4991,16 @@ function populateBulkScope() {
 
       const gPrefs = activePrefs();
       if (gPrefs.length) scoredGroups.forEach(g => { g.pref = g.groupSchedules.reduce((s, p) => s + prefScore(p.schedule, gPrefs), 0); });
-      scoredGroups.sort((a, b) => (a.closedCount - b.closedCount) || (b.score - a.score) || ((a.pref || 0) - (b.pref || 0)));   // المقاعد المتاحة ← التشابه ← التفضيلات
+      const rankMode = friendsRankMode();
+      scoredGroups.sort(groupCmp(rankMode));   // المقاعد أولًا (الافتراضي) أو التشابه أولًا — حسب التبويب   // المقاعد المتاحة ← التشابه ← التفضيلات
       scoredGroups = selectGroupTop(scoredGroups, 10);
       let limit = Math.min(scoredGroups.length, 10);
 
+      resultsHtml += `<div class="results-tabs friends-rank" role="tablist" aria-label="ترتيب المطابقات">
+          <button type="button" role="tab" class="results-tab ${rankMode === 'seats' ? 'active' : ''}" aria-selected="${rankMode === 'seats'}" onclick="setFriendsRank('seats')">🟢 المقاعد أولًا</button>
+          <button type="button" role="tab" class="results-tab ${rankMode === 'shared' ? 'active' : ''}" aria-selected="${rankMode === 'shared'}" onclick="setFriendsRank('shared')">🤝 التشابه أولًا</button>
+        </div>
+        <p class="friends-rank-note">${rankMode === 'seats' ? 'الجداول يلي كل فئاتها متاحة أول، وبعدها الأكتر فئات مشتركة بيناتكن.' : 'الأكتر فئات مشتركة بيناتكن أول — حتى لو فيها فئة ممتلئة — وبعدها المتاحة.'}</p>`;
       resultsHtml += `<h3 class="result-heading" style="color:var(--teal);">أفضل ${limit} مطابقة جماعية</h3>`;
       resultsHtml += `<label class="closed-filter"><input type="checkbox" id="hide-closed-toggle" ${hideClosedSchedules() ? 'checked' : ''} onchange="toggleClosedFilter()"> إخفاء الجداول التي تحوي فئة ممتلئة</label>`;
       for (let idx = 0; idx < limit; idx++) {
