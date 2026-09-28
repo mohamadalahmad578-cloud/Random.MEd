@@ -1124,7 +1124,11 @@ body:not(.admin-device) .admin-only{ display:none !important; }
 .gpa-impact{ grid-column:1 / -1; font-size:11.5px; color:var(--ink-soft); }
 .gpa-impact:empty{ display:none; }
 .gpa-impact b{ color:var(--ink); }
-.gpa-scen{ display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:8px; }
+.gpa-scen{ display:grid; grid-template-columns:repeat(auto-fill, minmax(96px,1fr)); gap:8px; }
+.gpa-scen-pick{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:10px; }
+.gpa-scen-chip{ min-width:40px; padding:5px 9px; border-radius:999px; border:1.5px solid var(--line, #ccc); background:var(--paper); color:var(--ink-soft); font:inherit; font-size:12.5px; font-weight:700; cursor:pointer; }
+.gpa-scen-chip.on{ background:var(--brass-deep); border-color:var(--brass-deep); color:#fff; }
+.gpa-scen-acts{ margin-inline-start:auto; font-size:12.5px; }
 .gpa-scen-item{ background:var(--paper); border-radius:12px; padding:10px 6px; text-align:center; display:flex; flex-direction:column; gap:2px; }
 .gpa-scen-item b{ font-size:12px; color:var(--ink-soft); }
 .gpa-scen-item span{ font-size:11px; color:var(--ink-soft); }
@@ -2378,7 +2382,7 @@ body.tp-first .theme-picker #tp-cancel{ display:none; }
         { sel: '#gpa-cgpa', title: 'معدلك قبل هالفصل', text: 'اكتب معدلك التراكمي وساعاتك المنجزة من كشف العلامات (بدون الساعات المعادلة). بدونهن بينحسب معدل الفصل بس.' },
         { sel: '[onclick="gpaFromSchedule()"]', title: 'جيب موادك', text: 'بيعبّي مواد «جدولي» مع ساعاتها لحالها. أو ضيف مادة بإيدك من «+ مادة».' },
         { sel: '#gpa-rows .gpa-row', title: 'علامة كل مادة', text: 'اختار العلامة بالحرف، أو اكتبها من 100 وبتتحوّل لحالها (مثلًا 96 ← A). إذا عم تعيد المادة، علّم «عم أعيد» واختار علامتك القديمة — الجديدة بتحل محلها.' },
-        { sel: '#gpa-scen-box', title: 'لو جبت…', text: 'شو بيصير معدلك إذا جبت نفس العلامة بكل مواد هالفصل — من A لـ C.' },
+        { sel: '#gpa-scen-box', title: 'لو جبت…', text: 'شو بيصير معدلك إذا جبت نفس العلامة بكل مواد هالفصل — اكبس على العلامات لتختار أنت شو ينعرض، أو «كلهن».' },
         { sel: '#gpa-target', title: 'شو لازم جيب؟', text: 'اكتب المعدل يلي بدك توصلو، وبيقلّك المعدل المطلوب بهالفصل — أو إذا مو ممكن، أو مضمون.' },
         { sel: '#gpa-history-box', title: 'سجل الفصول', text: 'لما تخلص فصل اكبس «حفظ هالفصل بالسجل». التراكمي بينحسب من السجل لحاله، والرسم بيبين تطوّر معدلك. وتحت: الطلعة من الإنذار، التخرج، ومقارنة خطط «جدولي».' },
       ]},
@@ -5818,11 +5822,22 @@ function populateBulkScope() {
 
     // «لو جبت…»: كل مواد الفصل بنفس العلامة
     const GPA_SCENARIOS = ['A', 'B+', 'B', 'C+', 'C'];
+    // العلامات يلي بتنعرض: اختيار الطالب (محفوظ) أو الافتراضي — دايمًا بترتيب السلّم
+    function scenarioGrades(st) {
+      const scale = gradeScale().map(x => x.l);
+      const pick = Array.isArray(st.scenGrades) ? st.scenGrades : GPA_SCENARIOS;
+      const out = scale.filter(l => pick.includes(l));
+      return out.length || Array.isArray(st.scenGrades) ? out : scale.slice(0, 5);
+    }
     function scenariosHTML(st, r) {
       if (!(r.rowsH > 0)) return '<p class="gpa-muted">ضيف مواد هالفصل مع ساعاتها لتشوف السيناريوهات.</p>';
-      const b = baseBeforeCurrent(st);
-      return `<div class="gpa-scen">${GPA_SCENARIOS.map(g => { const x = applySemester(b.acc, st.rows, g); const cum = x.H > 0 && (b.hasPrev || x.semH) ? x.P / x.H : NaN; const warn = Number.isFinite(cum) && cum < probationLimit();
-        return `<div class="gpa-scen-item ${warn ? 'warn' : ''}"><b>كلهن ${esc(g)}</b><span>الفصل ${fmtGpa(x.semH ? x.semP / x.semH : NaN)}</span><strong>${fmtGpa(cum)}</strong><small>${b.hasPrev ? 'التراكمي' : 'معدل الفصل'}${honorsFor(cum) ? ' · ' + esc(honorsFor(cum)) : ''}</small></div>`; }).join('')}</div>`;
+      const b = baseBeforeCurrent(st), shown = scenarioGrades(st), scale = gradeScale();
+      const custom = Array.isArray(st.scenGrades), all = shown.length === scale.length;
+      const picker = `<div class="gpa-scen-pick" role="group" aria-label="اختار العلامات">${scale.map(g => `<button type="button" dir="ltr" class="gpa-scen-chip ${shown.includes(g.l) ? 'on' : ''}" data-scen="${esc(g.l)}" aria-pressed="${shown.includes(g.l)}">${esc(g.l)}</button>`).join('')}
+        <span class="gpa-scen-acts">${all ? '' : '<button type="button" class="gpa-link" data-scen-all="1">كلهن</button>'}${custom ? ' <button type="button" class="gpa-link" data-scen-reset="1">الافتراضي</button>' : ''}</span></div>`;
+      if (!shown.length) return picker + '<p class="gpa-muted">اختار علامة أو أكتر من فوق.</p>';
+      return picker + `<div class="gpa-scen">${shown.map(g => { const x = applySemester(b.acc, st.rows, g); const cum = x.H > 0 && (b.hasPrev || x.semH) ? x.P / x.H : NaN; const warn = Number.isFinite(cum) && cum < probationLimit();
+        return `<div class="gpa-scen-item ${warn ? 'warn' : ''}"><b>كلهن <bdi dir="ltr">${esc(g)}</bdi></b><span>الفصل ${fmtGpa(x.semH ? x.semP / x.semH : NaN)}</span><strong>${fmtGpa(cum)}</strong><small>${b.hasPrev ? 'التراكمي' : 'معدل الفصل'}${honorsFor(cum) ? ' · ' + esc(honorsFor(cum)) : ''}</small></div>`; }).join('')}</div>`;
     }
 
     // الطلعة من الإنذار والتخرج
@@ -6031,7 +6046,7 @@ function populateBulkScope() {
             <button type="button" class="btn btn-ghost" onclick="gpaAddRow()">${ic('plus')} مادة</button>
             ${st.rows.length ? `<button type="button" class="btn btn-teal" onclick="gpaSaveSemester()">💾 حفظ هالفصل بالسجل</button><button type="button" class="btn btn-ghost" onclick="gpaClear()">${ic('trash')} مسح المواد</button>` : ''}
           </div></div>
-        <div class="gpa-card"><h3>🔮 لو جبت…</h3><p>شو بيصير معدلك إذا جبت نفس العلامة بكل مواد هالفصل.</p><div id="gpa-scen-box"></div></div>
+        <div class="gpa-card"><h3>🔮 لو جبت…</h3><p>شو بيصير معدلك إذا جبت نفس العلامة بكل مواد هالفصل — اختار العلامات يلي بدك تشوفها، أو «كلهن».</p><div id="gpa-scen-box"></div></div>
         <div class="gpa-card"><h3>🔄 لو سحبت مادة</h3><p>شو بيصير بمعدلك إذا سحبت (W) وحدة من مواد هالفصل — المسحوبة ما بتدخل بالمعدل ولا بالساعات.</p><div id="gpa-wd-box"></div></div>
         <div class="gpa-card"><h3>🎯 شو لازم جيب؟</h3><p>اكتب المعدل التراكمي يلي بدك توصلو آخر هالفصل.</p>
           <div class="gpa-target">
@@ -6093,6 +6108,13 @@ function populateBulkScope() {
       if (!gpaState || !e.target.closest) return;
       const b = e.target.closest('#gpa-container [data-del]');
       if (b) { const snap = gpaSnap(), id = b.closest('.gpa-row').dataset.id, gone = gpaState.rows.find(r => r.id === id); gpaState.rows = gpaState.rows.filter(r => r.id !== id); saveGPA(gpaState); renderGPA(); gpaUndoToast(`انحذفت «${(gone && gone.name) || 'المادة'}»`, snap); return; }
+      const sc = e.target.closest('#gpa-container [data-scen], #gpa-container [data-scen-all], #gpa-container [data-scen-reset]');
+      if (sc) {
+        if (sc.dataset.scenReset) delete gpaState.scenGrades;
+        else if (sc.dataset.scenAll) gpaState.scenGrades = gradeScale().map(x => x.l);
+        else { const cur = scenarioGrades(gpaState), g = sc.dataset.scen; gpaState.scenGrades = cur.includes(g) ? cur.filter(x => x !== g) : cur.concat(g); }
+        saveGPA(gpaState); renderGPA(); return;
+      }
       const wdb = e.target.closest('#gpa-container [data-wd], #gpa-container [data-unwd]');
       if (wdb) { const id = wdb.dataset.wd || wdb.dataset.unwd, row = gpaState.rows.find(r => r.id === id); if (!row) return; const snap = gpaSnap(); row.withdrawn = !!wdb.dataset.wd; saveGPA(gpaState); renderGPA();
         if (row.withdrawn) gpaUndoToast(`«${row.name || 'المادة'}» صارت مسحوبة (W)`, snap); return; }
@@ -6142,7 +6164,7 @@ function populateBulkScope() {
       history: { label: 'سجل الفصول',                          run: st => { st.history = []; st.form = null; } },
       prev:    { label: 'المعدل السابق (المعدل والساعات)',     run: st => { st.cgpa = ''; st.done = ''; } },
       pre:     { label: 'الراسبة والشرطية قبل السجل',          run: st => { st.pre = { failed: [], cond: [] }; } },
-      goals:   { label: 'الأهداف والإعدادات (الهدف، هدف التخرج، العلامة المفترضة)', run: st => { st.target = ''; st.gradTarget = ''; delete st.planAssume; } },
+      goals:   { label: 'الأهداف والإعدادات (الهدف، هدف التخرج، العلامة المفترضة)', run: st => { st.target = ''; st.gradTarget = ''; delete st.planAssume; delete st.scenGrades; } },
     };
     window.gpaWipe = async function(what) {
       const w = GPA_WIPE[what]; if (!w) return;
