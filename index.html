@@ -4571,6 +4571,11 @@ function populateBulkScope() {
       const cmp = (a, b) => { const x = key(a), y = key(b); for (let i = 0; i < x.length; i++) if (x[i] !== y[i]) return x[i] - y[i]; return 0; };
       if (d.result && d.result.solutions) d.result.solutions.sort(cmp);
       if (d.conditional) d.conditional.sort(cmp);
+      if (d.dropOpts) {
+        const lostH = x => x.dropped.reduce((n, c) => n + (creditsOf(c) || 0), 0);
+        d.dropOpts.forEach(x => { x.pref = P.length ? prefScore(x.sections, P) : 0; });
+        d.dropOpts.sort((a, b) => (a.dropped.length - b.dropped.length) || (lostH(a) - lostH(b)) || (a.pref - b.pref) || (a.changes - b.changes));
+      }
     }
 
     // إذا الجدول تجاوز حد الساعات: شو أقل سحب بيرجّعه تحت الحد؟ (ما منقترح سحب مادة مثبّتة أو مادة عم تضيفها)
@@ -6707,6 +6712,7 @@ function populateBulkScope() {
 
     function renderSolutionsHTML(d) {
       const { result, conditional, addCourses, dropCourses, base } = d;
+      const dropOpts = d.dropOpts || [];
       const sub = d.subtab || 'available';
       const avail = result.solutions;            // مضمون: صفر فئات ممتلئة
       const cond = conditional || [];
@@ -6718,7 +6724,28 @@ function populateBulkScope() {
         <div class="results-tabs" style="margin-bottom:12px;">
           <button class="results-tab ${sub === 'available' ? 'active' : ''}" onclick="msSolutionsTab('available')">${ic('check')} حلول متاحة <span class="tab-count ${avail.length ? '' : 'zero'}">${avail.length}</span></button>
           <button class="results-tab ${sub === 'conditional' ? 'active' : ''}" onclick="msSolutionsTab('conditional')">${ic('users')} لو فضي مقعد <span class="tab-count ${cond.length ? '' : 'zero'}">${cond.length}</span></button>
+          ${addCourses.length ? `<button class="results-tab ${sub === 'drop' ? 'active' : ''}" onclick="msSolutionsTab('drop')" title="حلول بالفئات المتاحة إذا سحبت مادة">🔄 مع سحب <span class="tab-count ${dropOpts.length ? '' : 'zero'}">${dropOpts.length}</span></button>` : ''}
         </div>`;
+
+      if (sub === 'drop') {
+        html += `<details class="ms-explain"><summary>${ic('alert')} شو هدول؟</summary><ul>
+            <li>حلول <strong>كل فئاتها متاحة</strong> بس بتحتاج <strong>تسحب مادة</strong> من جدولك حتى تزبط — هاد آخر خيار بنفكّر فيه.</li>
+            <li><strong>الترتيب:</strong> ١) أقل عدد مواد بتنسحب ← ٢) أقل ساعات بتخسرها ← ٣) ${activePrefs().length ? 'تفضيلاتك ← ٤) ' : ''}أقل تغييرات على الباقي.</li></ul></details>`;
+        if (!dropOpts.length) { html += `<p class="ms-panel-note">ما في حل بالفئات المتاحة حتى لو سحبت مادة أو مادتين.</p></div>`; return html; }
+        const dLim = (d.showAll || {}).drop ? dropOpts.length : MS_SHOW_SOLUTIONS;
+        html += dropOpts.slice(0, dLim).map((s, i) => {
+          const ops = diffSchedules(base, s.sections);
+          return `<div class="ms-opt drop">
+            <div class="ms-opt-head"><span class="ms-opt-title">خيار #${i + 1}</span>
+              <span><span class="ms-badge full">🔄 بتسحب ${s.dropped.map(c => `«${esc(c)}»`).join(' و')}</span> <span class="ms-badge open">🟢 كل الفئات متاحة</span></span></div>
+            ${opsListHTML(ops)}
+            <div style="margin-top:6px;">${creditsTotalHTML(s.sections)}${metricsChipsHTML(s.sections)}</div>
+            <div class="ms-toolbar" style="margin-top:10px;"><button class="btn btn-secondary" onclick="msPreviewDropOpt(${i})">${ic('zap')} توليد هذا الجدول</button></div>
+          </div>`; }).join('');
+        html += msMoreBtnHTML(dropOpts.length, dLim, 'drop');
+        html += `</div>`;
+        return html;
+      }
 
       if (result.blocked.length && sub === 'available') {
         html += result.blocked.map(b => `<div class="ms-warn">${ic('alert')} ما في ولا فئة صالحة لمادة «${esc(b.course)}» ضمن القيود الحالية:<ul class="ms-diff" style="margin-top:6px;">${b.info.rejected.map(r => `<li>• ${esc(r.section.className)} — ${rejectReasonText(r, base)}</li>`).join('')}</ul></div>`).join('');
@@ -6766,6 +6793,7 @@ function populateBulkScope() {
 
       if (!avail.length) {
         html += `<div class="ms-warn">${ic('alert')} ما لقينا جدول متاح يحقق طلبك بدون تغييرات أكبر.</div>`;
+        if (dropOpts.length) html += `<div class="ms-info">🔄 في <strong>${dropOpts.length}</strong> حل بالفئات المتاحة إذا سحبت مادة — <button type="button" class="btn btn-ghost" style="padding:4px 10px" onclick="msSolutionsTab('drop')">شوفهن</button></div>`;
         // لكل فئة من المواد المطلوب إضافتها: شو لازم يتغيّر حتى تزبط؟
         msFixCache = {};
         let fixesHTML = '';
@@ -7746,8 +7774,27 @@ function populateBulkScope() {
         .filter((s, i, arr) => arr.findIndex(t => t.sections.map(x => x.id).sort().join() === s.sections.map(x => x.id).sort().join()) === i);
       const conditional = withFull.solutions.filter(unlockedFull);
       rankMsSolutions({ result, conditional });
-      msUI = { mode: 'solutions', data: { result, conditional, addCourses, dropCourses, base, subtab: subtab || 'available' } };
+      const dropOpts = addCourses.length ? msDropOptions(base, addCourses, dropCourses, locked) : [];
+      msUI = { mode: 'solutions', data: { result, conditional, dropOpts, addCourses, dropCourses, base, subtab: subtab || 'available' } };
       renderMySchedule();
+    }
+    // آخر حل: «بيزبط بالفئات المتاحة إذا سحبت مادة» — مادة وحدة أول، وإذا ما في منجرّب مادتين
+    function msDropOptions(base, addCourses, dropCourses, locked) {
+      const L = getLocks();
+      const cands = [...new Set(base.map(courseNameOf))].filter(c => !addCourses.includes(c) && !dropCourses.includes(c) && !L.courses.includes(c) && !base.some(x => courseNameOf(x) === c && locked.includes(x.id)));
+      const out = [], seen = new Set();
+      const tryDrop = extra => {
+        const r = solveSchedule(base, addCourses, [...dropCourses, ...extra], { allowFull: false, locked });
+        r.solutions.forEach(sol => { const key = sol.sections.map(x => x.id).sort().join('|'); if (seen.has(key)) return; seen.add(key); out.push(Object.assign({}, sol, { dropped: extra.slice() })); });
+      };
+      cands.forEach(c => tryDrop([c]));
+      if (!out.length && cands.length > 1) for (let i = 0; i < cands.length; i++) for (let j = i + 1; j < cands.length; j++) { if (i * cands.length + j > 60) break; tryDrop([cands[i], cands[j]]); }
+      const P = activePrefs();
+      out.forEach(s => { s.pref = P.length ? prefScore(s.sections, P) : 0; });
+      // أقل مواد مسحوبة ← أقل ساعات بتخسرها ← التفضيلات ← أقل تغييرات
+      const lostH = s => s.dropped.reduce((n, c) => n + (creditsOf(c) || 0), 0);
+      out.sort((a, b) => (a.dropped.length - b.dropped.length) || (lostH(a) - lostH(b)) || (a.pref - b.pref) || (a.changes - b.changes));
+      return out.slice(0, MS_MAX_SOLUTIONS);
     }
     window.msSolutionsTab = function(t) { if (msUI.data) { msUI.data.subtab = t; renderMySchedule(); } };
 
@@ -7828,6 +7875,13 @@ function populateBulkScope() {
       msChangeTo(courseName, sectionId);
     };
 
+    window.msPreviewDropOpt = async function(i) {
+      const d = msUI.data; if (!d) return;
+      const sol = (d.dropOpts || [])[i]; if (!sol) return;
+      if (!await uiConfirm(`هالخيار بيسحب ${sol.dropped.map(c => `«${c}»`).join(' و')} من جدولك. بدك تشوفه؟`, { okText: 'شوف الجدول' })) return;
+      msUI = { mode: 'preview', data: { base: d.base, candidate: cloneSections(sol.sections), from: d } };
+      renderMySchedule();
+    };
     window.msPreviewSolution = function(i) {
       const d = msUI.data; if (!d) return;
       const sol = d.result.solutions[i]; if (!sol) return;
