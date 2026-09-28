@@ -5677,19 +5677,20 @@ function populateBulkScope() {
     // ---- الحساب ----
     // بيطبّق فصل (قائمة مواد) على مجموع النقاط والساعات — والمادة المعادة علامتها الجديدة بتحل محل القديمة
     function applySemester(acc, rows, gradeOverride) {
-      let { P, H, done } = acc, semP = 0, semH = 0, repP = 0, repH = 0, rowsH = 0;
+      let { P, H, done } = acc, semP = 0, semH = 0, repP = 0, repH = 0, planRepP = 0, planRepH = 0, rowsH = 0;
       (rows || []).forEach(r => {
         const h = parseFloat(r.hours); if (!(h > 0) || r.withdrawn) return;   // المسحوبة (W) ما بتدخل بالمعدل ولا بالساعات
         rowsH += h;
         const oldP = r.repeat ? gradePoints(r.oldGrade) : null;
-        if (oldP != null) { repP += oldP * h; repH += h; }
+        if (oldP != null) { planRepP += oldP * h; planRepH += h; }          // للتخطيط («شو لازم جيب»): القديمة رح تنستبدل أكيد
         const g = gradeOverride || r.grade, p = gradePoints(g);
-        if (p == null) return;
+        if (p == null) return;                                              // بلا علامة جديدة لسا: القديمة بتضل محسوبة
+        // الإعادة: العلامة الجديدة بتحل محل القديمة — منشيل القديمة (نقاطها وساعاتها، ومن المنجز إذا كانت ناجحة)
+        if (oldP != null) { repP += oldP * h; repH += h; if (oldP > 0) done -= h; }
         semP += p * h; semH += h;
-        if (g !== 'F' && !(oldP != null && r.oldGrade !== 'F')) done += h;   // المعادة الناجحة ما بتزيد الساعات المنجزة
+        if (p > 0) done += h;                                               // الراسبة (صفر) ما بتنحسب منجزة
       });
-      const baseP = P - repP, baseH = H - repH;
-      return { P: baseP + semP, H: baseH + semH, done, semP, semH, rowsH, baseP, baseH };
+      return { P: P - repP + semP, H: H - repH + semH, done, semP, semH, rowsH, baseP: P - planRepP, baseH: H - planRepH };
     }
     // المعدل قبل السجل: الساعات المنجزة + الساعات الراسبة يلي ما انعادت (الراسبة بتدخل بالمعدل بصفر)
     function manualBase(st) {
@@ -5762,6 +5763,7 @@ function populateBulkScope() {
           (h.failed || []).forEach((f, k) => items.push({ kind: 'F', name: norm(f.name), hours: parseFloat(f.hours) || 0, grade: 'F', sem: h.name, hi, src: `man|failed|${k}|${hi}` }));
           (h.cond || []).forEach((c, k) => items.push({ kind: 'C', name: norm(c.name), hours: parseFloat(c.hours) || 0, grade: c.grade, sem: h.name, hi, src: `man|cond|${k}|${hi}` }));
         } else (h.rows || []).forEach(r => {
+          if (r.withdrawn) return;                                    // المسحوبة (W) مو راسبة ولا شرطية
           if (r.grade === 'F') items.push({ kind: 'F', name: norm(r.name), hours: parseFloat(r.hours) || 0, grade: 'F', sem: h.name, hi });
           else if (isConditionalGrade(r.grade)) items.push({ kind: 'C', name: norm(r.name), hours: parseFloat(r.hours) || 0, grade: r.grade, sem: h.name, hi });
         });
@@ -5769,8 +5771,8 @@ function populateBulkScope() {
       // انعادت؟ منشوف إذا نفس الاسم انأخد بعدين (بفصل مواد لاحق أو بهالفصل)
       items.forEach(it => {
         let later = null;
-        st.history.forEach((h, hi) => { if (hi > it.hi && h.type !== 'manual') (h.rows || []).forEach(r => { if (norm(r.name) === it.name && it.name) later = { grade: r.grade, where: h.name }; }); });
-        const cur = st.rows.find(r => norm(r.name) === it.name && it.name);
+        st.history.forEach((h, hi) => { if (hi > it.hi && h.type !== 'manual') (h.rows || []).forEach(r => { if (!r.withdrawn && norm(r.name) === it.name && it.name) later = { grade: r.grade, where: h.name }; }); });
+        const cur = st.rows.find(r => !r.withdrawn && norm(r.name) === it.name && it.name);
         if (cur) it.current = cur;
         it.redone = later;
       });
@@ -5824,27 +5826,42 @@ function populateBulkScope() {
     }
 
     // الطلعة من الإنذار والتخرج
+    // ساعات راسبة لسا ما انعادت (من السجل وقبله، وراسبة هالفصل): إعادتها بتستبدل الصفر بدون ما تزيد الساعات بالمعدل
+    function outstandingFailedHours(st) {
+      const fromIssues = collectIssues(st).filter(it => it.kind === 'F' && !it.redone && !it.current).reduce((n, it) => n + (it.hours || 0), 0);
+      const nowF = st.rows.filter(x => !x.withdrawn && x.grade && gradePoints(x.grade) === 0).reduce((n, x) => n + (parseFloat(x.hours) || 0), 0);
+      return fromIssues + nowF;
+    }
+    // التخرج: الباقي = ساعات جديدة + إعادة الراسبة (الإعادة بتستبدل، ما بتزيد مقام المعدل)
+    function gradPlan(st, r) {
+      const G = gradHours(); if (!G) return null;
+      const rem = Math.max(0, G - r.done), fh = Math.min(rem, outstandingFailedHours(st)), newH = rem - fh;
+      const cumIf = avg => (r.P1 + avg * rem) / (r.H1 + newH);
+      return { G, rem, fh, newH, maxCum: cumIf(4), needFor: t => (t * (r.H1 + newH) - r.P1) / rem };
+    }
     function planningHTML(st, r) {
       const lim = probationLimit(), parts = [];
+      const fh = r.hasPrev ? outstandingFailedHours(st) : 0;
       if (r.hasPrev && Number.isFinite(r.cum) && r.cum < lim) {
         const need = g => Math.ceil((lim * r.H1 - r.P1) / (g - lim));
-        const opts = [4, 3.5, 3].filter(g => g > lim).map(g => `<li><strong>${need(g)}</strong> ساعة بمعدل <strong>${g.toFixed(2)}</strong> (${esc(letterAtLeast(g) || '')})</li>`).join('');
-        parts.push(`<div class="gpa-plan warn"><b>🚨 الطلعة من الإنذار (${lim.toFixed(2)})</b><p>بعد هالفصل تراكميك ${fmtGpa(r.cum)}. لترجع فوق الحد بتحتاج بالفصول الجاية تقريبًا:</p><ul>${opts}</ul></div>`);
+        const opts = [4, 3.5, 3].filter(g => g > lim).map(g => `<li><strong>${need(g)}</strong> ساعة جديدة بمعدل <strong>${g.toFixed(2)}</strong> (${esc(letterAtLeast(g) || '')})</li>`).join('');
+        const retake = fh > 0 ? `<p>💡 أسرع طريق: <strong>أعد الراسبة (${fh} ساعة)</strong> — العلامة الجديدة بتحل محل الصفر بدون ما تزيد ساعاتك بالمعدل. إذا جبت فيها B بيصير تراكميك <strong>${fmtGpa((r.P1 + 3 * fh) / r.H1)}</strong>، وإذا A <strong>${fmtGpa((r.P1 + 3.75 * fh) / r.H1)}</strong>.</p>` : '';
+        parts.push(`<div class="gpa-plan warn"><b>🚨 الطلعة من الإنذار (${lim.toFixed(2)})</b><p>بعد هالفصل تراكميك ${fmtGpa(r.cum)}. لترجع فوق الحد بتحتاج بالفصول الجاية تقريبًا:</p><ul>${opts}</ul>${retake}</div>`);
       }
-      const G = gradHours();
-      if (G && r.hasPrev) {
-        const rem = Math.max(0, G - r.done);
+      const gp = r.hasPrev ? gradPlan(st, r) : null;
+      if (gp) {
+        const G = gp.G, rem = gp.rem;
         if (rem <= 0) parts.push(`<div class="gpa-plan good"><b>🎓 خلصت ساعات التخرج (${G})</b><p>معدل تخرجك المتوقع: <strong>${fmtGpa(r.cum)}</strong>${honorsFor(r.cum) ? ' — ' + esc(honorsFor(r.cum)) : ''}.</p></div>`);
         else {
-          const maxCum = (r.P1 + 4 * rem) / (r.H1 + rem), t = parseFloat(st.gradTarget);
+          const maxCum = gp.maxCum, t = parseFloat(st.gradTarget);
           let need = '';
           if (Number.isFinite(t) && t > 0 && t <= 4) {
-            const n = (t * (r.H1 + rem) - r.P1) / rem;
+            const n = gp.needFor(t);
             need = n > 4 ? `<p class="bad">ما بتقدر تتخرج بـ ${t.toFixed(2)} — أعلى شي ممكن <strong>${fmtGpa(maxCum)}</strong>.</p>`
               : n <= 0 ? `<p class="good">مضمون تتخرج فوق ${t.toFixed(2)} 👌</p>`
               : `<p>لتتخرج بـ <strong>${t.toFixed(2)}</strong>${honorsFor(t) ? ` (${esc(honorsFor(t))})` : ''} لازم متوسطك بالـ ${rem} ساعة الباقية يكون <strong>${n.toFixed(2)}</strong> (${esc(letterAtLeast(n) || '')}).</p>`;
           }
-          parts.push(`<div class="gpa-plan"><b>🎓 التخرج</b><p>منجز <strong>${r.done}</strong> من <strong>${G}</strong> ساعة — باقيلك <strong>${rem}</strong>. أعلى معدل تخرج ممكن: <strong>${fmtGpa(maxCum)}</strong>.</p>
+          parts.push(`<div class="gpa-plan"><b>🎓 التخرج</b><p>منجز <strong>${r.done}</strong> من <strong>${G}</strong> ساعة — باقيلك <strong>${rem}</strong>${gp.fh ? ` (منها <strong>${gp.fh}</strong> إعادة راسبة)` : ''}. أعلى معدل تخرج ممكن: <strong>${fmtGpa(maxCum)}</strong>.</p>
             <div class="gpa-inline"><label for="gpa-grad-target">بدي اتخرج بمعدل</label><input class="editor-input" id="gpa-grad-target" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.gradTarget ?? '')}" placeholder="3.00"></div>${need}</div>`);
         }
       }
