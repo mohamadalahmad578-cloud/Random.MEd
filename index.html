@@ -1189,6 +1189,19 @@ body:not(.admin-device) .admin-only{ display:none !important; }
 .gi-sub .ok{ color:var(--teal-text); font-weight:700; } .gi-sub .bad{ color:var(--rose-text); font-weight:700; }
 .gpa-issue .gi-sub:last-child{ margin-bottom:0; }
 .gpa-floor{ margin:10px 0 0; padding:10px 12px; border-radius:12px; background:var(--paper); font-size:13px; line-height:1.8; }
+  .gpa-row.withdrawn .gpa-name, .gpa-row.withdrawn [data-f="hours"], .gpa-row.withdrawn .gpa-grade, .gpa-row.withdrawn [data-f="pct"]{ opacity:.5; text-decoration:line-through; }
+  .gpa-repeat label + label{ margin-inline-start:12px; }
+  .gpa-wd{ display:flex; flex-direction:column; gap:6px; }
+  .gpa-wd-item{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 12px; border-radius:12px; background:var(--paper); font-size:13px; border-inline-start:4px solid var(--line); }
+  .gpa-wd-item.up{ border-inline-start-color:var(--teal); } .gpa-wd-item.down{ border-inline-start-color:var(--rose); }
+  .gpa-wd-item em{ font-style:normal; font-weight:800; } .gpa-wd-item.up em{ color:var(--teal-text); } .gpa-wd-item.down em{ color:var(--rose-text); }
+  .gpa-wd-item .btn{ margin-inline-start:auto; }
+  .gpa-link{ border:none; background:none; color:var(--brass-deep); font:inherit; font-weight:700; cursor:pointer; padding:0; text-decoration:underline; }
+  .gi-del{ order:-1; width:26px; height:26px; }
+  .gpa-manage-row{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px; }
+  .gpa-manage-row .btn[disabled]{ opacity:.45; cursor:not-allowed; }
+  .gpa-manage-row.danger{ margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); }
+  .gpa-file{ cursor:pointer; }
 .gpa-ask{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:12px; padding:10px 12px; border-radius:12px; background:var(--paper); font-size:13px; line-height:1.8; }
 .gpa-ask-btns{ display:flex; gap:6px; }
 .chip-btn{ padding:6px 14px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--ink); font:inherit; font-size:12.5px; font-weight:700; cursor:pointer; }
@@ -5638,7 +5651,10 @@ function populateBulkScope() {
 
     function loadGPA() {
       let st = null; try { st = JSON.parse(localStorage.getItem(GPA_KEY) || 'null'); } catch (e) {}
-      if (!st || typeof st !== 'object') st = {};
+      return normalizeGPA(st);
+    }
+    function normalizeGPA(st) {
+      if (!st || typeof st !== 'object' || Array.isArray(st)) st = {};
       if (!Array.isArray(st.rows)) st.rows = [];
       if (!Array.isArray(st.history)) st.history = [];
       if (!st.pre || typeof st.pre !== 'object') st.pre = {};
@@ -5651,6 +5667,11 @@ function populateBulkScope() {
     }
     function saveGPA(st) { try { localStorage.setItem(GPA_KEY, JSON.stringify(st)); } catch (e) {} }
     let gpaState = null;
+    // كل حذف بالمعدل إلو «تراجع»: منصوّر الحالة قبل ومنرجّعها إذا بدو
+    function gpaSnap() { return JSON.stringify(gpaState); }
+    function gpaUndoToast(msg, snap) {
+      toastAction(msg, 'تراجع', () => { gpaState = normalizeGPA(JSON.parse(snap)); saveGPA(gpaState); renderGPA(); toast('رجع متل ما كان ✓', 'success', 2500); }, 9000);
+    }
     function gpaRowId() { return 'g' + Math.random().toString(36).slice(2, 9); }
 
     // ---- الحساب ----
@@ -5658,7 +5679,7 @@ function populateBulkScope() {
     function applySemester(acc, rows, gradeOverride) {
       let { P, H, done } = acc, semP = 0, semH = 0, repP = 0, repH = 0, rowsH = 0;
       (rows || []).forEach(r => {
-        const h = parseFloat(r.hours); if (!(h > 0)) return;
+        const h = parseFloat(r.hours); if (!(h > 0) || r.withdrawn) return;   // المسحوبة (W) ما بتدخل بالمعدل ولا بالساعات
         rowsH += h;
         const oldP = r.repeat ? gradePoints(r.oldGrade) : null;
         if (oldP != null) { repP += oldP * h; repH += h; }
@@ -5733,13 +5754,13 @@ function populateBulkScope() {
       const items = [];
       const norm = x => String(x || '').trim();
       if (st.pre && st.pre.asked !== 'no') {
-        (st.pre.failed || []).forEach(f => { if (norm(f.name) || parseFloat(f.hours) > 0) items.push({ kind: 'F', name: norm(f.name), hours: parseFloat(f.hours) || 0, grade: 'F', sem: 'قبل السجل', hi: -1 }); });
-        (st.pre.cond || []).forEach(c => { if (norm(c.name) || parseFloat(c.hours) > 0) items.push({ kind: 'C', name: norm(c.name), hours: parseFloat(c.hours) || 0, grade: c.grade, sem: 'قبل السجل', hi: -1 }); });
+        (st.pre.failed || []).forEach((f, k) => { if (norm(f.name) || parseFloat(f.hours) > 0) items.push({ kind: 'F', name: norm(f.name), hours: parseFloat(f.hours) || 0, grade: 'F', sem: 'قبل السجل', hi: -1, src: `pre|failed|${k}` }); });
+        (st.pre.cond || []).forEach((c, k) => { if (norm(c.name) || parseFloat(c.hours) > 0) items.push({ kind: 'C', name: norm(c.name), hours: parseFloat(c.hours) || 0, grade: c.grade, sem: 'قبل السجل', hi: -1, src: `pre|cond|${k}` }); });
       }
       st.history.forEach((h, hi) => {
         if (h.type === 'manual') {
-          (h.failed || []).forEach(f => items.push({ kind: 'F', name: norm(f.name), hours: parseFloat(f.hours) || 0, grade: 'F', sem: h.name, hi }));
-          (h.cond || []).forEach(c => items.push({ kind: 'C', name: norm(c.name), hours: parseFloat(c.hours) || 0, grade: c.grade, sem: h.name, hi }));
+          (h.failed || []).forEach((f, k) => items.push({ kind: 'F', name: norm(f.name), hours: parseFloat(f.hours) || 0, grade: 'F', sem: h.name, hi, src: `man|failed|${k}|${hi}` }));
+          (h.cond || []).forEach((c, k) => items.push({ kind: 'C', name: norm(c.name), hours: parseFloat(c.hours) || 0, grade: c.grade, sem: h.name, hi, src: `man|cond|${k}|${hi}` }));
         } else (h.rows || []).forEach(r => {
           if (r.grade === 'F') items.push({ kind: 'F', name: norm(r.name), hours: parseFloat(r.hours) || 0, grade: 'F', sem: h.name, hi });
           else if (isConditionalGrade(r.grade)) items.push({ kind: 'C', name: norm(r.name), hours: parseFloat(r.hours) || 0, grade: r.grade, sem: h.name, hi });
@@ -5767,11 +5788,30 @@ function populateBulkScope() {
           : `<span class="bad">${it.kind === 'F' ? 'لسا ما انعادت — ساعاتها ما انحسبت منجزة' : 'بتنصح تعيدها لترفع معدلك'}</span>`;
         const act = !it.redone && !it.current && it.name
           ? `<button type="button" class="btn btn-ghost gpa-mini" data-redo="${esc(it.name)}" data-redo-h="${it.hours}" data-redo-g="${esc(it.grade)}">${ic('plus')} أضفها كإعادة لهالفصل</button>` : '';
-        return `<div class="gpa-issue ${it.kind === 'F' ? 'f' : 'c'}"><div class="gi-main"><b>${esc(it.name || 'مادة بدون اسم')}</b><span class="gi-tag">${it.kind === 'F' ? 'راسب F' : `ناجح بشرط ${esc(it.grade)}`}</span><span class="gi-meta">${it.hours || '؟'} س · ${esc(it.sem)}</span></div>
+        return `<div class="gpa-issue ${it.kind === 'F' ? 'f' : 'c'}"><div class="gi-main">${it.src ? `<button type="button" class="gpa-ic del gi-del" data-issue-del="${esc(it.src)}" title="حذف من السجل" aria-label="حذف">${ic('trash')}</button>` : ''}<b>${esc(it.name || 'مادة بدون اسم')}</b><span class="gi-tag">${it.kind === 'F' ? 'راسب F' : `ناجح بشرط ${esc(it.grade)}`}</span><span class="gi-meta">${it.hours || '؟'} س · ${esc(it.sem)}</span></div>
           <div class="gi-sub">${status}${!it.redone && gainB > 0 && r.hasPrev ? ` · إذا أعدتها وجبت B بيرتفع تراكميك تقريبًا <b>+${gainB.toFixed(2)}</b>` : ''}</div>${act}</div>`;
       };
       const f = items.filter(x => x.kind === 'F'), c = items.filter(x => x.kind === 'C');
       return `${f.length ? `<p class="gpa-sub-h">❌ راسبة (${f.length})</p>${f.map(row).join('')}` : ''}${c.length ? `<p class="gpa-sub-h">⚠️ ناجح بشرط (${c.length})</p>${c.map(row).join('')}` : ''}`;
+    }
+
+    // «لو سحبت مادة»: لكل مادة معبّاية، التراكمي والفصلي بدونها
+    function withdrawHTML(st, r) {
+      const active = st.rows.filter(x => !x.withdrawn && parseFloat(x.hours) > 0 && gradePoints(x.grade) != null);
+      const wd = st.rows.filter(x => x.withdrawn);
+      if (!active.length) return `<p class="gpa-muted">${wd.length ? `مسحوب: ${wd.map(x => `«${esc(x.name || 'مادة')}»`).join('، ')}. ` : ''}عبّي ساعات وعلامات مواد هالفصل لتشوف أثر سحب كل وحدة.</p>`;
+      const b = baseBeforeCurrent(st), lim = probationLimit();
+      const cumOf = x => x.H > 0 && (b.hasPrev || x.semH) ? x.P / x.H : NaN;
+      const opts = active.map(row => { const x = applySemester(b.acc, st.rows.filter(y => y !== row)); return { row, cum: cumOf(x), sem: x.semH ? x.semP / x.semH : NaN, done: x.done }; })
+        .sort((a, b2) => (b2.cum || 0) - (a.cum || 0));
+      const cur = r.cum;
+      return `<div class="gpa-wd">${opts.map(o => { const d = Number.isFinite(o.cum) && Number.isFinite(cur) ? o.cum - cur : NaN; const warn = Number.isFinite(o.cum) && o.cum < lim;
+          return `<div class="gpa-wd-item ${d > 0.0005 ? 'up' : d < -0.0005 ? 'down' : ''}">
+            <b>${esc(o.row.name || 'مادة بدون اسم')}</b><span class="gi-meta">${esc(o.row.grade)} · ${esc(o.row.hours)} س</span>
+            <span>التراكمي <strong>${fmtGpa(o.cum)}</strong>${Number.isFinite(d) ? ` <em>${d > 0 ? '+' : ''}${d.toFixed(2)}</em>` : ''} · الفصل ${fmtGpa(o.sem)}${warn ? ` · ⚠️ تحت ${lim.toFixed(2)}` : ''}</span>
+            <button type="button" class="btn btn-ghost gpa-mini" data-wd="${esc(o.row.id)}">سحبها</button></div>`; }).join('')}</div>
+        ${wd.length ? `<p class="gpa-muted" style="margin-top:8px">مسحوب هلق: ${wd.map(x => `«${esc(x.name || 'مادة')}» <button type="button" class="gpa-link" data-unwd="${esc(x.id)}">رجّعها</button>`).join('، ')}</p>` : ''}
+        <p class="gpa-muted" style="margin-top:6px">السحب بيخفّف الساعات المنجزة بهالفصل، وبعض الجامعات إلها شروط ومواعيد للسحب — تأكد من نظام جامعتك.</p>`;
     }
 
     // «لو جبت…»: كل مواد الفصل بنفس العلامة
@@ -5840,7 +5880,7 @@ function populateBulkScope() {
         ${list ? `<div class="gpa-hist">${list}</div>` : '<p class="gpa-muted">لسا ما سجّلت ولا فصل. سجّل فصولك السابقة يدويًا (ساعات ومعدل)، أو عبّي علامات هالفصل واكبس «حفظ هالفصل بالسجل».</p>'}
         ${st.form ? manualFormHTML(st.form) : ''}
         <div class="gpa-actions">${st.form ? '' : `<button type="button" class="btn btn-secondary" onclick="gpaOpenManual()">${ic('plus')} فصل يدوي (ساعات ومعدل)</button>`}
-          ${st.history.length || st.rows.length || st.cgpa || st.done || (st.pre && (st.pre.failed.length || st.pre.cond.length)) ? `<button type="button" class="btn btn-ghost" onclick="gpaResetAll()">${ic('trash')} مسح كل بيانات المعدل</button>` : ''}</div>`;
+          </div>`;
     }
     // سطر مادة راسبة/شرطية: الاسم بينختار من مواد الكلية (أو بينكتب بإيد الطالب) وساعاتها بتتعبّى لحالها
     function mfLineHTML(scope, kind, it, k) {
@@ -5899,7 +5939,7 @@ function populateBulkScope() {
       if (!plans.length) return '<p class="gpa-muted">ما في خطط بـ «جدولي» لسا.</p>';
       const assume = st.planAssume || 'B', b = baseBeforeCurrent(st);
       const byName = Object.fromEntries(st.rows.map(r => [r.name, r]));
-      const rowsFor = secs => [...new Set(secs.map(courseNameOf))].map(c => { const r = byName[c]; const h = r && parseFloat(r.hours) > 0 ? r.hours : creditsOf(c); return { name: c, hours: h == null ? '' : h, grade: r && r.grade ? r.grade : assume, repeat: r && r.repeat, oldGrade: r && r.oldGrade }; });
+      const rowsFor = secs => [...new Set(secs.map(courseNameOf))].filter(c => !(byName[c] && byName[c].withdrawn)).map(c => { const r = byName[c]; const h = r && parseFloat(r.hours) > 0 ? r.hours : creditsOf(c); return { name: c, hours: h == null ? '' : h, grade: r && r.grade ? r.grade : assume, repeat: r && r.repeat, oldGrade: r && r.oldGrade }; });
       return `<div class="gpa-inline"><label for="gpa-plan-assume">العلامة المفترضة للمواد يلي ما عبّيتها</label><select class="editor-input" id="gpa-plan-assume">${gradeScale().map(g => `<option value="${esc(g.l)}" ${g.l === assume ? 'selected' : ''}>${esc(g.l)} (${g.p.toFixed(2)})</option>`).join('')}</select></div>
         <div class="gpa-plans">${plans.map(pl => { const rows = rowsFor(pl.secs); const x = applySemester(b.acc, rows); const miss = rows.filter(r => !(parseFloat(r.hours) > 0)).length; const cum = x.H > 0 && (b.hasPrev || x.semH) ? x.P / x.H : NaN;
           return `<div class="gpa-plan-card"><b>${esc(pl.name)}</b><span>${rows.length} مواد · ${x.rowsH} ساعة${miss ? ` <em>(${miss} بدون ساعات)</em>` : ''}</span><span>الفصل <strong>${fmtGpa(x.semH ? x.semP / x.semH : NaN)}</strong></span><span>${b.hasPrev ? 'التراكمي' : 'المعدل'} <strong>${fmtGpa(cum)}</strong></span></div>`; }).join('')}</div>`;
@@ -5924,15 +5964,18 @@ function populateBulkScope() {
       const fl = document.getElementById('gpa-floor-box'); if (fl) fl.innerHTML = probationFloorHTML(r);
       const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
       set('gpa-scen-box', scenariosHTML(st, r));
+      set('gpa-wd-box', withdrawHTML(st, r));
       set('gpa-plan-box', planningHTML(st, r));
       document.getElementById('gpa-plan-card').hidden = !planningHTML(st, r);
       set('gpa-history-box', historyHTML(st, r));
       set('gpa-issues-box', issuesHTML(st, r));
       set('gpa-plans-box', plansHTML(st));
+      set('gpa-manage-box', gpaManageHTML(st));
       // أثر كل مادة على التراكمي
       const denom = r.baseH + r.rowsH; let maxW = 0, maxId = null;
-      st.rows.forEach(row => { const h = parseFloat(row.hours); if (h > 0 && h > maxW) { maxW = h; maxId = row.id; } });
+      st.rows.forEach(row => { const h = parseFloat(row.hours); if (!row.withdrawn && h > 0 && h > maxW) { maxW = h; maxId = row.id; } });
       st.rows.forEach(row => { const el = document.querySelector(`#gpa-rows .gpa-row[data-id="${row.id}"] .gpa-impact`); if (!el) return; const h = parseFloat(row.hours);
+        if (row.withdrawn) { el.innerHTML = '🔄 مسحوبة (W) — ما بتدخل بالمعدل ولا بالساعات المنجزة.'; return; }
         if (!(h > 0) || !(denom > 0)) { el.textContent = ''; return; }
         const w = h / denom * 100, step = .25 * h / denom;
         el.innerHTML = `${row.grade === 'F' ? '❌ راسب — بتدخل بالمعدل بصفر وما بتنحسب منجزة · ' : isConditionalGrade(row.grade) ? '⚠️ ناجح بشرط · ' : ''}${row.id === maxId && st.rows.filter(x => parseFloat(x.hours) > 0).length > 1 ? '⭐ الأكثر تأثيرًا · ' : ''}وزنها <b>${w.toFixed(1)}%</b> من ${r.hasPrev ? 'تراكميك' : 'معدل الفصل'} · كل درجة أعلى (+0.25) = <b>+${step.toFixed(3)}</b>`; });
@@ -5945,13 +5988,13 @@ function populateBulkScope() {
     window.renderGPA = function() {
       if (!gpaState) gpaState = loadGPA();
       const st = gpaState, c = document.getElementById('gpa-container');
-      const rows = st.rows.map(r => `<div class="gpa-row" data-id="${r.id}">
+      const rows = st.rows.map(r => `<div class="gpa-row ${r.withdrawn ? 'withdrawn' : ''}" data-id="${r.id}">
           <input class="editor-input gpa-name" data-f="name" list="gpa-courses" autocomplete="off" value="${esc(r.name || '')}" placeholder="اختار مادة أو اكتب اسمها">
           <input class="editor-input" data-f="hours" type="number" min="0" step="0.5" inputmode="decimal" value="${esc(r.hours ?? '')}" placeholder="ساعات">
           <select class="editor-input gpa-grade" data-f="grade">${gradeOptions(r.grade, 'العلامة')}</select>
           <input class="editor-input" data-f="pct" type="number" min="0" max="100" inputmode="numeric" value="${esc(r.pct ?? '')}" placeholder="/100">
           <button type="button" class="gpa-del" data-del="1" title="حذف المادة" aria-label="حذف المادة">${ic('trash')}</button>
-          <div class="gpa-repeat"><label><input type="checkbox" data-f="repeat" ${r.repeat ? 'checked' : ''}> عم أعيد هالمادة</label>
+          <div class="gpa-repeat"><label><input type="checkbox" data-f="withdrawn" ${r.withdrawn ? 'checked' : ''}> سحبتها (W)</label><label><input type="checkbox" data-f="repeat" ${r.repeat ? 'checked' : ''}> عم أعيد هالمادة</label>
             ${r.repeat ? `<span>علامتي القديمة:</span><select class="editor-input" data-f="oldGrade">${gradeOptions(r.oldGrade, 'اختار')}</select><span>— الجديدة بتحل محلها</span>` : ''}</div>
           <div class="gpa-impact"></div>
         </div>`).join('');
@@ -5972,6 +6015,7 @@ function populateBulkScope() {
             ${st.rows.length ? `<button type="button" class="btn btn-teal" onclick="gpaSaveSemester()">💾 حفظ هالفصل بالسجل</button><button type="button" class="btn btn-ghost" onclick="gpaClear()">${ic('trash')} مسح المواد</button>` : ''}
           </div></div>
         <div class="gpa-card"><h3>🔮 لو جبت…</h3><p>شو بيصير معدلك إذا جبت نفس العلامة بكل مواد هالفصل.</p><div id="gpa-scen-box"></div></div>
+        <div class="gpa-card"><h3>🔄 لو سحبت مادة</h3><p>شو بيصير بمعدلك إذا سحبت (W) وحدة من مواد هالفصل — المسحوبة ما بتدخل بالمعدل ولا بالساعات.</p><div id="gpa-wd-box"></div></div>
         <div class="gpa-card"><h3>🎯 شو لازم جيب؟</h3><p>اكتب المعدل التراكمي يلي بدك توصلو آخر هالفصل.</p>
           <div class="gpa-target">
             <div><label>المعدل الهدف</label><input class="editor-input" id="gpa-target" type="number" min="0" max="4" step="0.01" inputmode="decimal" value="${esc(st.target ?? '')}" placeholder="مثال: 3.00"></div>
@@ -5981,6 +6025,7 @@ function populateBulkScope() {
         <div class="gpa-card" id="gpa-plan-card"><h3>🧭 الخطة الجاية</h3><div id="gpa-plan-box"></div></div>
         <div class="gpa-card"><h3>📈 سجل الفصول</h3><p>كل فصل بتحفظه بيدخل بحساب التراكمي لحاله، وبتشوف تطوّر معدلك.</p><div id="gpa-history-box"></div></div>
         <div class="gpa-card"><h3>🗂️ مقارنة خطط «جدولي»</h3><p>المعدل المتوقع لكل خطة — المواد يلي عبّيت علامتها فوق بتنحسب بعلامتها.</p><div id="gpa-plans-box"></div></div>
+        <div class="gpa-card"><h3>⚙️ إدارة بيانات المعدل</h3><p>امسح أي جزء لحالو (مع تراجع)، أو نزّل نسخة احتياطية ورجّعها بأي وقت.</p><div id="gpa-manage-box"></div></div>
         <div id="gpa-share" class="gpa-share" aria-hidden="true"></div>
         <datalist id="gpa-courses">${gpaCourseNames().map(n => `<option value="${esc(n)}"></option>`).join('')}</datalist>`;
       renderGPAResults();
@@ -6011,7 +6056,7 @@ function populateBulkScope() {
       else {
         const rowEl = t.closest('.gpa-row'); const row = rowEl && gpaState.rows.find(r => r.id === rowEl.dataset.id);
         if (!row || !t.dataset.f) return;
-        if (t.dataset.f === 'repeat') return;   // بيتعامل معه حدث change
+        if (t.dataset.f === 'repeat' || t.dataset.f === 'withdrawn') return;   // بيتعامل معهن حدث change
         row[t.dataset.f] = t.value;
         if (t.dataset.f === 'name') fillHoursFromDB(t.value, row, rowEl.querySelector('[data-f="hours"]'));
         if (t.dataset.f === 'pct') { const l = letterForPercent(t.value); if (l) { row.grade = l; rowEl.querySelector('[data-f="grade"]').value = l; } }
@@ -6023,27 +6068,34 @@ function populateBulkScope() {
       const t = e.target; if (!gpaState || !t.closest || !t.closest('#gpa-container')) return;
       const rowEl = t.closest('.gpa-row'); const row = rowEl && gpaState.rows.find(r => r.id === rowEl.dataset.id);
       if (row && t.dataset.f === 'repeat') { row.repeat = t.checked; if (!t.checked) row.oldGrade = ''; saveGPA(gpaState); renderGPA(); }
+      if (row && t.dataset.f === 'withdrawn') { row.withdrawn = t.checked; saveGPA(gpaState); renderGPA(); toast(t.checked ? `«${row.name || 'المادة'}» صارت مسحوبة (W) — ما بتنحسب بالمعدل.` : `رجعت «${row.name || 'المادة'}» تنحسب.`, 'success', 3500); }
       if (t.id === 'gpa-plan-assume') { gpaState.planAssume = t.value; renderGPAResults(); }
       if (t.dataset && t.dataset.mfF === 'grade') { const ln = t.closest('.mf-line'), it = mfList(ln)[+ln.dataset.mfI]; if (it) it.grade = t.value; saveGPA(gpaState); if (ln.dataset.mfScope === 'pre') renderGPAResults(); }
     });
     document.addEventListener('click', async e => {
       if (!gpaState || !e.target.closest) return;
       const b = e.target.closest('#gpa-container [data-del]');
-      if (b) { const id = b.closest('.gpa-row').dataset.id; gpaState.rows = gpaState.rows.filter(r => r.id !== id); saveGPA(gpaState); renderGPA(); return; }
+      if (b) { const snap = gpaSnap(), id = b.closest('.gpa-row').dataset.id, gone = gpaState.rows.find(r => r.id === id); gpaState.rows = gpaState.rows.filter(r => r.id !== id); saveGPA(gpaState); renderGPA(); gpaUndoToast(`انحذفت «${(gone && gone.name) || 'المادة'}»`, snap); return; }
+      const wdb = e.target.closest('#gpa-container [data-wd], #gpa-container [data-unwd]');
+      if (wdb) { const id = wdb.dataset.wd || wdb.dataset.unwd, row = gpaState.rows.find(r => r.id === id); if (!row) return; const snap = gpaSnap(); row.withdrawn = !!wdb.dataset.wd; saveGPA(gpaState); renderGPA();
+        if (row.withdrawn) gpaUndoToast(`«${row.name || 'المادة'}» صارت مسحوبة (W)`, snap); return; }
+      const idel = e.target.closest('#gpa-container [data-issue-del]');
+      if (idel) { const [src, kind, k, hi] = idel.dataset.issueDel.split('|'); const list = src === 'pre' ? gpaState.pre[kind] : (gpaState.history[+hi] || {})[kind];
+        if (!Array.isArray(list) || !list[+k]) return; const snap = gpaSnap(), nm = list[+k].name; list.splice(+k, 1); saveGPA(gpaState); renderGPA(); gpaUndoToast(`انحذفت «${nm || 'المادة'}» من ${src === 'pre' ? 'قبل السجل' : 'الفصل'}`, snap); return; }
       const ask = e.target.closest('#gpa-container [data-pre-ask]');
       if (ask) { gpaState.pre.asked = ask.dataset.preAsk; if (ask.dataset.preAsk === 'yes' && !gpaState.pre.failed.length && !gpaState.pre.cond.length) gpaState.pre.failed.push({ name: '', hours: '' }); saveGPA(gpaState); renderGPA(); return; }
       const add = e.target.closest('#gpa-container [data-mf-add]');
       if (add) { const k = add.dataset.mfAdd, obj = add.dataset.mfScope === 'pre' ? gpaState.pre : gpaState.form; obj[k] = obj[k] || []; obj[k].push(k === 'cond' ? { name: '', hours: '', grade: conditionalGrades()[0] || 'D' } : { name: '', hours: '' }); saveGPA(gpaState); renderGPA();
         const inp = [...document.querySelectorAll(`#gpa-container .mf-line[data-mf-scope="${add.dataset.mfScope === 'pre' ? 'pre' : 'form'}"][data-mf-kind="${k}"] [data-mf-f="name"]`)].pop(); if (inp) inp.focus(); return; }
       const mdel = e.target.closest('#gpa-container [data-mf-del]');
-      if (mdel) { const ln = mdel.closest('.mf-line'); mfList(ln).splice(+ln.dataset.mfI, 1); saveGPA(gpaState); renderGPA(); return; }
+      if (mdel) { const snap = gpaSnap(), ln = mdel.closest('.mf-line'); const gone = mfList(ln).splice(+ln.dataset.mfI, 1)[0]; saveGPA(gpaState); renderGPA(); if (ln.dataset.mfScope === 'pre' && gone && (gone.name || gone.hours)) gpaUndoToast(`انحذفت «${gone.name || 'المادة'}»`, snap); return; }
       const redo = e.target.closest('#gpa-container [data-redo]');
       if (redo) { gpaState.rows.push({ id: gpaRowId(), name: redo.dataset.redo, hours: redo.dataset.redoH || '', grade: '', repeat: true, oldGrade: redo.dataset.redoG }); saveGPA(gpaState); renderGPA(); toast('انضافت لمواد هالفصل كإعادة — اختار العلامة المتوقعة.', 'success'); return; }
       const hf = e.target.closest('#gpa-container [data-hist-form]');
       if (hf) { const i = +hf.dataset.histForm, h0 = gpaState.history[i]; gpaState.form = { edit: i, name: h0.name, hours: h0.hours, gpa: h0.gpa, failed: JSON.parse(JSON.stringify(h0.failed || [])), cond: JSON.parse(JSON.stringify(h0.cond || [])) }; saveGPA(gpaState); renderGPA(); document.querySelector('.gpa-mform')?.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
       const h = e.target.closest('#gpa-container [data-hist-del], #gpa-container [data-hist-rename], #gpa-container [data-hist-edit]'); if (!h) return;
       const i = +(h.dataset.histDel ?? h.dataset.histRename ?? h.dataset.histEdit), sem = gpaState.history[i]; if (!sem) return;
-      if (h.dataset.histDel != null) { if (!await uiConfirm(`تحذف «${sem.name}» من السجل؟`, { okText: 'حذف', danger: true })) return; gpaState.history.splice(i, 1); if (gpaState.form && gpaState.form.edit != null) gpaState.form = null; }
+      if (h.dataset.histDel != null) { if (!await uiConfirm(`تحذف «${sem.name}» من السجل؟`, { okText: 'حذف', danger: true })) return; const snap = gpaSnap(); gpaState.history.splice(i, 1); if (gpaState.form && gpaState.form.edit != null) gpaState.form = null; saveGPA(gpaState); renderGPA(); gpaUndoToast(`انحذف «${sem.name}» من السجل`, snap); return; }
       else if (h.dataset.histRename != null) { const n = ((await uiPrompt('اسم الفصل:', sem.name)) || '').trim(); if (!n) return; sem.name = n; }
       else {
         if (gpaState.rows.length && !await uiConfirm(`رح تنرجع مواد «${sem.name}» لخانة «مواد هالفصل» وتنشال من السجل — والمواد يلي هلق هونيك رح تنمسح. متأكد؟`)) return;
@@ -6066,10 +6118,61 @@ function populateBulkScope() {
       const noHours = gpaState.rows.filter(r => !(parseFloat(r.hours) > 0)).length;
       toast(added ? `انضافت ${added} مادة من «جدولي».${noHours ? ` ${noHours} منها بدون ساعات — عبّيها بإيدك.` : ''}` : 'كل مواد «جدولي» موجودة أصلًا.', added ? 'success' : 'error', 6000);
     };
-    window.gpaClear = async function() {
-      if (!await uiConfirm('تمسح كل مواد هالفصل من الحاسبة؟', { okText: 'مسح', danger: true })) return;
-      gpaState.rows = []; saveGPA(gpaState); renderGPA();
+    window.gpaClear = function() { gpaWipe('rows'); };
+    // ---- إدارة البيانات: مسح انتقائي + نسخة احتياطية ----
+    const GPA_WIPE = {
+      rows:    { label: 'مواد هالفصل',                         run: st => { st.rows = []; } },
+      history: { label: 'سجل الفصول',                          run: st => { st.history = []; st.form = null; } },
+      prev:    { label: 'المعدل السابق (المعدل والساعات)',     run: st => { st.cgpa = ''; st.done = ''; } },
+      pre:     { label: 'الراسبة والشرطية قبل السجل',          run: st => { st.pre = { failed: [], cond: [] }; } },
+      goals:   { label: 'الأهداف والإعدادات (الهدف، هدف التخرج، العلامة المفترضة)', run: st => { st.target = ''; st.gradTarget = ''; delete st.planAssume; } },
     };
+    window.gpaWipe = async function(what) {
+      const w = GPA_WIPE[what]; if (!w) return;
+      if (!await uiConfirm(`تمسح ${w.label}؟ فيك ترجّعها بزر «تراجع» بعدها مباشرة.`, { okText: 'مسح', danger: true })) return;
+      const snap = gpaSnap(); w.run(gpaState); saveGPA(gpaState); renderGPA(); gpaUndoToast(`انمسح: ${w.label}`, snap);
+    };
+    window.gpaExport = function() {
+      try {
+        const data = { app: 'Random.MEd', kind: 'gpa', version: 1, college: currentCollege ? currentCollege.id : '', exportedAt: new Date().toISOString(), data: gpaState };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+        a.download = `Random.MEd-GPA-${currentCollege ? currentCollege.id + '-' : ''}${new Date().toISOString().slice(0, 10)}.json`; document.body.appendChild(a); a.click();
+        setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+        toast('انحفظت نسخة احتياطية من بيانات المعدل — فيك ترجّعها على أي جهاز.', 'success', 5000);
+      } catch (e) { toast('ما قدرنا نعمل النسخة الاحتياطية.', 'error'); }
+    };
+    window.gpaImport = function(input) {
+      const file = input.files && input.files[0]; if (!file) return;
+      const rd = new FileReader();
+      rd.onload = async () => {
+        input.value = '';
+        let j; try { j = JSON.parse(rd.result); } catch (e) { toast('الملف مو نسخة صالحة (JSON غلط).', 'error'); return; }
+        const d = j && j.kind === 'gpa' && j.data ? j.data : j;
+        if (!d || typeof d !== 'object' || (!Array.isArray(d.rows) && !Array.isArray(d.history))) { toast('الملف ما فيه بيانات معدل.', 'error'); return; }
+        const n = normalizeGPA(JSON.parse(JSON.stringify(d)));
+        if (!await uiConfirm(`رح تنستبدل بيانات المعدل الحالية بالنسخة (${n.history.length} فصل بالسجل، ${n.rows.length} مادة بهالفصل${j.exportedAt ? `، محفوظة ${new Date(j.exportedAt).toLocaleDateString('ar-SY')}` : ''}). نكمّل؟`, { okText: 'استرجاع' })) return;
+        const snap = gpaSnap(); gpaState = n; saveGPA(gpaState); renderGPA(); gpaUndoToast('رجعت بياناتك من النسخة الاحتياطية', snap);
+      };
+      rd.onerror = () => toast('تعذّرت قراءة الملف.', 'error');
+      rd.readAsText(file, 'utf-8');
+    };
+    function gpaManageHTML(st) {
+      const n = { rows: st.rows.length, history: st.history.length, prev: (st.cgpa || st.done) ? 1 : 0, pre: (st.pre.failed.length + st.pre.cond.length), goals: (st.target || st.gradTarget || st.planAssume) ? 1 : 0 };
+      const any = Object.values(n).some(Boolean);
+      const btn = (k, text) => `<button type="button" class="btn btn-ghost gpa-mini" onclick="gpaWipe('${k}')" ${n[k] ? '' : 'disabled'}>${ic('trash')} ${text}${n[k] > 1 ? ` (${n[k]})` : ''}</button>`;
+      return `<div class="gpa-manage">
+          <p class="gpa-sub-h">🗑 مسح انتقائي</p>
+          <div class="gpa-manage-row">${btn('rows', 'مواد هالفصل')}${btn('history', 'سجل الفصول')}${btn('prev', 'المعدل السابق')}${btn('pre', 'الراسبة والشرطية قبل السجل')}${btn('goals', 'الأهداف')}</div>
+          <p class="gpa-sub-h">💾 نسخة احتياطية</p>
+          <div class="gpa-manage-row">
+            <button type="button" class="btn btn-secondary gpa-mini" onclick="gpaExport()" ${any ? '' : 'disabled'}>${ic('download')} تنزيل نسخة</button>
+            <label class="btn btn-secondary gpa-mini gpa-file">⬆️ استرجاع من نسخة<input type="file" accept=".json,application/json" onchange="gpaImport(this)" hidden></label>
+          </div>
+          <p class="gpa-muted">بياناتك محفوظة بهالمتصفح بس — نزّل نسخة إذا بدك تنقلها لجهاز تاني أو تحميها.</p>
+          ${any ? `<div class="gpa-manage-row danger"><button type="button" class="btn btn-danger-ghost gpa-mini" onclick="gpaResetAll()">${ic('trash')} مسح كل بيانات المعدل</button></div>` : ''}
+        </div>`;
+    }
     window.gpaOpenManual = function() {
       gpaState.form = { edit: null, name: `الفصل ${gpaState.history.length + 1}`, hours: '', gpa: '', failed: [], cond: [] };
       saveGPA(gpaState); renderGPA(); setTimeout(() => document.querySelector('.gpa-mform')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 50);
@@ -6093,17 +6196,17 @@ function populateBulkScope() {
       toast(f.edit != null ? `تم تعديل «${name}».` : `انضاف «${name}» للسجل.`, 'success');
     };
     window.gpaResetAll = async function() {
-      if (!await uiConfirm('تمسح كل بيانات المعدل؟ (المعدل السابق، السجل، ومواد هالفصل) — ما في رجعة.', { okText: 'مسح الكل', danger: true })) return;
-      gpaState = { rows: [], history: [], pre: { failed: [], cond: [] } }; saveGPA(gpaState); renderGPA(); toast('انمسحت كل بيانات المعدل.', 'success');
+      if (!await uiConfirm('تمسح كل بيانات المعدل؟ (المعدل السابق، السجل، مواد هالفصل، الراسبة والشرطية والأهداف) — فيك ترجّعها بزر «تراجع» بعدها مباشرة.', { okText: 'مسح الكل', danger: true })) return;
+      const snap = gpaSnap(); gpaState = normalizeGPA({}); saveGPA(gpaState); renderGPA(); gpaUndoToast('انمسحت كل بيانات المعدل', snap);
     };
     window.gpaSaveSemester = async function() {
-      const graded = gpaState.rows.filter(r => parseFloat(r.hours) > 0 && gradePoints(r.grade) != null);
+      const graded = gpaState.rows.filter(r => parseFloat(r.hours) > 0 && (gradePoints(r.grade) != null || r.withdrawn));
       if (!graded.length) { toast('عبّي ساعات وعلامات المواد أول.', 'error'); return; }
       const missing = gpaState.rows.length - graded.length;
       if (missing && !await uiConfirm(`في ${missing} مادة بدون ساعات أو علامة — ما رح تنحفظ. نكمّل؟`)) return;
       const name = ((await uiPrompt('اسم الفصل (مثلًا: الفصل الأول 2026):', `الفصل ${gpaState.history.length + 1}`)) || '').trim();
       if (!name) return;
-      gpaState.history.push({ id: gpaRowId(), name, rows: graded.map(r => ({ name: r.name, hours: r.hours, grade: r.grade, repeat: !!r.repeat, oldGrade: r.oldGrade || '' })) });
+      gpaState.history.push({ id: gpaRowId(), name, rows: graded.map(r => ({ name: r.name, hours: r.hours, grade: r.grade, repeat: !!r.repeat, oldGrade: r.oldGrade || '', withdrawn: !!r.withdrawn })) });
       gpaState.rows = []; gpaState.target = '';
       saveGPA(gpaState); renderGPA();
       toast(`انحفظ «${name}» بالسجل — والتراكمي صار ينحسب منه لحاله.`, 'success', 6000);
